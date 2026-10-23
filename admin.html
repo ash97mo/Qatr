@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة المشرف - إدارة حركة القطارات</title>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { 
+      font-family: 'Segoe UI', Tahoma, sans-serif; 
+      background: #090d16; 
+      color: #f1f5f9; 
+      padding: 16px; 
+      display: flex; 
+      justify-content: center; 
+      min-height: 100vh;
+    }
+    .admin-container { 
+      width: 100%; 
+      max-width: 860px; 
+      background: #131d2e; 
+      border-radius: 16px; 
+      padding: 20px; 
+      border: 1px solid #1e293b; 
+    }
+    
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #223049;
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    h1 { color: #38bdf8; font-size: 20px; margin: 0; }
+    h2 { font-size: 15px; color: #cbd5e1; margin-bottom: 12px; }
+
+    .header-actions { display: flex; gap: 8px; }
+
+    .box { background: #1a263d; border-radius: 10px; padding: 16px; margin-bottom: 18px; }
+    label { display: block; font-size: 13px; color: #94a3b8; margin-bottom: 6px; }
+    input, select, textarea { 
+      width: 100%; 
+      padding: 10px; 
+      background: #0f172a; 
+      border: 1px solid #334155; 
+      border-radius: 8px; 
+      color: #fff; 
+      margin-bottom: 12px; 
+      font-size: 14px; 
+      outline: none; 
+    }
+    textarea { font-family: monospace; line-height: 1.6; }
+    
+    .btn { padding: 8px 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 12px; }
+    .btn-primary { background: #0284c7; color: white; width: 100%; font-size: 14px; padding: 12px; }
+    .btn-danger { background: #dc2626; color: white; }
+    .btn-warning { background: #d97706; color: white; }
+    .btn-caution { background: #b91c1c; color: #fecaca; border: 1px dashed #ef4444; }
+    .btn-add { background: #10b981; color: white; }
+    .btn-secondary { background: #334155; color: #e2e8f0; }
+    .btn:hover { opacity: 0.85; }
+
+    .station-control-row {
+      background: #0f172a; padding: 12px; border-radius: 8px; margin-bottom: 12px;
+      border-right: 5px solid #3b82f6;
+    }
+    .station-head { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      margin-bottom: 10px; 
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .station-edit-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      min-width: 250px;
+    }
+    .station-order-input {
+      width: 55px !important;
+      padding: 6px !important;
+      margin: 0 !important;
+      text-align: center;
+      font-weight: bold;
+      color: #38bdf8 !important;
+      border-color: #0284c7 !important;
+    }
+    .station-name-input {
+      flex: 1;
+      margin: 0 !important;
+      padding: 6px 10px !important;
+      font-weight: bold;
+      color: #f8fafc !important;
+    }
+    
+    .times-inputs {
+      display: flex; 
+      gap: 10px; 
+      flex-wrap: wrap; 
+      margin-bottom: 10px;
+      background: #1e293b; 
+      padding: 8px 12px; 
+      border-radius: 6px;
+      align-items: center;
+    }
+    .times-inputs div { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #cbd5e1; }
+    .times-inputs input { width: 95px; padding: 4px 8px; margin: 0; font-size: 12px; }
+
+    /* شارات التأخير البارزة بجوار الوقت المجدول */
+    .delay-label-red {
+      color: #ff3333;
+      background: rgba(239, 68, 68, 0.22);
+      border: 1px solid #ef4444;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 11px;
+      white-space: nowrap;
+      box-shadow: 0 0 8px rgba(239, 68, 68, 0.35);
+    }
+    .delay-label-ontime {
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid #0284c7;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+    .delay-label-early {
+      color: #4ade80;
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid #22c55e;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .btn-group { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    .between-alert {
+      background: rgba(239, 68, 68, 0.15); border: 1px dashed #ef4444;
+      padding: 6px 12px; border-radius: 6px; color: #f87171; font-size: 12px;
+      margin-bottom: 8px; font-weight: bold;
+    }
+
+    .preview-box {
+      background: #0b1120; border: 1px dashed #38bdf8;
+      border-radius: 8px; padding: 12px; margin-bottom: 15px; display: none;
+    }
+    .preview-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .preview-table td { padding: 4px 8px; border-bottom: 1px solid #1e293b; }
+    .preview-table td:last-child { text-align: left; color: #facc15; }
+
+    .status-alert { padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 13px; text-align: center; }
+    .status-ok { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid #22c55e; }
+    .status-wait { background: rgba(234, 179, 8, 0.2); color: #facc15; border: 1px solid #eab308; }
+
+    .add-station-bar {
+      display: grid; grid-template-columns: 2fr 1fr auto; gap: 8px; align-items: center;
+      background: #0f172a; padding: 10px; border-radius: 8px; border: 1px dashed #334155; margin-top: 15px;
+    }
+    .add-station-bar input { margin: 0; }
+
+    /* شاشة تسجيل الدخول */
+    .login-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: #090d16;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      padding: 16px;
+    }
+    .login-card {
+      background: #131d2e;
+      border: 1px solid #1e293b;
+      border-radius: 16px;
+      padding: 24px;
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    }
+    .login-card h2 { color: #38bdf8; font-size: 18px; margin-bottom: 8px; }
+    .login-card p { font-size: 13px; color: #94a3b8; margin-bottom: 16px; }
+    .login-error {
+      color: #ef4444;
+      font-size: 12px;
+      margin-top: 8px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- نافذة تسجيل دخول المشرف -->
+  <div id="loginOverlay" class="login-overlay">
+    <div class="login-card">
+      <div style="font-size: 40px; margin-bottom: 10px;">🔐</div>
+      <h2>دخول المشرف المعتمد</h2>
+      <p>أدخل كلمة المرور للوصول إلى لوحة التحكم المباشرة</p>
+      
+      <input type="password" id="adminPassInput" placeholder="كلمة المرور..." onkeydown="if(event.key==='Enter') attemptLogin()">
+      <button class="btn btn-primary" onclick="attemptLogin()">تسجيل الدخول 🚀</button>
+      
+      <div id="loginErrorMsg" class="login-error">❌ كلمة المرور غير صحيحة، يرجى المحاولة ثانية!</div>
+    </div>
+  </div>
+
+  <!-- لوحة التحكم الرئيسية -->
+  <div class="admin-container" id="adminMainContainer" style="display: none;">
+    <div class="admin-header">
+      <h1>🛠️ لوحة تحكم حركة القطارات (المشرف)</h1>
+      <div class="header-actions">
+        <button class="btn btn-secondary" onclick="changeAdminPassword()">🔑 تغيير كلمة السر</button>
+        <button class="btn btn-danger" onclick="logoutAdmin()">🚪 خروج</button>
+      </div>
+    </div>
+
+    <div id="connStatus" class="status-alert status-wait">⏳ جاري الاتصال بالسيرفر السحابي...</div>
+
+    <!-- 1. المراقبة والتحكم الميداني -->
+    <div class="box">
+      <h2>1. المراقبة والتحكم الميداني وتعديل المحطات</h2>
+      <label>اختر القطار للإدارة والتعديل:</label>
+      <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+        <select id="selectedTrain" onchange="renderControlBoard()" style="margin: 0;"></select>
+        <button id="btnDeleteTrain" class="btn btn-danger" onclick="deleteCurrentTrain()" style="display: none;">حذف القطار</button>
+      </div>
+
+      <div id="controlPanel">
+        <p style="color:#64748b; text-align:center; padding: 20px;">👈 برجاء اختيار قطار من القائمة أعلاه لبدء المراقبة وتعديل المحطات.</p>
+      </div>
+
+      <!-- إضافة محطة جديدة -->
+      <div id="addStationSection" style="display: none;">
+        <label style="margin-top: 15px; font-weight: bold; color: #38bdf8;">➕ إضافة محطة جديدة لهذا القطار:</label>
+        <div class="add-station-bar">
+          <input type="text" id="newStationName" placeholder="اسم المحطة (مثال: بنها)">
+          <input type="text" id="newStationTime" placeholder="الوقت (مثال: 04:30 م)">
+          <button class="btn btn-add" onclick="addStationToCurrentTrain()">+ إضافة للمسار</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. إضافة قطار جديد -->
+    <div class="box">
+      <h2>2. إضافة رحلة قطار جديدة (لصق ذكي مباشر 📋)</h2>
+      <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px;">
+        <div>
+          <label>رقم القطار:</label>
+          <input type="text" id="newTrainNumber" placeholder="مثال: 905">
+        </div>
+        <div>
+          <label>اسم الرحلة / الوصف:</label>
+          <input type="text" id="newTrainName" placeholder="مثال: القاهرة - الإسكندرية مباشر">
+        </div>
+      </div>
+
+      <label>انسخ المحطات وأوقاتها واعمل Paste هنا مباشرة بأي شكل:</label>
+      <textarea id="smartPasteInput" rows="4" oninput="parsePastedStations()" placeholder="القاهرة 08:00 ص
+طنطا 09:15 ص
+سيدي جابر 10:20 ص
+الإسكندرية 10:30 ص"></textarea>
+
+      <div class="preview-box" id="previewContainer">
+        <div style="font-size: 12px; color: #38bdf8; font-weight: bold; margin-bottom: 6px;" id="previewCount"></div>
+        <table class="preview-table"><tbody id="previewBody"></tbody></table>
+      </div>
+
+      <button class="btn btn-primary" onclick="addNewTrain()">+ حفظ ونشر الرحلة سحابياً</button>
+    </div>
+  </div>
+
+  <script>
+    const DEFAULT_ADMIN_PASSWORD = "admin2026";
+
+    function getAdminPassword() {
+      return localStorage.getItem('app_admin_pass') || DEFAULT_ADMIN_PASSWORD;
+    }
+
+    function checkLoginStatus() {
+      const isAuth = sessionStorage.getItem('admin_authenticated');
+      if (isAuth === 'true') {
+        document.getElementById('loginOverlay').style.display = 'none';
+        document.getElementById('adminMainContainer').style.display = 'block';
+        initMQTT();
+      } else {
+        document.getElementById('loginOverlay').style.display = 'flex';
+        document.getElementById('adminMainContainer').style.display = 'none';
+        setTimeout(() => document.getElementById('adminPassInput').focus(), 100);
+      }
+    }
+
+    function attemptLogin() {
+      const enteredPass = document.getElementById('adminPassInput').value.trim();
+      const actualPass = getAdminPassword();
+      const errBox = document.getElementById('loginErrorMsg');
+
+      if (enteredPass === actualPass) {
+        errBox.style.display = 'none';
+        sessionStorage.setItem('admin_authenticated', 'true');
+        document.getElementById('adminPassInput').value = '';
+        checkLoginStatus();
+      } else {
+        errBox.style.display = 'block';
+        document.getElementById('adminPassInput').value = '';
+        document.getElementById('adminPassInput').focus();
+      }
+    }
+
+    function logoutAdmin() {
+      if (confirm("هل تريد تسجيل الخروج من لوحة التحكم؟")) {
+        sessionStorage.removeItem('admin_authenticated');
+        checkLoginStatus();
+      }
+    }
+
+    function changeAdminPassword() {
+      const current = prompt("أدخل كلمة المرور الحالية:");
+      if (!current) return;
+      if (current !== getAdminPassword()) {
+        alert("❌ كلمة المرور الحالية غير صحيحة!");
+        return;
+      }
+
+      const newPass = prompt("أدخل كلمة المرور الجديدة (يجب ألا تقل عن 4 خانات):");
+      if (!newPass || newPass.trim().length < 4) {
+        alert("⚠️ كلمة المرور قصيرة جداً أو فارغة، لم يتم التغيير.");
+        return;
+      }
+
+      localStorage.setItem('app_admin_pass', newPass.trim());
+      alert("✅ تم تغيير كلمة المرور بنجاح!");
+    }
+
+    /* ================= منطق المزامنة وإدارة القطارات ================= */
+    const SYNC_TOPIC = "egy_train_master_sync_2026";
+    const BROKER_HOST = "broker.emqx.io";
+    const BROKER_PORT = 8084;
+    const BROKER_PATH = "/mqtt";
+
+    let trainsData = {};
+    let parsedStationsList = [];
+    let client = null;
+
+    const cached = localStorage.getItem('local_trains_cache');
+    if (cached) {
+      try { 
+        trainsData = JSON.parse(cached); 
+        checkAndApplyDailyReset();
+        refreshTrainList();
+      } catch(e){}
+    }
+
+    function getTodayKey() {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    }
+
+    function checkAndApplyDailyReset() {
+      const today = getTodayKey();
+      let modified = false;
+
+      Object.keys(trainsData).forEach(trainId => {
+        const train = trainsData[trainId];
+        if (train.lastActiveDate !== today) {
+          train.lastActiveDate = today;
+          train.status = {
+            state: 'AT_STATION',
+            stationIndex: 0,
+            updatedBy: 'بدء جدول اليوم الجديد تلقائياً'
+          };
+          train.stations.forEach(st => {
+            st.actual = '--';
+            delete st.delayMinutes;
+          });
+          modified = true;
+        }
+      });
+
+      if (modified) {
+        broadcastData();
+      }
+    }
+
+    function initMQTT() {
+      if (client && client.isConnected()) return;
+
+      const box = document.getElementById('connStatus');
+      box.className = 'status-alert status-wait';
+      box.textContent = "⏳ جاري الاتصال بالسيرفر السحابي...";
+
+      const clientId = "adm_" + Math.random().toString(16).substr(2, 8);
+      client = new Paho.MQTT.Client(BROKER_HOST, Number(BROKER_PORT), BROKER_PATH, clientId);
+
+      client.onConnectionLost = () => {
+        box.className = 'status-alert status-wait';
+        box.textContent = "⏳ انقطع الاتصال، جاري إعادة المحاولة...";
+        setTimeout(initMQTT, 2000);
+      };
+
+      client.onMessageArrived = (message) => {
+        try {
+          const data = JSON.parse(message.payloadString);
+          if (data && typeof data === 'object') {
+            trainsData = data;
+            checkAndApplyDailyReset();
+            localStorage.setItem('local_trains_cache', JSON.stringify(data));
+            refreshTrainList();
+          }
+        } catch (e) {}
+      };
+
+      client.connect({
+        useSSL: true,
+        timeout: 5,
+        cleanSession: true,
+        onSuccess: () => {
+          box.className = 'status-alert status-ok';
+          box.textContent = "✅ متصل بالسيرفر السحابي (أي تعديل يصل للركاب فوراً)";
+          client.subscribe(SYNC_TOPIC, { qos: 1 });
+        },
+        onFailure: () => {
+          box.className = 'status-alert status-wait';
+          box.textContent = "⏳ تعذر الاتصال، جاري إعادة المحاولة...";
+          setTimeout(initMQTT, 2500);
+        }
+      });
+    }
+
+    function broadcastData() {
+      localStorage.setItem('local_trains_cache', JSON.stringify(trainsData));
+      if (client && client.isConnected()) {
+        const message = new Paho.MQTT.Message(JSON.stringify(trainsData));
+        message.destinationName = SYNC_TOPIC;
+        message.retained = true;
+        message.qos = 1;
+        client.send(message);
+      }
+    }
+
+    function timeStringToMinutes(str) {
+      if (!str || str === '--') return null;
+      let clean = str.trim();
+      const isPM = clean.includes('م') || /pm/i.test(clean);
+      const isAM = clean.includes('ص') || /am/i.test(clean);
+      const numbers = clean.replace(/[^0-9:]/g, '').split(':');
+      if (numbers.length < 2) return null;
+
+      let h = parseInt(numbers[0], 10);
+      let m = parseInt(numbers[1], 10);
+      if (isPM && h < 12) h += 12;
+      if (isAM && h === 12) h = 0;
+      return h * 60 + m;
+    }
+
+    function calculateDelayMinutes(schedStr, actStr) {
+      const sched = timeStringToMinutes(schedStr);
+      const act = timeStringToMinutes(actStr);
+      if (sched === null || act === null) return null;
+
+      let diff = act - sched;
+      if (diff < -720) diff += 1440;
+      else if (diff > 720) diff -= 1440;
+      return diff;
+    }
+
+    function refreshTrainList() {
+      const select = document.getElementById('selectedTrain');
+      const currentVal = select.value;
+      select.innerHTML = '<option value="">-- اختر قطاراً للتحكم --</option>';
+      const keys = Object.keys(trainsData);
+
+      keys.forEach(k => {
+        const opt = document.createElement('option');
+        opt.value = k;
+        opt.textContent = `قطار ${trainsData[k].number} - ${trainsData[k].name}`;
+        select.appendChild(opt);
+      });
+
+      if (currentVal && trainsData[currentVal]) {
+        select.value = currentVal;
+      }
+      renderControlBoard();
+    }
+
+    function renderControlBoard() {
+      const trainId = document.getElementById('selectedTrain').value;
+      const container = document.getElementById('controlPanel');
+      const addSection = document.getElementById('addStationSection');
+      const btnDelete = document.getElementById('btnDeleteTrain');
+      container.innerHTML = '';
+
+      if (!trainId || !trainsData[trainId]) {
+        container.innerHTML = '<p style="color:#64748b; text-align:center; padding: 20px;">👈 برجاء اختيار قطار من القائمة أعلاه لبدء المراقبة وتعديل المحطات.</p>';
+        addSection.style.display = 'none';
+        btnDelete.style.display = 'none';
+        return;
+      }
+
+      addSection.style.display = 'block';
+      btnDelete.style.display = 'block';
+      const train = trainsData[trainId];
+
+      train.stations.forEach((st, idx) => {
+        const isStopped = (train.status.state === 'AT_STATION' && train.status.stationIndex === idx);
+        const isMoving = (train.status.state === 'MOVING' && train.status.stationIndex === idx);
+        const isStoppedBetween = (train.status.state === 'STOPPED_BETWEEN' && train.status.stationIndex === idx);
+
+        const card = document.createElement('div');
+        card.className = 'station-control-row';
+        card.style.borderColor = isStopped ? '#ef4444' : (isMoving ? '#facc15' : (isStoppedBetween ? '#b91c1c' : '#334155'));
+
+        const nextSt = train.stations[idx + 1];
+
+        let actionButtons = '';
+        if (nextSt) {
+          actionButtons = `
+            <button class="btn btn-warning" onclick="setTrainMoving('${trainId}', ${idx})">🚀 غادر باتجاه ${nextSt.name}</button>
+            <button class="btn btn-caution" onclick="setTrainStoppedBetween('${trainId}', ${idx})">⚠️ متوقف بين ${st.name} و ${nextSt.name}</button>
+          `;
+        }
+
+        let alertBetweenHtml = '';
+        if (isStoppedBetween && nextSt) {
+          alertBetweenHtml = `<div class="between-alert">⚠️ تنبيه: القطار متوقف حالياً في السكة الحديد بين محطة [${st.name}] ومحطة [${nextSt.name}]</div>`;
+        }
+
+        // إظهار شارة التأخير بجوار المجدول مباشرة
+        let delayText = '';
+        if (st.delayMinutes !== undefined && st.delayMinutes !== null) {
+          if (st.delayMinutes > 0) {
+            delayText = `<span class="delay-label-red">⚠️ تأخير: +${st.delayMinutes} د</span>`;
+          } else if (st.delayMinutes < 0) {
+            delayText = `<span class="delay-label-early">⚡ متقدم: ${Math.abs(st.delayMinutes)} د</span>`;
+          } else {
+            delayText = `<span class="delay-label-ontime">🟢 في الموعد</span>`;
+          }
+        }
+
+        card.innerHTML = `
+          ${alertBetweenHtml}
+          <div class="station-head">
+            <div class="station-edit-group">
+              <span style="font-size:12px; color:#94a3b8;">رقم:</span>
+              <input type="number" class="station-order-input" min="1" max="${train.stations.length}" value="${idx + 1}" onchange="reorderStation('${trainId}', ${idx}, this.value)" title="غيّر الرقم لتبديل ترتيب المحطة">
+              <span style="font-size:12px; color:#94a3b8;">اسم:</span>
+              <input type="text" class="station-name-input" value="${st.name}" onchange="updateStationName('${trainId}', ${idx}, this.value)" placeholder="اسم المحطة">
+            </div>
+            <button class="btn btn-danger" style="padding: 4px 8px; font-size:11px;" onclick="removeStation('${trainId}', ${idx})">🗑️ حذف</button>
+          </div>
+
+          <div class="times-inputs">
+            <div>
+              <span>المجدول:</span>
+              <input type="text" value="${st.scheduled}" onchange="updateScheduledTime('${trainId}', ${idx}, this.value)" placeholder="الوقت">
+            </div>
+            ${delayText}
+            <div>
+              <span>الفعلي:</span>
+              <input type="text" value="${st.actual}" onchange="updateActualTimeManual('${trainId}', ${idx}, this.value)" placeholder="الفعلي">
+            </div>
+          </div>
+
+          <div class="btn-group">
+            <button class="btn btn-danger" onclick="setTrainAtStation('${trainId}', ${idx})">🛑 وصل رصيف ${st.name}</button>
+            ${actionButtons}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function updateStationName(trainId, stationIndex, newName) {
+      const val = newName.trim();
+      if (!val) {
+        alert("⚠️ لا يمكن ترك اسم المحطة فارغاً!");
+        renderControlBoard();
+        return;
+      }
+      trainsData[trainId].stations[stationIndex].name = val;
+      broadcastData();
+      renderControlBoard();
+    }
+
+    function reorderStation(trainId, currentIndex, targetPosition) {
+      const train = trainsData[trainId];
+      const newPos = parseInt(targetPosition) - 1;
+
+      if (isNaN(newPos) || newPos < 0 || newPos >= train.stations.length) {
+        alert(`⚠️ يرجى إدخال رقم صحيح بين 1 و ${train.stations.length}`);
+        renderControlBoard();
+        return;
+      }
+
+      if (newPos === currentIndex) return;
+
+      const [movedStation] = train.stations.splice(currentIndex, 1);
+      train.stations.splice(newPos, 0, movedStation);
+
+      if (train.status.stationIndex === currentIndex) {
+        train.status.stationIndex = newPos;
+      } else if (currentIndex < train.status.stationIndex && newPos >= train.status.stationIndex) {
+        train.status.stationIndex--;
+      } else if (currentIndex > train.status.stationIndex && newPos <= train.status.stationIndex) {
+        train.status.stationIndex++;
+      }
+
+      broadcastData();
+      renderControlBoard();
+    }
+
+    function setTrainAtStation(trainId, stationIndex) {
+      const now = new Date();
+      const timeString = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+
+      trainsData[trainId].status = { 
+        state: 'AT_STATION', 
+        stationIndex: stationIndex,
+        updatedBy: `المشرف (${timeString})`,
+        departedAt: null
+      };
+      trainsData[trainId].stations[stationIndex].actual = timeString;
+
+      const delay = calculateDelayMinutes(trainsData[trainId].stations[stationIndex].scheduled, timeString);
+      if (delay !== null) {
+        trainsData[trainId].stations[stationIndex].delayMinutes = delay;
+      }
+
+      broadcastData();
+      renderControlBoard();
+    }
+
+    function setTrainMoving(trainId, fromStationIndex) {
+      const now = new Date();
+      const timeString = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+
+      trainsData[trainId].status = { 
+        state: 'MOVING', 
+        stationIndex: fromStationIndex,
+        updatedBy: `المشرف (${timeString})`,
+        departedAt: Date.now()
+      };
+      broadcastData();
+      renderControlBoard();
+    }
+
+    function setTrainStoppedBetween(trainId, fromStationIndex) {
+      const now = new Date();
+      const timeString = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+
+      trainsData[trainId].status = { 
+        state: 'STOPPED_BETWEEN', 
+        stationIndex: fromStationIndex,
+        updatedBy: `المشرف: متوقف بالسكة (${timeString})`
+      };
+      broadcastData();
+      renderControlBoard();
+    }
+
+    function updateScheduledTime(trainId, stationIndex, newTime) {
+      trainsData[trainId].stations[stationIndex].scheduled = newTime.trim();
+      const act = trainsData[trainId].stations[stationIndex].actual;
+      if (act && act !== '--') {
+        trainsData[trainId].stations[stationIndex].delayMinutes = calculateDelayMinutes(newTime.trim(), act);
+      }
+      broadcastData();
+      renderControlBoard();
+    }
+
+    function updateActualTimeManual(trainId, stationIndex, newTime) {
+      const val = newTime.trim();
+      trainsData[trainId].stations[stationIndex].actual = val;
+      if (val && val !== '--') {
+        trainsData[trainId].stations[stationIndex].delayMinutes = calculateDelayMinutes(trainsData[trainId].stations[stationIndex].scheduled, val);
+      } else {
+        delete trainsData[trainId].stations[stationIndex].delayMinutes;
+      }
+      broadcastData();
+      renderControlBoard();
+    }
+
+    function addStationToCurrentTrain() {
+      const trainId = document.getElementById('selectedTrain').value;
+      const nameInput = document.getElementById('newStationName');
+      const timeInput = document.getElementById('newStationTime');
+
+      const name = nameInput.value.trim();
+      const time = timeInput.value.trim() || '--';
+
+      if (!name) {
+        alert("⚠️ يرجى إدخال اسم المحطة المراد إضافتها");
+        return;
+      }
+
+      trainsData[trainId].stations.push({
+        name: name,
+        scheduled: time,
+        actual: '--'
+      });
+
+      broadcastData();
+      renderControlBoard();
+      nameInput.value = '';
+      timeInput.value = '';
+    }
+
+    function removeStation(trainId, index) {
+      const train = trainsData[trainId];
+      if (train.stations.length <= 1) {
+        alert("⚠️ لا يمكن حذف آخر محطة في القطار!");
+        return;
+      }
+      if (confirm(`هل أنت متأكد من حذف محطة (${train.stations[index].name}) من مسار هذا القطار؟`)) {
+        train.stations.splice(index, 1);
+        if (train.status.stationIndex >= train.stations.length) {
+          train.status.stationIndex = train.stations.length - 1;
+        }
+        broadcastData();
+        renderControlBoard();
+      }
+    }
+
+    function parsePastedStations() {
+      const rawText = document.getElementById('smartPasteInput').value.trim();
+      const previewBox = document.getElementById('previewContainer');
+      const previewBody = document.getElementById('previewBody');
+      const previewCount = document.getElementById('previewCount');
+      
+      parsedStationsList = [];
+      previewBody.innerHTML = '';
+
+      if (!rawText) {
+        previewBox.style.display = 'none';
+        return;
+      }
+
+      const lines = rawText.split(/\r?\n/);
+      lines.forEach((line) => {
+        line = line.trim();
+        if (!line) return;
+
+        let name = "";
+        let time = "--";
+        const timeMatch = line.match(/(\d{1,2}:\d{2}(\s*(ص|م|AM|PM|am|pm))?)/);
+
+        if (timeMatch) {
+          time = timeMatch[0].trim();
+          name = line.replace(timeMatch[0], '').replace(/[-–—,،:|\t]/g, ' ').replace(/\s+/g, ' ').trim();
+        } else {
+          name = line.replace(/[-–—,،:|\t]/g, ' ').trim();
+        }
+
+        if (name && !name.includes("هل تحتاج إلى معرفة")) {
+          parsedStationsList.push({ name: name, scheduled: time, actual: '--' });
+          const row = document.createElement('tr');
+          row.innerHTML = `<td>📍 <b>${name}</b></td><td>🕒 ${time}</td>`;
+          previewBody.appendChild(row);
+        }
+      });
+
+      if (parsedStationsList.length > 0) {
+        previewCount.textContent = `✅ تم التعرف على (${parsedStationsList.length}) محطة:`;
+        previewBox.style.display = 'block';
+      } else {
+        previewBox.style.display = 'none';
+      }
+    }
+
+    function addNewTrain() {
+      const num = document.getElementById('newTrainNumber').value.trim();
+      const name = document.getElementById('newTrainName').value.trim();
+
+      if (!num) { alert('⚠️ يرجى كتابة رقم القطار'); return; }
+      if (!name) { alert('⚠️ يرجى كتابة اسم الرحلة'); return; }
+      if (parsedStationsList.length === 0) {
+        parsePastedStations();
+        if (parsedStationsList.length === 0) {
+          alert('⚠️ لم يتم التعرف على أي محطات! الصق المحطات في المربع');
+          return;
+        }
+      }
+
+      trainsData[num] = {
+        number: num,
+        name: name,
+        lastActiveDate: getTodayKey(),
+        status: { state: 'AT_STATION', stationIndex: 0, updatedBy: 'جدول الرحلة الأساسي' },
+        stations: parsedStationsList
+      };
+
+      broadcastData();
+      refreshTrainList();
+      document.getElementById('selectedTrain').value = num;
+      renderControlBoard();
+
+      alert(`✅ تم نشر قطار (${num}) سحابياً بنجاح!`);
+      document.getElementById('newTrainNumber').value = '';
+      document.getElementById('newTrainName').value = '';
+      document.getElementById('smartPasteInput').value = '';
+      document.getElementById('previewContainer').style.display = 'none';
+      parsedStationsList = [];
+    }
+
+    function deleteCurrentTrain() {
+      const trainId = document.getElementById('selectedTrain').value;
+      if (!trainId) return;
+      if (confirm(`هل أنت متأكد من حذف قطار ${trainId} نهائياً؟`)) {
+        delete trainsData[trainId];
+        broadcastData();
+        refreshTrainList();
+      }
+    }
+
+    setInterval(checkAndApplyDailyReset, 60000);
+    
+    // تشغيل التحقق من تسجيل الدخول فور فتح الصفحة
+    checkLoginStatus();
+  </script>
+</body>
+</html>

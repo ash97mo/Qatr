@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تتبع القطارات - تطبيق الراكب التشاركي</title>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      background: #0b0f19; 
+      color: #f8fafc; 
+      padding: 16px; 
+      display: flex; 
+      justify-content: center; 
+    }
+    .app-container { 
+      width: 100%; 
+      max-width: 480px; 
+      background: #1e293b; 
+      border-radius: 20px; 
+      padding: 20px; 
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5); 
+    }
+    
+    header { text-align: center; margin-bottom: 16px; }
+    header h1 { font-size: 21px; color: #38bdf8; margin-bottom: 4px; }
+    header p { font-size: 13px; color: #94a3b8; }
+
+    .status-alert { 
+      padding: 8px 12px; 
+      border-radius: 8px; 
+      margin-bottom: 15px; 
+      font-size: 12px; 
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    .status-ok { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid #22c55e; }
+    .status-wait { background: rgba(234, 179, 8, 0.15); color: #facc15; border: 1px solid #eab308; }
+
+    .selector-box { margin-bottom: 15px; }
+    .selector-box label { display: block; font-size: 13px; margin-bottom: 6px; color: #cbd5e1; }
+    select { 
+      width: 100%; 
+      padding: 12px; 
+      background: #0f172a; 
+      border: 1px solid #334155; 
+      border-radius: 10px; 
+      color: #fff; 
+      font-size: 14px; 
+      outline: none; 
+      cursor: pointer;
+    }
+
+    .role-card {
+      background: #0f172a;
+      border: 1px solid #3b82f6;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 18px;
+    }
+    .role-title { font-size: 13px; color: #93c5fd; font-weight: bold; margin-bottom: 8px; text-align: center; }
+    .role-buttons { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+    .role-btn {
+      padding: 8px 4px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      border-radius: 8px;
+      font-size: 11px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+    .role-btn.active {
+      background: #0284c7;
+      border-color: #38bdf8;
+      color: white;
+    }
+
+    .crowd-panel {
+      background: #132238;
+      border: 1px dashed #38bdf8;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 18px;
+    }
+    .crowd-title { font-size: 13px; color: #38bdf8; font-weight: bold; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+    .btn-update {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border-radius: 8px;
+      border: none;
+      font-weight: bold;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-arrive { background: #ef4444; color: white; }
+    .btn-depart { background: #eab308; color: #000; }
+    .btn-caution { background: #b91c1c; color: #fecaca; border: 1px solid #f87171; }
+
+    .train-info-badge { 
+      background: #0f172a; 
+      padding: 12px; 
+      border-radius: 12px; 
+      border-right: 4px solid #38bdf8; 
+      margin-bottom: 15px; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+    }
+    .status-badge { font-size: 11px; padding: 5px 8px; border-radius: 20px; font-weight: bold; }
+    .status-moving { background: rgba(234, 179, 8, 0.2); color: #facc15; }
+    .status-stopped { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+    .status-between { background: rgba(220, 38, 38, 0.35); color: #fca5a5; border: 1px solid #ef4444; }
+
+    .route-map { position: relative; padding: 10px 5px; }
+    .station-node { display: flex; align-items: center; position: relative; margin-bottom: 6px; }
+    
+    .big-dot {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: #334155; border: 3px solid #1e293b;
+      position: relative; z-index: 2; transition: all 0.3s ease;
+    }
+    
+    .big-dot.stopped-here {
+      background: #ef4444 !important;
+      border-color: #fca5a5;
+      box-shadow: 0 0 16px 5px rgba(239, 68, 68, 0.85);
+      transform: scale(1.25);
+    }
+
+    .station-details { 
+      margin-right: 12px; 
+      flex-grow: 1; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      gap: 8px;
+    }
+    .station-name { 
+      font-size: 14px; 
+      font-weight: 700; 
+      color: #f1f5f9; 
+      white-space: nowrap;
+    }
+
+    /* صندوق الأوقات: الوقت المجدول وجانبه التأخير */
+    .times-box { 
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 3px;
+    }
+    
+    .time-sched-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    
+    .time-sched {
+      font-size: 12px;
+      color: #94a3b8;
+    }
+    .time-sched b {
+      color: #f8fafc;
+    }
+
+    .time-act { 
+      font-weight: bold; 
+      color: #38bdf8; 
+      font-size: 11px;
+    }
+
+    /* تصميم شارات التأخير البارزة بالأحمر بجانب المجدول */
+    .delay-badge-red {
+      color: #ff3333;
+      background: rgba(239, 68, 68, 0.22);
+      border: 1px solid #ef4444;
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-weight: 800;
+      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      box-shadow: 0 0 8px rgba(239, 68, 68, 0.35);
+      white-space: nowrap;
+    }
+    .delay-badge-ontime {
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid #0284c7;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+    .delay-badge-early {
+      color: #4ade80;
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid #22c55e;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .track-line {
+      width: 4px; height: 50px; background: #334155;
+      margin-right: 9px; position: relative;
+      display: flex; align-items: center; justify-content: center;
+    }
+    
+    .small-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #475569; position: absolute; right: -3px;
+    }
+
+    .small-dot.moving-here {
+      background: #facc15;
+      box-shadow: 0 0 14px 4px rgba(250, 204, 21, 0.9);
+      animation: pulse 0.8s infinite alternate;
+    }
+
+    .small-dot.stopped-between-here {
+      background: #ef4444;
+      width: 14px; height: 14px; right: -5px;
+      box-shadow: 0 0 14px 5px rgba(239, 68, 68, 0.95);
+      animation: blink 0.6s infinite alternate;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.7; }
+      100% { transform: scale(1.6); opacity: 1; }
+    }
+
+    @keyframes blink {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(1.4); opacity: 0.3; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <header>
+      <h1>🚆 تتبع القطارات التشاركي</h1>
+      <p>تحديث الموقع لحظياً بمساعدة ركاب القطار بالـ GPS المنطقي</p>
+    </header>
+
+    <div id="connStatus" class="status-alert status-wait">⏳ جاري الاتصال بالسيرفر السحابي...</div>
+
+    <div class="selector-box">
+      <label>اختر رقم القطار:</label>
+      <select id="trainSelect" onchange="loadSelectedTrain()"></select>
+    </div>
+
+    <!-- بطاقة سؤال المستخدم عن دوره -->
+    <div class="role-card" id="roleCardSection" style="display: none;">
+      <div class="role-title">📍 هل أنت في هذا القطار أو بالمحطة الآن؟</div>
+      <div class="role-buttons">
+        <button class="role-btn" id="btnRolePassenger" onclick="setUserRole('PASSENGER')">🚆 أنا راكب القطار</button>
+        <button class="role-btn" id="btnRoleWaiting" onclick="setUserRole('WAITING')">⏳ منتظر بمحطة</button>
+        <button class="role-btn active" id="btnRoleViewer" onclick="setUserRole('VIEWER')">👁️ مجرد متابع</button>
+      </div>
+    </div>
+
+    <!-- لوحة التحديث بالـ GPS للمساهمين -->
+    <div class="crowd-panel" id="crowdActionPanel" style="display: none;">
+      <div class="crowd-title">
+        <span>مساعد المسافرين (GPS مُفعّل) 📡</span>
+        <span id="gpsDistanceStatus" style="font-size: 11px; color:#facc15;"></span>
+      </div>
+      <div id="crowdControls"></div>
+    </div>
+
+    <div class="train-info-badge" id="trainBadgeSection" style="display: none;">
+      <div>
+        <div style="font-weight: bold;" id="trainTitle">--</div>
+        <div style="font-size: 12px; color: #94a3b8;" id="trainRouteName">--</div>
+        <div id="updateSourceText" style="font-size: 11px; color: #64748b; margin-top: 4px;"></div>
+      </div>
+      <div id="statusBadge" class="status-badge">--</div>
+    </div>
+
+    <div class="route-map" id="routeMap">
+      <div style="text-align: center; color: #64748b; padding: 30px 10px;">
+        👈 يرجى اختيار قطار من القائمة أعلاه لمتابعة مساره المباشر.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SYNC_TOPIC = "egy_train_master_sync_2026";
+    const BROKER_HOST = "broker.emqx.io";
+    const BROKER_PORT = 8084;
+    const BROKER_PATH = "/mqtt";
+
+    let trainsData = {};
+    let currentUserRole = 'VIEWER';
+    let client = null;
+
+    const cached = localStorage.getItem('local_trains_cache');
+    if (cached) {
+      try { 
+        trainsData = JSON.parse(cached);
+        checkAndApplyDailyReset();
+        populateTrainDropdown();
+      } catch(e){}
+    }
+
+    function getTodayKey() {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    }
+
+    function checkAndApplyDailyReset() {
+      const today = getTodayKey();
+      let modified = false;
+
+      Object.keys(trainsData).forEach(trainId => {
+        const train = trainsData[trainId];
+        if (train.lastActiveDate !== today) {
+          train.lastActiveDate = today;
+          train.status = {
+            state: 'AT_STATION',
+            stationIndex: 0,
+            updatedBy: 'بدء جدول اليوم الجديد تلقائياً'
+          };
+          train.stations.forEach(st => {
+            st.actual = '--';
+            delete st.delayMinutes;
+          });
+          modified = true;
+        }
+      });
+
+      if (modified) {
+        broadcastData();
+      }
+    }
+
+    function initMQTT() {
+      const box = document.getElementById('connStatus');
+      box.className = 'status-alert status-wait';
+      box.textContent = "⏳ جاري الاتصال بالسيرفر السحابي...";
+
+      const clientId = "pass_" + Math.random().toString(16).substr(2, 8);
+      client = new Paho.MQTT.Client(BROKER_HOST, Number(BROKER_PORT), BROKER_PATH, clientId);
+
+      client.onConnectionLost = () => {
+        box.className = 'status-alert status-wait';
+        box.textContent = "⏳ انقطع الاتصال، جاري إعادة المحاولة...";
+        setTimeout(initMQTT, 2000);
+      };
+
+      client.onMessageArrived = (message) => {
+        try {
+          const data = JSON.parse(message.payloadString);
+          if (data && typeof data === 'object') {
+            trainsData = data;
+            checkAndApplyDailyReset();
+            localStorage.setItem('local_trains_cache', JSON.stringify(trainsData));
+            populateTrainDropdown();
+          }
+        } catch (e) {}
+      };
+
+      client.connect({
+        useSSL: true,
+        timeout: 5,
+        cleanSession: true,
+        onSuccess: () => {
+          box.className = 'status-alert status-ok';
+          box.textContent = "✅ متصل بالسيرفر السحابي مباشرة";
+          client.subscribe(SYNC_TOPIC, { qos: 1 });
+        },
+        onFailure: () => {
+          box.className = 'status-alert status-wait';
+          box.textContent = "⏳ تعذر الاتصال، جاري إعادة المحاولة...";
+          setTimeout(initMQTT, 2500);
+        }
+      });
+    }
+
+    function broadcastData() {
+      localStorage.setItem('local_trains_cache', JSON.stringify(trainsData));
+      if (client && client.isConnected()) {
+        const message = new Paho.MQTT.Message(JSON.stringify(trainsData));
+        message.destinationName = SYNC_TOPIC;
+        message.retained = true;
+        message.qos = 1;
+        client.send(message);
+      }
+    }
+
+    function timeStringToMinutes(str) {
+      if (!str || str === '--' || str.includes('تجاوز')) return null;
+      let clean = str.trim();
+      const isPM = clean.includes('م') || /pm/i.test(clean);
+      const isAM = clean.includes('ص') || /am/i.test(clean);
+      const numbers = clean.replace(/[^0-9:]/g, '').split(':');
+      if (numbers.length < 2) return null;
+
+      let h = parseInt(numbers[0], 10);
+      let m = parseInt(numbers[1], 10);
+      if (isPM && h < 12) h += 12;
+      if (isAM && h === 12) h = 0;
+      return h * 60 + m;
+    }
+
+    function calculateDelayMinutes(schedStr, actStr) {
+      const sched = timeStringToMinutes(schedStr);
+      const act = timeStringToMinutes(actStr);
+      if (sched === null || act === null) return null;
+
+      let diff = act - sched;
+      if (diff < -720) diff += 1440;
+      else if (diff > 720) diff -= 1440;
+      return diff;
+    }
+
+    // قاعدة بيانات إحداثيات المحطات
+    const EGYPT_STATIONS_COORDS = {
+      "القاهرة": { lat: 30.0633, lng: 31.2469 },
+      "رمسيس": { lat: 30.0633, lng: 31.2469 },
+      "محطة مصر": { lat: 30.0633, lng: 31.2469 },
+      "شبرا الخيمة": { lat: 30.1228, lng: 31.2435 },
+      "الجيزة": { lat: 29.9870, lng: 31.2001 },
+      "الحوامدية": { lat: 29.8972, lng: 31.2612 },
+      "البدرشين": { lat: 29.8142, lng: 31.2657 },
+      "العياط": { lat: 29.6197, lng: 31.2584 },
+      "قليوب": { lat: 30.1794, lng: 31.2056 },
+      "قها": { lat: 30.2844, lng: 31.2033 },
+      "طوخ": { lat: 30.3547, lng: 31.1994 },
+      "بنها": { lat: 30.4660, lng: 31.1853 },
+      "قويسنا": { lat: 30.5186, lng: 31.1444 },
+      "بركة السبع": { lat: 30.6386, lng: 31.0850 },
+      "طنطا": { lat: 30.7885, lng: 31.0020 },
+      "كفر الزيات": { lat: 30.8252, lng: 30.8175 },
+      "التوفيقية": { lat: 30.8936, lng: 30.7303 },
+      "إيتاي البارود": { lat: 30.8872, lng: 30.6658 },
+      "دمنهور": { lat: 31.0409, lng: 30.4700 },
+      "أبو حمص": { lat: 31.1003, lng: 30.3122 },
+      "كفر الدوار": { lat: 31.1342, lng: 30.1306 },
+      "سيدي جابر": { lat: 31.2185, lng: 29.9442 },
+      "الإسكندرية": { lat: 31.1927, lng: 29.9060 },
+      "الواسطى": { lat: 29.3364, lng: 31.2008 },
+      "ناصر": { lat: 29.1764, lng: 31.1292 },
+      "بني سويف": { lat: 29.0744, lng: 31.0978 },
+      "ببا": { lat: 28.9247, lng: 30.9856 },
+      "الفشن": { lat: 28.8242, lng: 30.8986 },
+      "مغاغة": { lat: 28.6489, lng: 30.8408 },
+      "بني مزار": { lat: 28.5039, lng: 30.7997 },
+      "مطاي": { lat: 28.4172, lng: 30.7786 },
+      "سمالوط": { lat: 28.3125, lng: 30.7103 },
+      "المنيا": { lat: 28.1099, lng: 30.7503 },
+      "أبو قرقاص": { lat: 27.9333, lng: 30.8333 },
+      "ملوي": { lat: 27.7314, lng: 30.8422 },
+      "ديرمواس": { lat: 27.6433, lng: 30.8497 },
+      "ديروط": { lat: 27.5572, lng: 30.8122 },
+      "القوصية": { lat: 27.4428, lng: 30.8197 },
+      "منفلوط": { lat: 27.3147, lng: 30.9706 },
+      "أسيوط": { lat: 27.1809, lng: 31.1837 },
+      "أبو تيج": { lat: 27.0428, lng: 31.3197 },
+      "صدفا": { lat: 26.9667, lng: 31.3997 },
+      "طما": { lat: 26.9083, lng: 31.4333 },
+      "طهطا": { lat: 26.7694, lng: 31.5022 },
+      "المراغة": { lat: 26.6936, lng: 31.6036 },
+      "سوهاج": { lat: 26.5569, lng: 31.6948 },
+      "المنشأة": { lat: 26.4756, lng: 31.8028 },
+      "جرجا": { lat: 26.3386, lng: 31.8925 },
+      "البلينا": { lat: 26.2344, lng: 31.9997 },
+      "أبو تشت": { lat: 26.1167, lng: 32.0997 },
+      "فرشوط": { lat: 26.0558, lng: 32.1606 },
+      "نجع حمادي": { lat: 26.0494, lng: 32.2414 },
+      "دشنا": { lat: 26.1214, lng: 32.4786 },
+      "قنا": { lat: 26.1642, lng: 32.7267 },
+      "قفط": { lat: 25.9972, lng: 32.8167 },
+      "قوص": { lat: 25.9189, lng: 32.7636 },
+      "الأقصر": { lat: 25.6949, lng: 32.6450 },
+      "أرمنت": { lat: 25.6178, lng: 32.5358 },
+      "إسنا": { lat: 25.2933, lng: 32.5539 },
+      "إدفو": { lat: 24.9781, lng: 32.8753 },
+      "سلوا": { lat: 24.7833, lng: 32.9167 },
+      "كوم أمبو": { lat: 24.4644, lng: 32.9461 },
+      "دراو": { lat: 24.3167, lng: 32.9333 },
+      "أسوان": { lat: 24.0934, lng: 32.9070 },
+      "السد العالي": { lat: 23.9744, lng: 32.8833 },
+      "الزقازيق": { lat: 30.5877, lng: 31.5020 },
+      "الإسماعيلية": { lat: 30.6043, lng: 32.2723 },
+      "السويس": { lat: 29.9737, lng: 32.5599 },
+      "بورسعيد": { lat: 31.2565, lng: 32.2841 },
+      "المنصورة": { lat: 31.0379, lng: 31.3815 },
+      "دمياط": { lat: 31.4175, lng: 31.8144 }
+    };
+
+    function calculateDistanceKm(lat1, lon1, lat2, lon2) {
+      const R = 6371;
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+      return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
+    }
+
+    function normalizeStationName(name) {
+      return name.replace(/محطة/g, '').replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/\s+/g, ' ').trim();
+    }
+
+    function getStationCoordinates(name) {
+      const cleanName = normalizeStationName(name);
+      for (const [key, coords] of Object.entries(EGYPT_STATIONS_COORDS)) {
+        const cleanKey = normalizeStationName(key);
+        if (cleanName.includes(cleanKey) || cleanKey.includes(cleanName)) {
+          return coords;
+        }
+      }
+      return null;
+    }
+
+    function setUserRole(role) {
+      currentUserRole = role;
+      document.getElementById('btnRolePassenger').className = 'role-btn ' + (role === 'PASSENGER' ? 'active' : '');
+      document.getElementById('btnRoleWaiting').className = 'role-btn ' + (role === 'WAITING' ? 'active' : '');
+      document.getElementById('btnRoleViewer').className = 'role-btn ' + (role === 'VIEWER' ? 'active' : '');
+      renderCrowdControls();
+    }
+
+    function populateTrainDropdown() {
+      const select = document.getElementById('trainSelect');
+      const currentVal = select.value;
+      select.innerHTML = '<option value="">-- اختر رقم القطار لمتابعته --</option>';
+      
+      const keys = Object.keys(trainsData);
+      keys.forEach(key => {
+        const t = trainsData[key];
+        const opt = document.createElement('option');
+        opt.value = key;
+        opt.textContent = `قطار ${t.number} - ${t.name}`;
+        select.appendChild(opt);
+      });
+
+      if (currentVal && trainsData[currentVal]) {
+        select.value = currentVal;
+      }
+      loadSelectedTrain();
+    }
+
+    function loadSelectedTrain() {
+      const trainId = document.getElementById('trainSelect').value;
+      const train = trainsData[trainId];
+
+      const roleSec = document.getElementById('roleCardSection');
+      const badgeSec = document.getElementById('trainBadgeSection');
+      const crowdSec = document.getElementById('crowdActionPanel');
+      const routeMap = document.getElementById('routeMap');
+
+      if (!trainId || !train) {
+        roleSec.style.display = 'none';
+        badgeSec.style.display = 'none';
+        crowdSec.style.display = 'none';
+        routeMap.innerHTML = '<div style="text-align: center; color: #64748b; padding: 30px 10px;">👈 يرجى اختيار قطار من القائمة أعلاه لمتابعة مساره المباشر.</div>';
+        return;
+      }
+
+      roleSec.style.display = 'block';
+      badgeSec.style.display = 'flex';
+
+      document.getElementById('trainTitle').textContent = `قطار رقم ${train.number}`;
+      document.getElementById('trainRouteName').textContent = train.name;
+
+      const badge = document.getElementById('statusBadge');
+      const curIdx = train.status.stationIndex;
+      const curStation = train.stations[curIdx]?.name || '';
+      const nextStation = train.stations[curIdx + 1]?.name || '';
+
+      if (train.status.state === 'MOVING') {
+        badge.className = 'status-badge status-moving';
+        badge.textContent = `متحرك: ${curStation} ⟵ ${nextStation}`;
+      } else if (train.status.state === 'STOPPED_BETWEEN') {
+        badge.className = 'status-badge status-between';
+        badge.textContent = `⚠️ متوقف بالسكة بين ${curStation} و ${nextStation}`;
+      } else {
+        badge.className = 'status-badge status-stopped';
+        badge.textContent = `متوقف برصيف محطة ${curStation}`;
+      }
+
+      const sourceBox = document.getElementById('updateSourceText');
+      sourceBox.textContent = train.status.updatedBy ? `📍 المصدر: ${train.status.updatedBy}` : "";
+
+      renderMap(train);
+      renderCrowdControls();
+    }
+
+    function renderCrowdControls() {
+      const panel = document.getElementById('crowdActionPanel');
+      const controls = document.getElementById('crowdControls');
+      const trainId = document.getElementById('trainSelect').value;
+      const train = trainsData[trainId];
+
+      if (currentUserRole === 'VIEWER' || !train) {
+        panel.style.display = 'none';
+        return;
+      }
+
+      panel.style.display = 'block';
+      controls.innerHTML = '';
+
+      const currentIndex = train.status.stationIndex;
+      const currentStation = train.stations[currentIndex];
+      const nextStation = train.stations[currentIndex + 1];
+
+      if (currentUserRole === 'PASSENGER') {
+        if (train.status.state === 'AT_STATION') {
+          if (nextStation) {
+            controls.innerHTML = `
+              <p style="font-size:12px; margin-bottom:8px; color:#cbd5e1;">القطار متوقف الآن في <b>${currentStation.name}</b>:</p>
+              <button class="btn-update btn-depart" onclick="submitVerifiedMovement('${trainId}', ${currentIndex}, 'DEPART')">
+                🚀 نعم تحركنا الآن باتجاه محطة ${nextStation.name}
+              </button>
+            `;
+          } else {
+            controls.innerHTML = `<p style="font-size:12px; color:#4ade80;">وصل القطار إلى المحطة النهائية بحمد الله 🎉</p>`;
+          }
+        } else if (train.status.state === 'MOVING') {
+          controls.innerHTML = `
+            <p style="font-size:12px; margin-bottom:8px; color:#cbd5e1;">المسجل حالياً: في الطريق إلى <b>${nextStation ? nextStation.name : ''}</b></p>
+            ${nextStation ? `
+            <button class="btn-update btn-arrive" onclick="submitVerifiedMovement('${trainId}', ${currentIndex + 1}, 'ARRIVE')">
+              🛑 وصلنا رصيف محطة ${nextStation.name}
+            </button>` : ''}
+            <button class="btn-update btn-caution" onclick="submitVerifiedMovement('${trainId}', ${currentIndex}, 'STOP_BETWEEN')">
+              ⚠️ توقف القطار فجأة في السكة قبل الوصول
+            </button>
+          `;
+        } else if (train.status.state === 'STOPPED_BETWEEN') {
+          controls.innerHTML = `
+            <p style="font-size:12px; margin-bottom:8px; color:#fca5a5;">القطار متوقف في السكة بين <b>${currentStation.name}</b> و <b>${nextStation ? nextStation.name : ''}</b>:</p>
+            <button class="btn-update btn-depart" onclick="submitVerifiedMovement('${trainId}', ${currentIndex}, 'DEPART')">
+              🚀 استأنف القطار المسير باتجاه ${nextStation ? nextStation.name : ''}
+            </button>
+            ${nextStation ? `
+            <button class="btn-update btn-arrive" onclick="submitVerifiedMovement('${trainId}', ${currentIndex + 1}, 'ARRIVE')">
+              🛑 دخلنا رصيف محطة ${nextStation.name}
+            </button>` : ''}
+          `;
+        }
+
+      } else if (currentUserRole === 'WAITING') {
+        let optionsHtml = '';
+        train.stations.forEach((st, idx) => {
+          if (idx >= currentIndex) {
+            optionsHtml += `<option value="${idx}">${st.name}</option>`;
+          }
+        });
+
+        controls.innerHTML = `
+          <label style="font-size:11px; color:#94a3b8; display:block; margin-bottom:4px;">حدد المحطة التي تنتظر على رصيفها:</label>
+          <select id="waitingStationSelect" style="margin-bottom:8px; padding:8px;">${optionsHtml}</select>
+          <button class="btn-update btn-arrive" onclick="submitWaitingStationArrival('${trainId}')">
+            🛑 القطار وصل رصيف المحطة عندي الآن
+          </button>
+        `;
+      }
+    }
+
+    function submitWaitingStationArrival(trainId) {
+      const selectedIdx = parseInt(document.getElementById('waitingStationSelect').value);
+      submitVerifiedMovement(trainId, selectedIdx, 'ARRIVE');
+    }
+
+    // التحقق الجغرافي والزمني بالـ GPS
+    function submitVerifiedMovement(trainId, targetStationIndex, actionType) {
+      const train = trainsData[trainId];
+      const curIdx = train.status.stationIndex;
+      const curStation = train.stations[curIdx];
+      const targetStation = train.stations[targetStationIndex];
+
+      if (actionType === 'ARRIVE') {
+        if (targetStationIndex < curIdx) {
+          alert(`⛔ غير منطقي! القطار تجاوز محطة (${targetStation.name}) بالفعل.`);
+          return;
+        }
+
+        if (targetStationIndex === curIdx && train.status.state === 'AT_STATION') {
+          alert(`ℹ️ القطار مسجل بالفعل أنه متوقف حالياً في محطة (${targetStation.name}).`);
+          return;
+        }
+
+        const now = new Date();
+        const currentMins = now.getHours() * 60 + now.getMinutes();
+        const toSchedMins = timeStringToMinutes(targetStation.scheduled);
+
+        if (train.status.departedAt || (curStation.actual && curStation.actual !== '--')) {
+          let elapsedMinutes = null;
+
+          if (train.status.departedAt) {
+            elapsedMinutes = (Date.now() - train.status.departedAt) / 60000;
+          } else if (curStation.actual) {
+            const lastActMins = timeStringToMinutes(curStation.actual);
+            if (lastActMins !== null) {
+              let diff = currentMins - lastActMins;
+              if (diff < -720) diff += 1440;
+              else if (diff > 720) diff -= 1440;
+              elapsedMinutes = diff;
+            }
+          }
+
+          const fromSchedMins = timeStringToMinutes(curStation.scheduled);
+          if (elapsedMinutes !== null && fromSchedMins !== null && toSchedMins !== null) {
+            let scheduledTripDuration = toSchedMins - fromSchedMins;
+            if (scheduledTripDuration < 0) scheduledTripDuration += 1440;
+
+            const minRealisticMinutes = Math.max(2, scheduledTripDuration * 0.35);
+
+            if (elapsedMinutes >= 0 && elapsedMinutes < minRealisticMinutes) {
+              alert(`⛔ غير منطقي من حيث السرعة والوقت!\nالقطار تحرك منذ (${Math.round(elapsedMinutes)} دقيقة) فقط، ويستحيل وصوله بهذه السرعة.`);
+              return;
+            }
+          }
+        }
+      }
+
+      if (!navigator.geolocation) {
+        alert("⚠️ جهازك لا يدعم نظام تحديد الموقع (GPS).");
+        return;
+      }
+
+      document.getElementById('gpsDistanceStatus').textContent = "📡 جاري التحقق من موقعك...";
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const userLat = position.coords.latitude;
+          const userLng = position.coords.longitude;
+          const accuracy = position.coords.accuracy || 100;
+
+          if (accuracy > 3000) {
+            document.getElementById('gpsDistanceStatus').textContent = "❌ إشارة ضعيفة";
+            alert("⚠️ إشارة الـ GPS على هاتفك غير دقيقة حالياً.");
+            return;
+          }
+
+          if (actionType === 'ARRIVE') {
+            const stCoords = getStationCoordinates(targetStation.name);
+            if (!stCoords) {
+              document.getElementById('gpsDistanceStatus').textContent = "❌ غير مسجلة";
+              alert(`⚠️ لم نتمكن من مطابقة محطة (${targetStation.name}) في قاعدة الإحداثيات.`);
+              return;
+            }
+
+            const distanceKm = calculateDistanceKm(userLat, userLng, stCoords.lat, stCoords.lng);
+            const MAX_ALLOWED_KM = 3.5;
+
+            if (distanceKm > MAX_ALLOWED_KM) {
+              document.getElementById('gpsDistanceStatus').textContent = "❌ تم الرفض";
+              alert(`⛔ تم رفض التحديث!\nأنت تبعد عن محطة (${targetStation.name}) مسافة (${distanceKm.toFixed(1)} كم).`);
+              return;
+            }
+          }
+
+          if (actionType === 'DEPART') {
+            const fromCoords = getStationCoordinates(curStation.name);
+            if (!fromCoords) {
+              document.getElementById('gpsDistanceStatus').textContent = "❌ غير مسجلة";
+              alert(`⚠️ لم نتمكن من مطابقة محطة (${curStation.name}) في قاعدة الإحداثيات.`);
+              return;
+            }
+
+            const distanceKm = calculateDistanceKm(userLat, userLng, fromCoords.lat, fromCoords.lng);
+            const MAX_DEPART_KM = 6.0;
+
+            if (distanceKm > MAX_DEPART_KM) {
+              document.getElementById('gpsDistanceStatus').textContent = "❌ تم الرفض";
+              alert(`⛔ تم رفض التحديث!\nأنت تبعد عن محطة المغادرة مسافة (${distanceKm.toFixed(1)} كم).`);
+              return;
+            }
+          }
+
+          if (actionType === 'STOP_BETWEEN') {
+            const fromSt = train.stations[train.status.stationIndex];
+            const toSt = train.stations[train.status.stationIndex + 1];
+            const c1 = getStationCoordinates(fromSt.name);
+            const c2 = toSt ? getStationCoordinates(toSt.name) : null;
+
+            if (!c1 || !c2) {
+              document.getElementById('gpsDistanceStatus').textContent = "❌ محطة غير مسجلة";
+              alert("⚠️ تعذر مطابقة إحداثيات المحطات المحيطة بك.");
+              return;
+            }
+
+            const d1 = calculateDistanceKm(userLat, userLng, c1.lat, c1.lng);
+            const d2 = calculateDistanceKm(userLat, userLng, c2.lat, c2.lng);
+            const interDistance = calculateDistanceKm(c1.lat, c1.lng, c2.lat, c2.lng);
+
+            if (d1 + d2 > interDistance + 15) {
+              document.getElementById('gpsDistanceStatus').textContent = "❌ بعيد عن المسار";
+              alert("⛔ تم رفض التحديث! موقعك يقع خارج مسار السكة الحديد.");
+              return;
+            }
+          }
+
+          applyTrainUpdate(trainId, targetStationIndex, actionType);
+        },
+        (error) => {
+          document.getElementById('gpsDistanceStatus').textContent = "";
+          alert("⚠️ يرجى تفعيل إذن الموقع الجغرافي (GPS) في المتصفح لتأكيد وصولك.");
+        },
+        { enableHighAccuracy: true, timeout: 9000, maximumAge: 0 }
+      );
+    }
+
+    function applyTrainUpdate(trainId, stationIndex, actionType) {
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+      const train = trainsData[trainId];
+
+      if (actionType === 'ARRIVE') {
+        train.status = { 
+          state: 'AT_STATION', 
+          stationIndex: stationIndex,
+          updatedBy: `راكب موثق بالـ GPS (${timeStr})`,
+          departedAt: null
+        };
+        train.stations[stationIndex].actual = timeStr;
+
+        const delay = calculateDelayMinutes(train.stations[stationIndex].scheduled, timeStr);
+        if (delay !== null) {
+          train.stations[stationIndex].delayMinutes = delay;
+        }
+      } else if (actionType === 'DEPART') {
+        train.status = { 
+          state: 'MOVING', 
+          stationIndex: stationIndex,
+          updatedBy: `راكب موثق بالـ GPS (${timeStr})`,
+          departedAt: Date.now()
+        };
+      } else if (actionType === 'STOP_BETWEEN') {
+        train.status = { 
+          state: 'STOPPED_BETWEEN', 
+          stationIndex: stationIndex,
+          updatedBy: `راكب موثق: متوقف بالسكة (${timeStr})`
+        };
+      }
+
+      broadcastData();
+      document.getElementById('gpsDistanceStatus').textContent = "✅ تم الاعتماد!";
+      alert(`✅ تم التحقق من موقعك الفعلي بنجاح وتحديث مسار القطار.`);
+      loadSelectedTrain();
+    }
+
+    function renderMap(train) {
+      const map = document.getElementById('routeMap');
+      map.innerHTML = '';
+
+      train.stations.forEach((st, idx) => {
+        const isStoppedHere = (train.status.state === 'AT_STATION' && train.status.stationIndex === idx);
+
+        // شارة التأخير البارزة بالأحمر بجوار الوقت المجدول
+        let delayHtml = '';
+        if (st.delayMinutes !== undefined && st.delayMinutes !== null) {
+          if (st.delayMinutes > 0) {
+            delayHtml = `<span class="delay-badge-red">⏱️ تأخير: +${st.delayMinutes} د</span>`;
+          } else if (st.delayMinutes < 0) {
+            delayHtml = `<span class="delay-badge-early">⚡ متقدم: ${Math.abs(st.delayMinutes)} د</span>`;
+          } else {
+            delayHtml = `<span class="delay-badge-ontime">🟢 في الموعد</span>`;
+          }
+        }
+
+        const scheduledText = st.scheduled ? st.scheduled : '--';
+        const actualText = (st.actual && st.actual !== '--') 
+          ? `<div class="time-act">✅ وصل: ${st.actual}</div>` 
+          : '';
+
+        const row = document.createElement('div');
+        row.className = 'station-node';
+        row.innerHTML = `
+          <div class="big-dot ${isStoppedHere ? 'stopped-here' : ''}"></div>
+          <div class="station-details">
+            <span class="station-name">${st.name}</span>
+            <div class="times-box">
+              <div class="time-sched-line">
+                <span class="time-sched">مجدول: <b>${scheduledText}</b></span>
+                ${delayHtml}
+              </div>
+              ${actualText}
+            </div>
+          </div>
+        `;
+        map.appendChild(row);
+
+        if (idx < train.stations.length - 1) {
+          const isMovingHere = (train.status.state === 'MOVING' && train.status.stationIndex === idx);
+          const isStoppedBetweenHere = (train.status.state === 'STOPPED_BETWEEN' && train.status.stationIndex === idx);
+
+          let dotClass = '';
+          if (isMovingHere) dotClass = 'moving-here';
+          if (isStoppedBetweenHere) dotClass = 'stopped-between-here';
+
+          const track = document.createElement('div');
+          track.className = 'track-line';
+          track.innerHTML = `<div class="small-dot ${dotClass}"></div>`;
+          map.appendChild(track);
+        }
+      });
+    }
+
+    setInterval(checkAndApplyDailyReset, 60000);
+    initMQTT();
+  </script>
+</body>
+</html>
