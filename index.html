@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>تتبع القطارات - تطبيق الراكب التشاركي</title>
   
+  <!-- إعدادات تطبيق الهاتف PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b0f19">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="القطارات">
+  <link rel="apple-touch-icon" href="icon.svg">
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script>
 
   <style>
@@ -29,6 +37,30 @@
     header { text-align: center; margin-bottom: 16px; }
     header h1 { font-size: 21px; color: #38bdf8; margin-bottom: 4px; }
     header p { font-size: 13px; color: #94a3b8; }
+
+    /* شريط تثبيت التطبيق */
+    .install-bar {
+      display: none;
+      background: #132238;
+      border: 1px solid #0284c7;
+      padding: 10px 14px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .install-bar span { font-size: 12.5px; color: #e2e8f0; font-weight: 600; }
+    .btn-install {
+      background: #0284c7;
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+    }
 
     .status-alert { 
       padding: 8px 12px; 
@@ -109,7 +141,6 @@
     .btn-depart { background: #eab308; color: #000; }
     .btn-caution { background: #b91c1c; color: #fecaca; border: 1px solid #f87171; }
 
-    /* بطاقة بيانات القطار الأصلية الهادئة */
     .train-info-badge { 
       background: #0f172a; 
       padding: 12px; 
@@ -185,7 +216,6 @@
       font-size: 11px;
     }
 
-    /* شارات التأخير البارزة */
     .delay-badge-red {
       color: #ffffff !important;
       background: #dc2626 !important;
@@ -345,6 +375,12 @@
       <p>تحديث الموقع لحظياً بمساعدة ركاب القطار والـ GPS المنطقي</p>
     </header>
 
+    <!-- شريط دعوة تثبيت التطبيق -->
+    <div id="installAppPrompt" class="install-bar">
+      <span>📲 ثبّت تطبيق القطارات على هاتفك</span>
+      <button class="btn-install" onclick="installPWA()">تثبيت الآن</button>
+    </div>
+
     <div id="connStatus" class="status-alert status-wait">⏳ جاري الاتصال بالسيرفر السحابي...</div>
 
     <div class="selector-box">
@@ -397,6 +433,36 @@
     let trainsData = {};
     let currentUserRole = 'VIEWER';
     let client = null;
+    let deferredPrompt = null;
+
+    // تسجيل Service Worker لتحويل الموقع إلى تطبيق هاتف
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(() => console.log('PWA Service Worker Registered!'))
+          .catch((err) => console.log('SW registration failed:', err));
+      });
+    }
+
+    // التقاط إشعار تثبيت التطبيق
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const bar = document.getElementById('installAppPrompt');
+      if (bar) bar.style.display = 'flex';
+    });
+
+    function installPWA() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            document.getElementById('installAppPrompt').style.display = 'none';
+          }
+          deferredPrompt = null;
+        });
+      }
+    }
 
     function showCustomAlert(type, title, message) {
       const overlay = document.getElementById('customModalOverlay');
@@ -506,7 +572,6 @@
       } catch(e){}
     }
 
-    // تصفير تلقائي ذكي عند بداية رحلة جديدة للقطار
     function autoResetIfNewTrip(trainId, stationIndex) {
       const train = trainsData[trainId];
       if (!train) return;
@@ -836,7 +901,7 @@
       const now = new Date();
       const currentMins = now.getHours() * 60 + now.getMinutes();
 
-      // فحص الاتجاه: منع التحديث للخلف
+      // 1. فحص الاتجاه: منع التحديث للخلف
       if (actionType === 'ARRIVE') {
         if (targetStationIndex < curIdx) {
           showCustomAlert('error', 'محطة سابقة', `القطار تجاوز محطة (${targetStation.name}) بالفعل، لا يمكن التحديث للخلف.`);
@@ -848,12 +913,12 @@
           return;
         }
 
-        // منع الوصول المبكر > 15 دقيقة أو المتأخر > ساعتين
+        // 2. التحقق من الوقت المجدول (منع الوصول المبكر > 15 دقيقة أو المتأخر > ساعتين)
         const toSchedMins = timeStringToMinutes(targetStation.scheduled);
         if (toSchedMins !== null) {
           let timeDiff = currentMins - toSchedMins;
           if (timeDiff < -720) timeDiff += 1440;
-          else if (timeDiff > 720) timeDiff -= 1440;
+          else if (timeDiff > 720) diff -= 1440;
 
           if (timeDiff < -15) {
             showCustomAlert('error', 'محاولة تحديث مبكرة', `متبقي أكثر من 15 دقيقة على موعد وصول محطة (${targetStation.name}) المجدول [${targetStation.scheduled}]. لا يمكن تسجيل الوصول الآن.`);
@@ -866,7 +931,7 @@
           }
         }
 
-        // فحص واقعية سرعة القطار
+        // 3. فحص واقعية سرعة القطار
         if (train.status.departedAt || (curStation.actual && curStation.actual !== '--')) {
           let elapsedMinutes = null;
 
