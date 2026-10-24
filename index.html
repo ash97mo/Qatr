@@ -1,5 +1,4 @@
-
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
@@ -263,13 +262,13 @@
       100% { transform: scale(1.4); opacity: 0.3; }
     }
 
-    /* نافذة التنبيهات المخصصة المودال */
+    /* نافذة المودال المخصصة المطابقة للمشرف */
     .custom-modal-overlay {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(5, 9, 18, 0.8);
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
+      background: rgba(5, 9, 18, 0.82);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -278,10 +277,7 @@
       animation: modalFadeIn 0.2s ease-out;
     }
 
-    @keyframes modalFadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
+    @keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     .custom-modal-card {
       background: #131d2e;
@@ -301,86 +297,38 @@
     }
 
     .modal-icon-container {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      margin: 0 auto 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 64px; height: 64px; border-radius: 50%;
+      margin: 0 auto 14px; display: flex; align-items: center; justify-content: center;
     }
 
-    /* كارت الخطأ */
-    .modal-error {
-      border: 1px solid rgba(239, 68, 68, 0.45);
-    }
+    .modal-error { border: 1px solid rgba(239, 68, 68, 0.45); }
     .modal-error .modal-icon-container {
-      background: rgba(239, 68, 68, 0.15);
-      border: 2px solid #ef4444;
+      background: rgba(239, 68, 68, 0.15); border: 2px solid #ef4444;
       box-shadow: 0 0 20px rgba(239, 68, 68, 0.45);
     }
-    .modal-error .modal-title {
-      color: #f87171;
-    }
-    .modal-error .modal-btn {
-      background: #dc2626;
-      color: #ffffff;
-    }
-    .modal-error .modal-btn:hover {
-      background: #b91c1c;
-    }
+    .modal-error .modal-title { color: #f87171; font-size: 17px; font-weight: 800; margin-bottom: 10px; }
+    .modal-error .modal-btn { background: #dc2626; color: #fff; }
+    .modal-error .modal-btn:hover { background: #b91c1c; }
 
-    /* كارت النجاح */
-    .modal-success {
-      border: 1px solid rgba(34, 197, 94, 0.45);
-    }
+    .modal-success { border: 1px solid rgba(34, 197, 94, 0.45); }
     .modal-success .modal-icon-container {
-      background: rgba(34, 197, 94, 0.15);
-      border: 2px solid #22c55e;
+      background: rgba(34, 197, 94, 0.15); border: 2px solid #22c55e;
       box-shadow: 0 0 20px rgba(34, 197, 94, 0.45);
     }
-    .modal-success .modal-title {
-      color: #4ade80;
-    }
-    .modal-success .modal-btn {
-      background: #10b981;
-      color: #ffffff;
-    }
-    .modal-success .modal-btn:hover {
-      background: #059669;
-    }
+    .modal-success .modal-title { color: #4ade80; font-size: 17px; font-weight: 800; margin-bottom: 10px; }
+    .modal-success .modal-btn { background: #10b981; color: #fff; }
+    .modal-success .modal-btn:hover { background: #059669; }
 
-    .modal-title {
-      font-size: 17px;
-      font-weight: 800;
-      margin-bottom: 10px;
-    }
-
-    .modal-message {
-      font-size: 13.5px;
-      line-height: 1.65;
-      color: #cbd5e1;
-      margin-bottom: 20px;
-      white-space: pre-line;
-      word-break: break-word;
-    }
-
+    .modal-message { font-size: 13.5px; line-height: 1.65; color: #cbd5e1; margin-bottom: 20px; white-space: pre-line; word-break: break-word; }
     .modal-btn {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      font-weight: 700;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      font-family: inherit;
+      width: 100%; padding: 12px; border: none; border-radius: 10px;
+      font-weight: 700; font-size: 14px; cursor: pointer; transition: 0.2s; font-family: inherit;
     }
   </style>
 </head>
 <body>
 
-  <!-- نافذة التنبيهات المودال المخصصة -->
+  <!-- نافذة التنبيهات المودال المخصصة للمستخدم -->
   <div id="customModalOverlay" class="custom-modal-overlay" style="display: none;" onclick="if(event.target===this) closeCustomModal()">
     <div class="custom-modal-card">
       <div id="modalIconContainer" class="modal-icon-container"></div>
@@ -466,7 +414,7 @@
           </svg>
         `;
         titleEl.textContent = title || "تم بنجاح";
-        btnEl.textContent = "حسناً، متابعة";
+        btnEl.textContent = "حسناً";
       } else {
         iconBox.innerHTML = `
           <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
@@ -474,7 +422,7 @@
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         `;
-        titleEl.textContent = title || "تعذر إتمام التحديث";
+        titleEl.textContent = title || "خطأ أو تنبيه";
         btnEl.textContent = "إغلاق";
       }
 
@@ -486,7 +434,7 @@
       document.getElementById('customModalOverlay').style.display = 'none';
     }
 
-    // دوال تحويل الأوقات وحساب التأخير الدقيق
+    // دوال تحويل الأوقات وحساب التأخير
     function normalizeTimeDigits(str) {
       if (!str) return '';
       return String(str)
@@ -894,6 +842,7 @@
       submitVerifiedMovement(trainId, selectedIdx, 'ARRIVE');
     }
 
+    // التحقق المنطقي والجغرافي
     function submitVerifiedMovement(trainId, targetStationIndex, actionType) {
       const train = trainsData[trainId];
       const curIdx = train.status.stationIndex;
@@ -903,37 +852,39 @@
       const now = new Date();
       const currentMins = now.getHours() * 60 + now.getMinutes();
 
-      // 1. فحص الاتجاه
+      // 1. فحص الاتجاه: منع التحديث للخلف
       if (actionType === 'ARRIVE') {
         if (targetStationIndex < curIdx) {
-          showCustomAlert('error', 'خطأ في اتجاه المسار', `القطار تجاوز محطة (${targetStation.name}) بالفعل، ولا يمكن التحديث للخلف.`);
+          showCustomAlert('error', 'محطة سابقة', `القطار تجاوز محطة (${targetStation.name}) بالفعل، لا يمكن التحديث للخلف.`);
           return;
         }
 
         if (targetStationIndex === curIdx && train.status.state === 'AT_STATION') {
-          showCustomAlert('error', 'القطار مسجل بالفعل', `القطار مسجل بالفعل أنه متوقف حالياً برصيف محطة (${targetStation.name}).`);
+          showCustomAlert('error', 'مسجل بالفعل', `القطار مسجل حالياً أنه متوقف برصيف محطة (${targetStation.name}).`);
           return;
         }
 
-        // 2. فحص الوقت المجدول
+        // 2. التحقق من الوقت المجدول (منع الوصول المبكر > 15 دقيقة أو المتأخر > ساعتين)
         const toSchedMins = timeStringToMinutes(targetStation.scheduled);
         if (toSchedMins !== null) {
           let timeDiff = currentMins - toSchedMins;
           if (timeDiff < -720) timeDiff += 1440;
           else if (timeDiff > 720) timeDiff -= 1440;
 
-          if (timeDiff < -5) {
-            showCustomAlert('error', 'وصول مبكر غير منطقي', `الوقت المجدول لوصول محطة (${targetStation.name}) هو [${targetStation.scheduled}].\nغير منطقي وصول القطار مبكراً بأكثر من 5 دقائق (أنت تحاول التحديث مبكراً بـ ${Math.abs(timeDiff)} دقيقة).`);
+          // إذا كان التحديث قبل الموعد بأكثر من 15 دقيقة
+          if (timeDiff < -15) {
+            showCustomAlert('error', 'محاولة تحديث مبكرة', `متبقي أكثر من 15 دقيقة على موعد وصول محطة (${targetStation.name}) المجدول [${targetStation.scheduled}]. لا يمكن تسجيل الوصول الآن.`);
             return;
           }
 
+          // إذا كان بعد الموعد بأكثر من ساعتين
           if (timeDiff > 120) {
-            showCustomAlert('error', 'تأخير كبير جداً', `القطار متأخر بأكثر من ساعتين عن الموعد المجدول [${targetStation.scheduled}].\nلتجنب حدوث أي خلل، يُرجى اعتماد هذه الرحلة من قِبل المشرف المعتمد.`);
+            showCustomAlert('error', 'تأخير كبير جداً', `القطار متأخر بأكثر من ساعتين عن موعده المجدول، يرجى اعتماد التحديث من المشرف.`);
             return;
           }
         }
 
-        // 3. فحص واقعية مدة الرحلة
+        // 3. فحص واقعية سرعة القطار
         if (train.status.departedAt || (curStation.actual && curStation.actual !== '--')) {
           let elapsedMinutes = null;
 
@@ -957,7 +908,7 @@
             const minRealisticMinutes = Math.max(2, scheduledTripDuration * 0.35);
 
             if (elapsedMinutes >= 0 && elapsedMinutes < minRealisticMinutes) {
-              showCustomAlert('error', 'سرعة غير واقعية للقطار', `القطار تحرك منذ (${Math.round(elapsedMinutes)} دقيقة) فقط، ويستحيل وصوله إلى المحطة التالية بهذه السرعة الفائقة.`);
+              showCustomAlert('error', 'سرعة غير منطقية', `تحرك القطار منذ (${Math.round(elapsedMinutes)} د) فقط، يستحيل وصوله للمحطة التالية بهذه السرعة.`);
               return;
             }
           }
@@ -965,7 +916,7 @@
       }
 
       if (!navigator.geolocation) {
-        showCustomAlert('error', 'الـ GPS غير مدعوم', 'جهازك أو متصفحك لا يدعم نظام تحديد الموقع الجغرافي (GPS).');
+        showCustomAlert('error', 'خدمة الـ GPS غير مدعومة', 'هاتفك أو متصفحك لا يدعم نظام تحديد الموقع الجغرافي.');
         return;
       }
 
@@ -979,7 +930,7 @@
 
           if (accuracy > 3000) {
             document.getElementById('gpsDistanceStatus').textContent = "❌ إشارة ضعيفة";
-            showCustomAlert('error', 'إشارة الموقع ضعيفة', 'إشارة الـ GPS على هاتفك غير دقيقة حالياً، يرجى المحاولة في مكان مفتوح.');
+            showCustomAlert('error', 'إشارة GPS ضعيفة', 'إشارة الموقع على هاتفك غير دقيقة حالياً، يرجى تجربة مكان مفتوح.');
             return;
           }
 
@@ -987,7 +938,7 @@
             const stCoords = getStationCoordinates(targetStation.name);
             if (!stCoords) {
               document.getElementById('gpsDistanceStatus').textContent = "❌ غير مسجلة";
-              showCustomAlert('error', 'المحطة غير مسجلة', `لم نتمكن من مطابقة إحداثيات محطة (${targetStation.name}) في قاعدة البيانات الجغرافية.`);
+              showCustomAlert('error', 'محطة غير مسجلة', `تعذر مطابقة إحداثيات محطة (${targetStation.name}) في النظام.`);
               return;
             }
 
@@ -996,7 +947,7 @@
 
             if (distanceKm > MAX_ALLOWED_KM) {
               document.getElementById('gpsDistanceStatus').textContent = "❌ تم الرفض";
-              showCustomAlert('error', 'الموقع الجغرافي بعيد', `أنت تبعد عن محطة (${targetStation.name}) مسافة (${distanceKm.toFixed(1)} كم).\nيجب أن تكون برصيف المحطة لتأكيد وصول القطار.`);
+              showCustomAlert('error', 'الموقع بعيد عن المحطة', `أنت تبعد مسافة (${distanceKm.toFixed(1)} كم) عن محطة (${targetStation.name}). يجب أن تكون على رصيف المحطة.`);
               return;
             }
           }
@@ -1005,7 +956,7 @@
             const fromCoords = getStationCoordinates(curStation.name);
             if (!fromCoords) {
               document.getElementById('gpsDistanceStatus').textContent = "❌ غير مسجلة";
-              showCustomAlert('error', 'المحطة غير مسجلة', `لم نتمكن من مطابقة محطة (${curStation.name}) في قاعدة الإحداثيات.`);
+              showCustomAlert('error', 'محطة غير مسجلة', `تعذر مطابقة إحداثيات محطة (${curStation.name}) في النظام.`);
               return;
             }
 
@@ -1014,7 +965,7 @@
 
             if (distanceKm > MAX_DEPART_KM) {
               document.getElementById('gpsDistanceStatus').textContent = "❌ تم الرفض";
-              showCustomAlert('error', 'الموقع الجغرافي بعيد', `أنت تبعد عن محطة المغادرة مسافة (${distanceKm.toFixed(1)} كم).\nيجب أن تكون داخل القطار أو على الرصيف لتأكيد المغادرة.`);
+              showCustomAlert('error', 'الموقع بعيد عن المغادرة', `أنت تبعد (${distanceKm.toFixed(1)} كم) عن محطة المغادرة.`);
               return;
             }
           }
@@ -1027,7 +978,7 @@
 
             if (!c1 || !c2) {
               document.getElementById('gpsDistanceStatus').textContent = "❌ محطة غير مسجلة";
-              showCustomAlert('error', 'إحداثيات غير متوفرة', 'تعذر مطابقة إحداثيات المحطات المحيطة بك بدقة.');
+              showCustomAlert('error', 'بيانات ناقصة', 'تعذر مطابقة إحداثيات المحطات المحيطة بموقعك.');
               return;
             }
 
@@ -1037,7 +988,7 @@
 
             if (d1 + d2 > interDistance + 15) {
               document.getElementById('gpsDistanceStatus').textContent = "❌ بعيد عن المسار";
-              showCustomAlert('error', 'خارج مسار السكة الحديد', 'موقعك الجغرافي الحالي يقع خارج مسار السكة الحديد لهذا الخط.');
+              showCustomAlert('error', 'خارج مسار السكة الحديد', 'أنت تتواجد في مكان بعيد جداً عن خط سير القطار.');
               return;
             }
           }
@@ -1046,7 +997,7 @@
         },
         (error) => {
           document.getElementById('gpsDistanceStatus').textContent = "";
-          showCustomAlert('error', 'إذن الموقع الجغرافي مطلوب', 'يرجى تفعيل صلاحية الـ GPS في المتصفح لتأكيد موقعك الجغرافي الميداني.');
+          showCustomAlert('error', 'إذن الموقع مطلوب', 'يرجى السماح بالوصول لموقعك الجغرافي (GPS) لتأكيد التحديث.');
         },
         { enableHighAccuracy: true, timeout: 9000, maximumAge: 0 }
       );
@@ -1086,7 +1037,7 @@
 
       broadcastData();
       document.getElementById('gpsDistanceStatus').textContent = "✅ تم الاعتماد!";
-      showCustomAlert('success', 'تم اعتماد التحديث بنجاح', `تم التحقق من موقعك عبر الـ GPS وتحديث حركة القطار (${train.number}) سحابياً.`);
+      showCustomAlert('success', 'تم اعتماد موقعك بنجاح', `تم التحقق عبر الـ GPS وتحديث حالة قطار (${train.number}) سحابياً.`);
       loadSelectedTrain();
     }
 
@@ -1097,7 +1048,7 @@
       train.stations.forEach((st, idx) => {
         const isStoppedHere = (train.status.state === 'AT_STATION' && train.status.stationIndex === idx);
 
-        // حساب التأخير الفوري وعرض الشارة بالأحمر
+        // شارة التأخير المضيئة
         const delayVal = getStationDelay(st);
         let delayHtml = '';
         if (delayVal !== null) {
