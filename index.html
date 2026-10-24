@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+
+    <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
@@ -102,7 +103,9 @@
       justify-content: center;
       align-items: center;
       gap: 6px;
+      transition: opacity 0.2s;
     }
+    .btn-update:hover { opacity: 0.9; }
     .btn-arrive { background: #ef4444; color: white; }
     .btn-depart { background: #eab308; color: #000; }
     .btn-caution { background: #b91c1c; color: #fecaca; border: 1px solid #f87171; }
@@ -153,7 +156,6 @@
       white-space: nowrap;
     }
 
-    /* صندوق الأوقات: الوقت المجدول وبجواره التأخير الفاقع */
     .times-box { 
       display: flex;
       flex-direction: column;
@@ -183,26 +185,26 @@
       font-size: 11px;
     }
 
-    /* شارة التأخير البارزة بالأحمر الفاقع بجانب المجدول */
+    /* شارات التأخير البارزة */
     .delay-badge-red {
-      color: #ffffff;
-      background: #dc2626;
-      border: 1px solid #ef4444;
-      padding: 2px 7px;
-      border-radius: 6px;
-      font-weight: 800;
-      font-size: 11px;
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-      box-shadow: 0 0 10px rgba(239, 68, 68, 0.7);
-      white-space: nowrap;
+      color: #ffffff !important;
+      background: #dc2626 !important;
+      border: 1px solid #ef4444 !important;
+      padding: 3px 8px !important;
+      border-radius: 6px !important;
+      font-weight: 800 !important;
+      font-size: 11px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 3px !important;
+      box-shadow: 0 0 12px rgba(239, 68, 68, 0.8) !important;
+      white-space: nowrap !important;
       animation: alertPulse 1.8s infinite;
     }
 
     @keyframes alertPulse {
       0% { box-shadow: 0 0 4px rgba(239, 68, 68, 0.5); }
-      50% { box-shadow: 0 0 12px rgba(239, 68, 68, 0.9); }
+      50% { box-shadow: 0 0 14px rgba(239, 68, 68, 0.95); }
       100% { box-shadow: 0 0 4px rgba(239, 68, 68, 0.5); }
     }
 
@@ -210,7 +212,7 @@
       color: #38bdf8;
       background: rgba(56, 189, 248, 0.15);
       border: 1px solid #0284c7;
-      padding: 2px 6px;
+      padding: 2px 7px;
       border-radius: 6px;
       font-weight: 700;
       font-size: 11px;
@@ -220,7 +222,7 @@
       color: #4ade80;
       background: rgba(34, 197, 94, 0.15);
       border: 1px solid #22c55e;
-      padding: 2px 6px;
+      padding: 2px 7px;
       border-radius: 6px;
       font-weight: 700;
       font-size: 11px;
@@ -260,9 +262,133 @@
       0% { transform: scale(1); opacity: 1; }
       100% { transform: scale(1.4); opacity: 0.3; }
     }
+
+    /* نافذة التنبيهات المخصصة المودال */
+    .custom-modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(5, 9, 18, 0.8);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100000;
+      padding: 16px;
+      animation: modalFadeIn 0.2s ease-out;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .custom-modal-card {
+      background: #131d2e;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 380px;
+      padding: 24px 20px;
+      text-align: center;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
+      animation: modalPopUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      direction: rtl;
+    }
+
+    @keyframes modalPopUp {
+      from { opacity: 0; transform: scale(0.9) translateY(12px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-icon-container {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      margin: 0 auto 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* كارت الخطأ */
+    .modal-error {
+      border: 1px solid rgba(239, 68, 68, 0.45);
+    }
+    .modal-error .modal-icon-container {
+      background: rgba(239, 68, 68, 0.15);
+      border: 2px solid #ef4444;
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.45);
+    }
+    .modal-error .modal-title {
+      color: #f87171;
+    }
+    .modal-error .modal-btn {
+      background: #dc2626;
+      color: #ffffff;
+    }
+    .modal-error .modal-btn:hover {
+      background: #b91c1c;
+    }
+
+    /* كارت النجاح */
+    .modal-success {
+      border: 1px solid rgba(34, 197, 94, 0.45);
+    }
+    .modal-success .modal-icon-container {
+      background: rgba(34, 197, 94, 0.15);
+      border: 2px solid #22c55e;
+      box-shadow: 0 0 20px rgba(34, 197, 94, 0.45);
+    }
+    .modal-success .modal-title {
+      color: #4ade80;
+    }
+    .modal-success .modal-btn {
+      background: #10b981;
+      color: #ffffff;
+    }
+    .modal-success .modal-btn:hover {
+      background: #059669;
+    }
+
+    .modal-title {
+      font-size: 17px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .modal-message {
+      font-size: 13.5px;
+      line-height: 1.65;
+      color: #cbd5e1;
+      margin-bottom: 20px;
+      white-space: pre-line;
+      word-break: break-word;
+    }
+
+    .modal-btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
   </style>
 </head>
 <body>
+
+  <!-- نافذة التنبيهات المودال المخصصة -->
+  <div id="customModalOverlay" class="custom-modal-overlay" style="display: none;" onclick="if(event.target===this) closeCustomModal()">
+    <div class="custom-modal-card">
+      <div id="modalIconContainer" class="modal-icon-container"></div>
+      <h3 id="modalTitle" class="modal-title"></h3>
+      <div id="modalMessage" class="modal-message"></div>
+      <button id="modalBtn" class="modal-btn" onclick="closeCustomModal()">حسناً</button>
+    </div>
+  </div>
 
   <div class="app-container">
     <header>
@@ -321,6 +447,108 @@
     let trainsData = {};
     let currentUserRole = 'VIEWER';
     let client = null;
+
+    // دوال المودال المنبثق
+    function showCustomAlert(type, title, message) {
+      const overlay = document.getElementById('customModalOverlay');
+      const card = overlay.querySelector('.custom-modal-card');
+      const iconBox = document.getElementById('modalIconContainer');
+      const titleEl = document.getElementById('modalTitle');
+      const msgEl = document.getElementById('modalMessage');
+      const btnEl = document.getElementById('modalBtn');
+
+      card.className = 'custom-modal-card ' + (type === 'success' ? 'modal-success' : 'modal-error');
+
+      if (type === 'success') {
+        iconBox.innerHTML = `
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        `;
+        titleEl.textContent = title || "تم بنجاح";
+        btnEl.textContent = "حسناً، متابعة";
+      } else {
+        iconBox.innerHTML = `
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        `;
+        titleEl.textContent = title || "تعذر إتمام التحديث";
+        btnEl.textContent = "إغلاق";
+      }
+
+      msgEl.textContent = message;
+      overlay.style.display = 'flex';
+    }
+
+    function closeCustomModal() {
+      document.getElementById('customModalOverlay').style.display = 'none';
+    }
+
+    // دوال تحويل الأوقات وحساب التأخير الدقيق
+    function normalizeTimeDigits(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/[٠۰]/g, '0').replace(/[١۱]/g, '1').replace(/[٢۲]/g, '2')
+        .replace(/[٣۳]/g, '3').replace(/[٤۴]/g, '4').replace(/[٥۵]/g, '5')
+        .replace(/[٦۶]/g, '6').replace(/[٧۷]/g, '7').replace(/[٨۸]/g, '8')
+        .replace(/[٩۹]/g, '9');
+    }
+
+    function formatCurrentTime() {
+      const now = new Date();
+      let hours = now.getHours();
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const period = hours >= 12 ? 'م' : 'ص';
+      hours = hours % 12;
+      if (hours === 0) hours = 12;
+      const hoursStr = String(hours).padStart(2, '0');
+      return `${hoursStr}:${minutes} ${period}`;
+    }
+
+    function timeStringToMinutes(str) {
+      if (!str || str === '--' || str.includes('تجاوز')) return null;
+      let clean = normalizeTimeDigits(str).trim();
+      const isPM = clean.includes('م') || /pm/i.test(clean);
+      const isAM = clean.includes('ص') || /am/i.test(clean);
+      
+      const match = clean.match(/(\d{1,2})\s*:\s*(\d{2})/);
+      if (!match) return null;
+
+      let h = parseInt(match[1], 10);
+      let m = parseInt(match[2], 10);
+      if (isNaN(h) || isNaN(m)) return null;
+
+      if (isPM && h < 12) h += 12;
+      if (isAM && h === 12) h = 0;
+      return h * 60 + m;
+    }
+
+    function calculateDelayMinutes(schedStr, actStr) {
+      const sched = timeStringToMinutes(schedStr);
+      const act = timeStringToMinutes(actStr);
+      if (sched === null || act === null) return null;
+
+      let diff = act - sched;
+      if (diff < -720) diff += 1440;
+      else if (diff > 720) diff -= 1440;
+      return diff;
+    }
+
+    function getStationDelay(st) {
+      if (st.delayMinutes !== undefined && st.delayMinutes !== null) {
+        return st.delayMinutes;
+      }
+      if (st.scheduled && st.actual && st.actual !== '--') {
+        const d = calculateDelayMinutes(st.scheduled, st.actual);
+        if (d !== null) {
+          st.delayMinutes = d;
+          return d;
+        }
+      }
+      return null;
+    }
 
     const cached = localStorage.getItem('local_trains_cache');
     if (cached) {
@@ -414,32 +642,6 @@
         message.qos = 1;
         client.send(message);
       }
-    }
-
-    function timeStringToMinutes(str) {
-      if (!str || str === '--' || str.includes('تجاوز')) return null;
-      let clean = str.trim();
-      const isPM = clean.includes('م') || /pm/i.test(clean);
-      const isAM = clean.includes('ص') || /am/i.test(clean);
-      const numbers = clean.replace(/[^0-9:]/g, '').split(':');
-      if (numbers.length < 2) return null;
-
-      let h = parseInt(numbers[0], 10);
-      let m = parseInt(numbers[1], 10);
-      if (isPM && h < 12) h += 12;
-      if (isAM && h === 12) h = 0;
-      return h * 60 + m;
-    }
-
-    function calculateDelayMinutes(schedStr, actStr) {
-      const sched = timeStringToMinutes(schedStr);
-      const act = timeStringToMinutes(actStr);
-      if (sched === null || act === null) return null;
-
-      let diff = act - sched;
-      if (diff < -720) diff += 1440;
-      else if (diff > 720) diff -= 1440;
-      return diff;
     }
 
     const EGYPT_STATIONS_COORDS = {
@@ -692,7 +894,6 @@
       submitVerifiedMovement(trainId, selectedIdx, 'ARRIVE');
     }
 
-    // التحقق الجغرافي والزمني الصارم بالـ GPS وجدول المواعيد المجدول
     function submitVerifiedMovement(trainId, targetStationIndex, actionType) {
       const train = trainsData[trainId];
       const curIdx = train.status.stationIndex;
@@ -702,39 +903,37 @@
       const now = new Date();
       const currentMins = now.getHours() * 60 + now.getMinutes();
 
-      // 1. فحص الاتجاه: منع التحديث للخلف نهائياً
+      // 1. فحص الاتجاه
       if (actionType === 'ARRIVE') {
         if (targetStationIndex < curIdx) {
-          alert(`⛔ غير منطقي! القطار تجاوز محطة (${targetStation.name}) بالفعل ولا يمكن التحديث للخلف.`);
+          showCustomAlert('error', 'خطأ في اتجاه المسار', `القطار تجاوز محطة (${targetStation.name}) بالفعل، ولا يمكن التحديث للخلف.`);
           return;
         }
 
         if (targetStationIndex === curIdx && train.status.state === 'AT_STATION') {
-          alert(`ℹ️ القطار مسجل بالفعل أنه متوقف حالياً في محطة (${targetStation.name}).`);
+          showCustomAlert('error', 'القطار مسجل بالفعل', `القطار مسجل بالفعل أنه متوقف حالياً برصيف محطة (${targetStation.name}).`);
           return;
         }
 
-        // 2. التحقق من الوقت المجدول (منع الوصول المبكر > 5 دقائق أو المتأخر > ساعتين)
+        // 2. فحص الوقت المجدول
         const toSchedMins = timeStringToMinutes(targetStation.scheduled);
         if (toSchedMins !== null) {
           let timeDiff = currentMins - toSchedMins;
           if (timeDiff < -720) timeDiff += 1440;
           else if (timeDiff > 720) timeDiff -= 1440;
 
-          // إذا كان التحديث قبل الموعد بأكثر من 5 دقائق
           if (timeDiff < -5) {
-            alert(`⛔ تم رفض التحديث!\nالوقت المجدول لوصول محطة (${targetStation.name}) هو [${targetStation.scheduled}].\nغير منطقي وصول القطار مبكراً بأكثر من 5 دقائق (أنت تحاول التحديث مبكراً بـ ${Math.abs(timeDiff)} دقيقة).`);
+            showCustomAlert('error', 'وصول مبكر غير منطقي', `الوقت المجدول لوصول محطة (${targetStation.name}) هو [${targetStation.scheduled}].\nغير منطقي وصول القطار مبكراً بأكثر من 5 دقائق (أنت تحاول التحديث مبكراً بـ ${Math.abs(timeDiff)} دقيقة).`);
             return;
           }
 
-          // إذا كان بعد الموعد بأكثر من 120 دقيقة (ساعتين)
           if (timeDiff > 120) {
-            alert(`⛔ تم رفض التحديث!\nالقطار متأخر بأكثر من ساعتين عن الموعد المجدول [${targetStation.scheduled}].\nلتجنب الخلل، يُرجى اعتماد هذه الرحلة عبر لوحة المشرف.`);
+            showCustomAlert('error', 'تأخير كبير جداً', `القطار متأخر بأكثر من ساعتين عن الموعد المجدول [${targetStation.scheduled}].\nلتجنب حدوث أي خلل، يُرجى اعتماد هذه الرحلة من قِبل المشرف المعتمد.`);
             return;
           }
         }
 
-        // 3. فحص واقعية مدة الرحلة بين المحطتين
+        // 3. فحص واقعية مدة الرحلة
         if (train.status.departedAt || (curStation.actual && curStation.actual !== '--')) {
           let elapsedMinutes = null;
 
@@ -758,7 +957,7 @@
             const minRealisticMinutes = Math.max(2, scheduledTripDuration * 0.35);
 
             if (elapsedMinutes >= 0 && elapsedMinutes < minRealisticMinutes) {
-              alert(`⛔ غير منطقي من حيث السرعة والوقت!\nالقطار تحرك منذ (${Math.round(elapsedMinutes)} دقيقة) فقط، ويستحيل وصوله بهذه السرعة الفائقة.`);
+              showCustomAlert('error', 'سرعة غير واقعية للقطار', `القطار تحرك منذ (${Math.round(elapsedMinutes)} دقيقة) فقط، ويستحيل وصوله إلى المحطة التالية بهذه السرعة الفائقة.`);
               return;
             }
           }
@@ -766,7 +965,7 @@
       }
 
       if (!navigator.geolocation) {
-        alert("⚠️ جهازك لا يدعم نظام تحديد الموقع (GPS).");
+        showCustomAlert('error', 'الـ GPS غير مدعوم', 'جهازك أو متصفحك لا يدعم نظام تحديد الموقع الجغرافي (GPS).');
         return;
       }
 
@@ -780,7 +979,7 @@
 
           if (accuracy > 3000) {
             document.getElementById('gpsDistanceStatus').textContent = "❌ إشارة ضعيفة";
-            alert("⚠️ إشارة الـ GPS على هاتفك غير دقيقة حالياً.");
+            showCustomAlert('error', 'إشارة الموقع ضعيفة', 'إشارة الـ GPS على هاتفك غير دقيقة حالياً، يرجى المحاولة في مكان مفتوح.');
             return;
           }
 
@@ -788,7 +987,7 @@
             const stCoords = getStationCoordinates(targetStation.name);
             if (!stCoords) {
               document.getElementById('gpsDistanceStatus').textContent = "❌ غير مسجلة";
-              alert(`⚠️ لم نتمكن من مطابقة محطة (${targetStation.name}) في قاعدة الإحداثيات.`);
+              showCustomAlert('error', 'المحطة غير مسجلة', `لم نتمكن من مطابقة إحداثيات محطة (${targetStation.name}) في قاعدة البيانات الجغرافية.`);
               return;
             }
 
@@ -797,7 +996,7 @@
 
             if (distanceKm > MAX_ALLOWED_KM) {
               document.getElementById('gpsDistanceStatus').textContent = "❌ تم الرفض";
-              alert(`⛔ تم رفض التحديث!\nأنت تبعد عن محطة (${targetStation.name}) مسافة (${distanceKm.toFixed(1)} كم). يجب أن تكون برصيف المحطة.`);
+              showCustomAlert('error', 'الموقع الجغرافي بعيد', `أنت تبعد عن محطة (${targetStation.name}) مسافة (${distanceKm.toFixed(1)} كم).\nيجب أن تكون برصيف المحطة لتأكيد وصول القطار.`);
               return;
             }
           }
@@ -806,7 +1005,7 @@
             const fromCoords = getStationCoordinates(curStation.name);
             if (!fromCoords) {
               document.getElementById('gpsDistanceStatus').textContent = "❌ غير مسجلة";
-              alert(`⚠️ لم نتمكن من مطابقة محطة (${curStation.name}) في قاعدة الإحداثيات.`);
+              showCustomAlert('error', 'المحطة غير مسجلة', `لم نتمكن من مطابقة محطة (${curStation.name}) في قاعدة الإحداثيات.`);
               return;
             }
 
@@ -815,7 +1014,7 @@
 
             if (distanceKm > MAX_DEPART_KM) {
               document.getElementById('gpsDistanceStatus').textContent = "❌ تم الرفض";
-              alert(`⛔ تم رفض التحديث!\nأنت تبعد عن محطة المغادرة مسافة (${distanceKm.toFixed(1)} كم).`);
+              showCustomAlert('error', 'الموقع الجغرافي بعيد', `أنت تبعد عن محطة المغادرة مسافة (${distanceKm.toFixed(1)} كم).\nيجب أن تكون داخل القطار أو على الرصيف لتأكيد المغادرة.`);
               return;
             }
           }
@@ -828,7 +1027,7 @@
 
             if (!c1 || !c2) {
               document.getElementById('gpsDistanceStatus').textContent = "❌ محطة غير مسجلة";
-              alert("⚠️ تعذر مطابقة إحداثيات المحطات المحيطة بك.");
+              showCustomAlert('error', 'إحداثيات غير متوفرة', 'تعذر مطابقة إحداثيات المحطات المحيطة بك بدقة.');
               return;
             }
 
@@ -838,7 +1037,7 @@
 
             if (d1 + d2 > interDistance + 15) {
               document.getElementById('gpsDistanceStatus').textContent = "❌ بعيد عن المسار";
-              alert("⛔ تم رفض التحديث! موقعك يقع خارج مسار السكة الحديد.");
+              showCustomAlert('error', 'خارج مسار السكة الحديد', 'موقعك الجغرافي الحالي يقع خارج مسار السكة الحديد لهذا الخط.');
               return;
             }
           }
@@ -847,15 +1046,14 @@
         },
         (error) => {
           document.getElementById('gpsDistanceStatus').textContent = "";
-          alert("⚠️ يرجى تفعيل إذن الموقع الجغرافي (GPS) في المتصفح لتأكيد موقعك.");
+          showCustomAlert('error', 'إذن الموقع الجغرافي مطلوب', 'يرجى تفعيل صلاحية الـ GPS في المتصفح لتأكيد موقعك الجغرافي الميداني.');
         },
         { enableHighAccuracy: true, timeout: 9000, maximumAge: 0 }
       );
     }
 
     function applyTrainUpdate(trainId, stationIndex, actionType) {
-      const now = new Date();
-      const timeStr = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+      const timeStr = formatCurrentTime();
       const train = trainsData[trainId];
 
       if (actionType === 'ARRIVE') {
@@ -888,7 +1086,7 @@
 
       broadcastData();
       document.getElementById('gpsDistanceStatus').textContent = "✅ تم الاعتماد!";
-      alert(`✅ تم التحقق وتحديث مسار القطار بنجاح.`);
+      showCustomAlert('success', 'تم اعتماد التحديث بنجاح', `تم التحقق من موقعك عبر الـ GPS وتحديث حركة القطار (${train.number}) سحابياً.`);
       loadSelectedTrain();
     }
 
@@ -899,13 +1097,14 @@
       train.stations.forEach((st, idx) => {
         const isStoppedHere = (train.status.state === 'AT_STATION' && train.status.stationIndex === idx);
 
-        // شارة التأخير البارزة بالأحمر بجوار الوقت المجدول
+        // حساب التأخير الفوري وعرض الشارة بالأحمر
+        const delayVal = getStationDelay(st);
         let delayHtml = '';
-        if (st.delayMinutes !== undefined && st.delayMinutes !== null) {
-          if (st.delayMinutes > 0) {
-            delayHtml = `<span class="delay-badge-red">⏱️ تأخير: +${st.delayMinutes} د</span>`;
-          } else if (st.delayMinutes < 0) {
-            delayHtml = `<span class="delay-badge-early">⚡ متقدم: ${Math.abs(st.delayMinutes)} د</span>`;
+        if (delayVal !== null) {
+          if (delayVal > 0) {
+            delayHtml = `<span class="delay-badge-red">⏱️ تأخير: +${delayVal} د</span>`;
+          } else if (delayVal < 0) {
+            delayHtml = `<span class="delay-badge-early">⚡ متقدم: ${Math.abs(delayVal)} د</span>`;
           } else {
             delayHtml = `<span class="delay-badge-ontime">🟢 في الموعد</span>`;
           }
