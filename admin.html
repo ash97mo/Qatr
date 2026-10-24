@@ -115,23 +115,23 @@
     .times-inputs div { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #cbd5e1; }
     .times-inputs input { width: 95px; padding: 4px 8px; margin: 0; font-size: 12px; }
 
-    /* شارات التأخير البارزة بجوار الوقت المجدول */
+    /* شارات التأخير البارزة بالأحمر بجوار المجدول */
     .delay-label-red {
-      color: #ff3333;
-      background: rgba(239, 68, 68, 0.22);
+      color: #ffffff;
+      background: #dc2626;
       border: 1px solid #ef4444;
-      padding: 4px 8px;
+      padding: 3px 8px;
       border-radius: 6px;
-      font-weight: bold;
+      font-weight: 800;
       font-size: 11px;
       white-space: nowrap;
-      box-shadow: 0 0 8px rgba(239, 68, 68, 0.35);
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
     }
     .delay-label-ontime {
       color: #38bdf8;
       background: rgba(56, 189, 248, 0.15);
       border: 1px solid #0284c7;
-      padding: 4px 8px;
+      padding: 3px 8px;
       border-radius: 6px;
       font-weight: bold;
       font-size: 11px;
@@ -141,7 +141,7 @@
       color: #4ade80;
       background: rgba(34, 197, 94, 0.15);
       border: 1px solid #22c55e;
-      padding: 4px 8px;
+      padding: 3px 8px;
       border-radius: 6px;
       font-weight: bold;
       font-size: 11px;
@@ -348,7 +348,6 @@
       alert("✅ تم تغيير كلمة المرور بنجاح!");
     }
 
-    /* ================= منطق المزامنة وإدارة القطارات ================= */
     const SYNC_TOPIC = "egy_train_master_sync_2026";
     const BROKER_HOST = "broker.emqx.io";
     const BROKER_PORT = 8084;
@@ -541,7 +540,7 @@
           alertBetweenHtml = `<div class="between-alert">⚠️ تنبيه: القطار متوقف حالياً في السكة الحديد بين محطة [${st.name}] ومحطة [${nextSt.name}]</div>`;
         }
 
-        // إظهار شارة التأخير بجوار المجدول مباشرة
+        // إظهار شارة التأخير بجوار المجدول مباشرة بالأحمر الفاقع
         let delayText = '';
         if (st.delayMinutes !== undefined && st.delayMinutes !== null) {
           if (st.delayMinutes > 0) {
@@ -828,8 +827,6 @@
     }
 
     setInterval(checkAndApplyDailyReset, 60000);
-    
-    // تشغيل التحقق من تسجيل الدخول فور فتح الصفحة
     checkLoginStatus();
   </script>
 </body>
