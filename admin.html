@@ -61,10 +61,41 @@
     .btn-primary { background: #0284c7; color: white; width: 100%; font-size: 14px; padding: 12px; }
     .btn-danger { background: #dc2626; color: white; }
     .btn-warning { background: #d97706; color: white; }
+    .btn-reset { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid #f59e0b; }
+    .btn-reset:hover { background: #f59e0b; color: #000; }
     .btn-caution { background: #b91c1c; color: #fecaca; border: 1px dashed #ef4444; }
     .btn-add { background: #10b981; color: white; }
     .btn-secondary { background: #334155; color: #e2e8f0; }
     .btn:hover { opacity: 0.85; }
+
+    /* شارة رقم القطار البارزة جداً */
+    .train-badge-highlight {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #1e293b;
+      border: 2px solid #f59e0b;
+      padding: 6px 14px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+      margin-bottom: 14px;
+    }
+    .train-badge-highlight .train-num {
+      color: #fef08a;
+      background: #854d0e;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      border: 1px solid #facc15;
+      text-shadow: 0 0 8px rgba(250, 204, 21, 0.8);
+    }
+    .train-badge-highlight .train-name {
+      font-size: 14px;
+      color: #f8fafc;
+      font-weight: bold;
+    }
 
     .station-control-row {
       background: #0f172a; padding: 12px; border-radius: 8px; margin-bottom: 12px;
@@ -250,7 +281,7 @@
       background: rgba(239, 68, 68, 0.15); border: 2px solid #ef4444;
       box-shadow: 0 0 20px rgba(239, 68, 68, 0.45);
     }
-    .modal-error .modal-title { color: #f87171; }
+    .modal-error .modal-title { color: #f87171; font-size: 17px; font-weight: 800; margin-bottom: 10px; }
     .modal-error .modal-btn { background: #dc2626; color: #fff; }
     .modal-error .modal-btn:hover { background: #b91c1c; }
 
@@ -259,11 +290,10 @@
       background: rgba(34, 197, 94, 0.15); border: 2px solid #22c55e;
       box-shadow: 0 0 20px rgba(34, 197, 94, 0.45);
     }
-    .modal-success .modal-title { color: #4ade80; }
+    .modal-success .modal-title { color: #4ade80; font-size: 17px; font-weight: 800; margin-bottom: 10px; }
     .modal-success .modal-btn { background: #10b981; color: #fff; }
     .modal-success .modal-btn:hover { background: #059669; }
 
-    .modal-title { font-size: 17px; font-weight: 800; margin-bottom: 10px; }
     .modal-message { font-size: 13.5px; line-height: 1.65; color: #cbd5e1; margin-bottom: 20px; white-space: pre-line; word-break: break-word; }
     .modal-btn {
       width: 100%; padding: 12px; border: none; border-radius: 10px;
@@ -313,10 +343,15 @@
     <div class="box">
       <h2>1. المراقبة والتحكم الميداني وتعديل المحطات</h2>
       <label>اختر القطار للإدارة والتعديل:</label>
-      <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-        <select id="selectedTrain" onchange="renderControlBoard()" style="margin: 0;"></select>
-        <button id="btnDeleteTrain" class="btn btn-danger" onclick="deleteCurrentTrain()" style="display: none;">حذف القطار</button>
+      
+      <div style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
+        <select id="selectedTrain" onchange="renderControlBoard()" style="margin: 0; flex: 1; min-width: 200px; font-weight: bold;"></select>
+        <button id="btnResetTrain" class="btn btn-reset" onclick="resetCurrentTrain()" style="display: none;">🔄 إعادة ضبط الرحلة</button>
+        <button id="btnDeleteTrain" class="btn btn-danger" onclick="deleteCurrentTrain()" style="display: none;">🗑️ حذف القطار</button>
       </div>
+
+      <!-- إبراز رقم القطار المختار حالياً -->
+      <div id="activeTrainBadge" style="display: none;"></div>
 
       <div id="controlPanel">
         <p style="color:#64748b; text-align:center; padding: 20px;">👈 برجاء اختيار قطار من القائمة أعلاه لبدء المراقبة وتعديل المحطات.</p>
@@ -339,7 +374,7 @@
       <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px;">
         <div>
           <label>رقم القطار:</label>
-          <input type="text" id="newTrainNumber" placeholder="مثال: 905">
+          <input type="text" id="newTrainNumber" placeholder="مثال: 905" style="font-weight: bold; color: #facc15;">
         </div>
         <div>
           <label>اسم الرحلة / الوصف:</label>
@@ -365,7 +400,6 @@
   <script>
     const DEFAULT_ADMIN_PASSWORD = "admin2026";
 
-    // دوال المودال المنبثق
     function showCustomAlert(type, title, message) {
       const overlay = document.getElementById('customModalOverlay');
       const card = overlay.querySelector('.custom-modal-card');
@@ -403,7 +437,6 @@
       document.getElementById('customModalOverlay').style.display = 'none';
     }
 
-    // دوال الأوقات والحساب المنضبط للتأخير
     function normalizeTimeDigits(str) {
       if (!str) return '';
       return String(str)
@@ -640,7 +673,7 @@
       keys.forEach(k => {
         const opt = document.createElement('option');
         opt.value = k;
-        opt.textContent = `قطار ${trainsData[k].number} - ${trainsData[k].name}`;
+        opt.textContent = `قطار [ ${trainsData[k].number} ] - ${trainsData[k].name}`;
         select.appendChild(opt);
       });
 
@@ -655,18 +688,34 @@
       const container = document.getElementById('controlPanel');
       const addSection = document.getElementById('addStationSection');
       const btnDelete = document.getElementById('btnDeleteTrain');
+      const btnReset = document.getElementById('btnResetTrain');
+      const activeBadge = document.getElementById('activeTrainBadge');
       container.innerHTML = '';
 
       if (!trainId || !trainsData[trainId]) {
         container.innerHTML = '<p style="color:#64748b; text-align:center; padding: 20px;">👈 برجاء اختيار قطار من القائمة أعلاه لبدء المراقبة وتعديل المحطات.</p>';
         addSection.style.display = 'none';
         btnDelete.style.display = 'none';
+        btnReset.style.display = 'none';
+        activeBadge.style.display = 'none';
         return;
       }
 
       addSection.style.display = 'block';
-      btnDelete.style.display = 'block';
+      btnDelete.style.display = 'inline-block';
+      btnReset.style.display = 'inline-block';
+
       const train = trainsData[trainId];
+
+      // إظهار شارة رقم القطار بلون ذهبي فاقع بارز
+      activeBadge.style.display = 'block';
+      activeBadge.innerHTML = `
+        <div class="train-badge-highlight">
+          <span style="font-size: 13px; color: #cbd5e1;">القطار المختار:</span>
+          <span class="train-num">قطار ${train.number}</span>
+          <span class="train-name">${train.name}</span>
+        </div>
+      `;
 
       train.stations.forEach((st, idx) => {
         const isStopped = (train.status.state === 'AT_STATION' && train.status.stationIndex === idx);
@@ -692,7 +741,6 @@
           alertBetweenHtml = `<div class="between-alert">⚠️ تنبيه: القطار متوقف حالياً في السكة الحديد بين محطة [${st.name}] ومحطة [${nextSt.name}]</div>`;
         }
 
-        // حساب التأخير الفوري وعرض الشارة بالأحمر الفاقع
         const delayVal = getStationDelay(st);
         let delayText = '';
         if (delayVal !== null) {
@@ -736,6 +784,31 @@
         `;
         container.appendChild(card);
       });
+    }
+
+    // دالة ريسيت الوقت وحركة القطار
+    function resetCurrentTrain() {
+      const trainId = document.getElementById('selectedTrain').value;
+      if (!trainId || !trainsData[trainId]) return;
+
+      const train = trainsData[trainId];
+      if (confirm(`هل أنت متأكد من تصفير وإعادة ضبط رحلة قطار (${train.number})؟\n\nسيتم مسح الأوقات الفعلية وإرجاع القطار إلى محطة البداية (${train.stations[0]?.name || ''}).`)) {
+        train.status = {
+          state: 'AT_STATION',
+          stationIndex: 0,
+          updatedBy: 'إعادة ضبط من قِبل المشرف',
+          departedAt: null
+        };
+
+        train.stations.forEach(st => {
+          st.actual = '--';
+          delete st.delayMinutes;
+        });
+
+        broadcastData();
+        renderControlBoard();
+        showCustomAlert('success', 'تم تصفير الرحلة بنجاح', `تمت إعادة ضبط قطار (${train.number}) بالكامل إلى محطة البداية ومسح جميع الأوقات الفعلية.`);
+      }
     }
 
     function updateStationName(trainId, stationIndex, newName) {
