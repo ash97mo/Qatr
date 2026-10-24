@@ -153,7 +153,7 @@
       white-space: nowrap;
     }
 
-    /* صندوق الأوقات: الوقت المجدول وجانبه التأخير */
+    /* صندوق الأوقات: الوقت المجدول وبجواره التأخير الفاقع */
     .times-box { 
       display: flex;
       flex-direction: column;
@@ -183,10 +183,10 @@
       font-size: 11px;
     }
 
-    /* تصميم شارات التأخير البارزة بالأحمر بجانب المجدول */
+    /* شارة التأخير البارزة بالأحمر الفاقع بجانب المجدول */
     .delay-badge-red {
-      color: #ff3333;
-      background: rgba(239, 68, 68, 0.22);
+      color: #ffffff;
+      background: #dc2626;
       border: 1px solid #ef4444;
       padding: 2px 7px;
       border-radius: 6px;
@@ -195,9 +195,17 @@
       display: inline-flex;
       align-items: center;
       gap: 3px;
-      box-shadow: 0 0 8px rgba(239, 68, 68, 0.35);
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.7);
       white-space: nowrap;
+      animation: alertPulse 1.8s infinite;
     }
+
+    @keyframes alertPulse {
+      0% { box-shadow: 0 0 4px rgba(239, 68, 68, 0.5); }
+      50% { box-shadow: 0 0 12px rgba(239, 68, 68, 0.9); }
+      100% { box-shadow: 0 0 4px rgba(239, 68, 68, 0.5); }
+    }
+
     .delay-badge-ontime {
       color: #38bdf8;
       background: rgba(56, 189, 248, 0.15);
@@ -259,7 +267,7 @@
   <div class="app-container">
     <header>
       <h1>🚆 تتبع القطارات التشاركي</h1>
-      <p>تحديث الموقع لحظياً بمساعدة ركاب القطار بالـ GPS المنطقي</p>
+      <p>تحديث الموقع لحظياً بمساعدة ركاب القطار والـ GPS المنطقي</p>
     </header>
 
     <div id="connStatus" class="status-alert status-wait">⏳ جاري الاتصال بالسيرفر السحابي...</div>
@@ -434,7 +442,6 @@
       return diff;
     }
 
-    // قاعدة بيانات إحداثيات المحطات
     const EGYPT_STATIONS_COORDS = {
       "القاهرة": { lat: 30.0633, lng: 31.2469 },
       "رمسيس": { lat: 30.0633, lng: 31.2469 },
@@ -685,16 +692,20 @@
       submitVerifiedMovement(trainId, selectedIdx, 'ARRIVE');
     }
 
-    // التحقق الجغرافي والزمني بالـ GPS
+    // التحقق الجغرافي والزمني الصارم بالـ GPS وجدول المواعيد المجدول
     function submitVerifiedMovement(trainId, targetStationIndex, actionType) {
       const train = trainsData[trainId];
       const curIdx = train.status.stationIndex;
       const curStation = train.stations[curIdx];
       const targetStation = train.stations[targetStationIndex];
 
+      const now = new Date();
+      const currentMins = now.getHours() * 60 + now.getMinutes();
+
+      // 1. فحص الاتجاه: منع التحديث للخلف نهائياً
       if (actionType === 'ARRIVE') {
         if (targetStationIndex < curIdx) {
-          alert(`⛔ غير منطقي! القطار تجاوز محطة (${targetStation.name}) بالفعل.`);
+          alert(`⛔ غير منطقي! القطار تجاوز محطة (${targetStation.name}) بالفعل ولا يمكن التحديث للخلف.`);
           return;
         }
 
@@ -703,10 +714,27 @@
           return;
         }
 
-        const now = new Date();
-        const currentMins = now.getHours() * 60 + now.getMinutes();
+        // 2. التحقق من الوقت المجدول (منع الوصول المبكر > 5 دقائق أو المتأخر > ساعتين)
         const toSchedMins = timeStringToMinutes(targetStation.scheduled);
+        if (toSchedMins !== null) {
+          let timeDiff = currentMins - toSchedMins;
+          if (timeDiff < -720) timeDiff += 1440;
+          else if (timeDiff > 720) timeDiff -= 1440;
 
+          // إذا كان التحديث قبل الموعد بأكثر من 5 دقائق
+          if (timeDiff < -5) {
+            alert(`⛔ تم رفض التحديث!\nالوقت المجدول لوصول محطة (${targetStation.name}) هو [${targetStation.scheduled}].\nغير منطقي وصول القطار مبكراً بأكثر من 5 دقائق (أنت تحاول التحديث مبكراً بـ ${Math.abs(timeDiff)} دقيقة).`);
+            return;
+          }
+
+          // إذا كان بعد الموعد بأكثر من 120 دقيقة (ساعتين)
+          if (timeDiff > 120) {
+            alert(`⛔ تم رفض التحديث!\nالقطار متأخر بأكثر من ساعتين عن الموعد المجدول [${targetStation.scheduled}].\nلتجنب الخلل، يُرجى اعتماد هذه الرحلة عبر لوحة المشرف.`);
+            return;
+          }
+        }
+
+        // 3. فحص واقعية مدة الرحلة بين المحطتين
         if (train.status.departedAt || (curStation.actual && curStation.actual !== '--')) {
           let elapsedMinutes = null;
 
@@ -730,7 +758,7 @@
             const minRealisticMinutes = Math.max(2, scheduledTripDuration * 0.35);
 
             if (elapsedMinutes >= 0 && elapsedMinutes < minRealisticMinutes) {
-              alert(`⛔ غير منطقي من حيث السرعة والوقت!\nالقطار تحرك منذ (${Math.round(elapsedMinutes)} دقيقة) فقط، ويستحيل وصوله بهذه السرعة.`);
+              alert(`⛔ غير منطقي من حيث السرعة والوقت!\nالقطار تحرك منذ (${Math.round(elapsedMinutes)} دقيقة) فقط، ويستحيل وصوله بهذه السرعة الفائقة.`);
               return;
             }
           }
@@ -769,7 +797,7 @@
 
             if (distanceKm > MAX_ALLOWED_KM) {
               document.getElementById('gpsDistanceStatus').textContent = "❌ تم الرفض";
-              alert(`⛔ تم رفض التحديث!\nأنت تبعد عن محطة (${targetStation.name}) مسافة (${distanceKm.toFixed(1)} كم).`);
+              alert(`⛔ تم رفض التحديث!\nأنت تبعد عن محطة (${targetStation.name}) مسافة (${distanceKm.toFixed(1)} كم). يجب أن تكون برصيف المحطة.`);
               return;
             }
           }
@@ -819,7 +847,7 @@
         },
         (error) => {
           document.getElementById('gpsDistanceStatus').textContent = "";
-          alert("⚠️ يرجى تفعيل إذن الموقع الجغرافي (GPS) في المتصفح لتأكيد وصولك.");
+          alert("⚠️ يرجى تفعيل إذن الموقع الجغرافي (GPS) في المتصفح لتأكيد موقعك.");
         },
         { enableHighAccuracy: true, timeout: 9000, maximumAge: 0 }
       );
@@ -834,7 +862,7 @@
         train.status = { 
           state: 'AT_STATION', 
           stationIndex: stationIndex,
-          updatedBy: `راكب موثق بالـ GPS (${timeStr})`,
+          updatedBy: `تحديث موثق بالـ GPS (${timeStr})`,
           departedAt: null
         };
         train.stations[stationIndex].actual = timeStr;
@@ -847,20 +875,20 @@
         train.status = { 
           state: 'MOVING', 
           stationIndex: stationIndex,
-          updatedBy: `راكب موثق بالـ GPS (${timeStr})`,
+          updatedBy: `تحديث موثق بالـ GPS (${timeStr})`,
           departedAt: Date.now()
         };
       } else if (actionType === 'STOP_BETWEEN') {
         train.status = { 
           state: 'STOPPED_BETWEEN', 
           stationIndex: stationIndex,
-          updatedBy: `راكب موثق: متوقف بالسكة (${timeStr})`
+          updatedBy: `تحديث موثق: متوقف بالسكة (${timeStr})`
         };
       }
 
       broadcastData();
       document.getElementById('gpsDistanceStatus').textContent = "✅ تم الاعتماد!";
-      alert(`✅ تم التحقق من موقعك الفعلي بنجاح وتحديث مسار القطار.`);
+      alert(`✅ تم التحقق وتحديث مسار القطار بنجاح.`);
       loadSelectedTrain();
     }
 
