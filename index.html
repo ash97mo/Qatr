@@ -50,8 +50,7 @@
       border: 1px solid #334155; 
       border-radius: 10px; 
       color: #fff; 
-      font-size: 14.5px; 
-      font-weight: bold;
+      font-size: 14px; 
       outline: none; 
       cursor: pointer;
     }
@@ -110,36 +109,18 @@
     .btn-depart { background: #eab308; color: #000; }
     .btn-caution { background: #b91c1c; color: #fecaca; border: 1px solid #f87171; }
 
-    /* لوحة الفصل بين رقم القطار واسم الرحلة في شاشة الراكب */
+    /* بطاقة بيانات القطار الأصلية الهادئة */
     .train-info-badge { 
       background: #0f172a; 
-      padding: 12px 14px; 
+      padding: 12px; 
       border-radius: 12px; 
-      border-right: 5px solid #f59e0b; 
-      border-top: 1px solid #334155;
-      border-bottom: 1px solid #334155;
-      border-left: 1px solid #334155;
+      border-right: 4px solid #38bdf8; 
       margin-bottom: 15px; 
       display: flex; 
       justify-content: space-between; 
       align-items: center; 
-      gap: 10px;
     }
-    .train-highlight-num {
-      display: inline-block;
-      background: #854d0e;
-      color: #fef08a;
-      border: 1.5px solid #facc15;
-      padding: 3px 10px;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 900;
-      letter-spacing: 0.5px;
-      text-shadow: 0 0 6px rgba(250, 204, 21, 0.6);
-      margin-bottom: 4px;
-    }
-
-    .status-badge { font-size: 11px; padding: 5px 8px; border-radius: 20px; font-weight: bold; white-space: nowrap; }
+    .status-badge { font-size: 11px; padding: 5px 8px; border-radius: 20px; font-weight: bold; }
     .status-moving { background: rgba(234, 179, 8, 0.2); color: #facc15; }
     .status-stopped { background: rgba(239, 68, 68, 0.2); color: #f87171; }
     .status-between { background: rgba(220, 38, 38, 0.35); color: #fca5a5; border: 1px solid #ef4444; }
@@ -204,6 +185,7 @@
       font-size: 11px;
     }
 
+    /* شارات التأخير البارزة */
     .delay-badge-red {
       color: #ffffff !important;
       background: #dc2626 !important;
@@ -281,6 +263,7 @@
       100% { transform: scale(1.4); opacity: 0.3; }
     }
 
+    /* نافذة المودال المخصصة */
     .custom-modal-overlay {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
@@ -365,7 +348,7 @@
     <div id="connStatus" class="status-alert status-wait">⏳ جاري الاتصال بالسيرفر السحابي...</div>
 
     <div class="selector-box">
-      <label>اختر رقم القطار للمتابعة:</label>
+      <label>اختر رقم القطار:</label>
       <select id="trainSelect" onchange="loadSelectedTrain()"></select>
     </div>
 
@@ -388,12 +371,12 @@
       <div id="crowdControls"></div>
     </div>
 
-    <!-- بطاقة معلومات القطار مع فصل رقم القطار عن اسم الرحلة -->
+    <!-- بطاقة معلومات القطار الأصلية -->
     <div class="train-info-badge" id="trainBadgeSection" style="display: none;">
       <div>
-        <div class="train-highlight-num" id="trainTitle">--</div>
-        <div style="font-size: 13.5px; color: #f1f5f9; font-weight: bold;" id="trainRouteName">--</div>
-        <div id="updateSourceText" style="font-size: 11px; color: #94a3b8; margin-top: 4px;"></div>
+        <div style="font-weight: bold;" id="trainTitle">--</div>
+        <div style="font-size: 12px; color: #94a3b8;" id="trainRouteName">--</div>
+        <div id="updateSourceText" style="font-size: 11px; color: #64748b; margin-top: 4px;"></div>
       </div>
       <div id="statusBadge" class="status-badge">--</div>
     </div>
@@ -704,14 +687,14 @@
     function populateTrainDropdown() {
       const select = document.getElementById('trainSelect');
       const currentVal = select.value;
-      select.innerHTML = '<option value="">-- اضغط هنا لاختيار رقم القطار --</option>';
+      select.innerHTML = '<option value="">-- اختر رقم القطار لمتابعته --</option>';
       
       const keys = Object.keys(trainsData);
       keys.forEach(key => {
         const t = trainsData[key];
         const opt = document.createElement('option');
         opt.value = key;
-        opt.textContent = `[ قطار ${t.number} ]  ⟵  ${t.name}`;
+        opt.textContent = `قطار ${t.number} - ${t.name}`;
         select.appendChild(opt);
       });
 
@@ -870,7 +853,7 @@
         if (toSchedMins !== null) {
           let timeDiff = currentMins - toSchedMins;
           if (timeDiff < -720) timeDiff += 1440;
-          else if (timeDiff > 720) diff -= 1440;
+          else if (timeDiff > 720) timeDiff -= 1440;
 
           if (timeDiff < -15) {
             showCustomAlert('error', 'محاولة تحديث مبكرة', `متبقي أكثر من 15 دقيقة على موعد وصول محطة (${targetStation.name}) المجدول [${targetStation.scheduled}]. لا يمكن تسجيل الوصول الآن.`);
