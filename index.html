@@ -50,7 +50,8 @@
       border: 1px solid #334155; 
       border-radius: 10px; 
       color: #fff; 
-      font-size: 14px; 
+      font-size: 15px; 
+      font-weight: bold;
       outline: none; 
       cursor: pointer;
     }
@@ -109,16 +110,36 @@
     .btn-depart { background: #eab308; color: #000; }
     .btn-caution { background: #b91c1c; color: #fecaca; border: 1px solid #f87171; }
 
+    /* شارة القطار الملونة والبارزة جداً */
     .train-info-badge { 
       background: #0f172a; 
-      padding: 12px; 
+      padding: 14px; 
       border-radius: 12px; 
-      border-right: 4px solid #38bdf8; 
+      border-right: 5px solid #f59e0b; 
+      border-left: 1px solid #334155;
+      border-top: 1px solid #334155;
+      border-bottom: 1px solid #334155;
       margin-bottom: 15px; 
       display: flex; 
       justify-content: space-between; 
       align-items: center; 
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     }
+    
+    .train-highlight-num {
+      display: inline-block;
+      background: #854d0e;
+      color: #fef08a;
+      border: 1.5px solid #facc15;
+      padding: 2px 10px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      text-shadow: 0 0 8px rgba(250, 204, 21, 0.7);
+      margin-bottom: 4px;
+    }
+
     .status-badge { font-size: 11px; padding: 5px 8px; border-radius: 20px; font-weight: bold; }
     .status-moving { background: rgba(234, 179, 8, 0.2); color: #facc15; }
     .status-stopped { background: rgba(239, 68, 68, 0.2); color: #f87171; }
@@ -184,7 +205,6 @@
       font-size: 11px;
     }
 
-    /* شارات التأخير البارزة */
     .delay-badge-red {
       color: #ffffff !important;
       background: #dc2626 !important;
@@ -262,7 +282,6 @@
       100% { transform: scale(1.4); opacity: 0.3; }
     }
 
-    /* نافذة المودال المخصصة المطابقة للمشرف */
     .custom-modal-overlay {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
@@ -328,7 +347,7 @@
 </head>
 <body>
 
-  <!-- نافذة التنبيهات المودال المخصصة للمستخدم -->
+  <!-- نافذة التنبيهات المودال المخصصة -->
   <div id="customModalOverlay" class="custom-modal-overlay" style="display: none;" onclick="if(event.target===this) closeCustomModal()">
     <div class="custom-modal-card">
       <div id="modalIconContainer" class="modal-icon-container"></div>
@@ -347,7 +366,7 @@
     <div id="connStatus" class="status-alert status-wait">⏳ جاري الاتصال بالسيرفر السحابي...</div>
 
     <div class="selector-box">
-      <label>اختر رقم القطار:</label>
+      <label>اختر رقم القطار للمتابعة:</label>
       <select id="trainSelect" onchange="loadSelectedTrain()"></select>
     </div>
 
@@ -370,11 +389,12 @@
       <div id="crowdControls"></div>
     </div>
 
+    <!-- بطاقة معلومات القطار مع إبراز الرقم بلون ذهبي فاقع -->
     <div class="train-info-badge" id="trainBadgeSection" style="display: none;">
       <div>
-        <div style="font-weight: bold;" id="trainTitle">--</div>
-        <div style="font-size: 12px; color: #94a3b8;" id="trainRouteName">--</div>
-        <div id="updateSourceText" style="font-size: 11px; color: #64748b; margin-top: 4px;"></div>
+        <div class="train-highlight-num" id="trainTitle">--</div>
+        <div style="font-size: 13px; color: #f1f5f9; font-weight: bold;" id="trainRouteName">--</div>
+        <div id="updateSourceText" style="font-size: 11px; color: #94a3b8; margin-top: 4px;"></div>
       </div>
       <div id="statusBadge" class="status-badge">--</div>
     </div>
@@ -396,7 +416,6 @@
     let currentUserRole = 'VIEWER';
     let client = null;
 
-    // دوال المودال المنبثق
     function showCustomAlert(type, title, message) {
       const overlay = document.getElementById('customModalOverlay');
       const card = overlay.querySelector('.custom-modal-card');
@@ -434,7 +453,6 @@
       document.getElementById('customModalOverlay').style.display = 'none';
     }
 
-    // دوال تحويل الأوقات وحساب التأخير
     function normalizeTimeDigits(str) {
       if (!str) return '';
       return String(str)
@@ -702,14 +720,14 @@
     function populateTrainDropdown() {
       const select = document.getElementById('trainSelect');
       const currentVal = select.value;
-      select.innerHTML = '<option value="">-- اختر رقم القطار لمتابعته --</option>';
+      select.innerHTML = '<option value="">-- اضغط هنا لاختيار رقم القطار --</option>';
       
       const keys = Object.keys(trainsData);
       keys.forEach(key => {
         const t = trainsData[key];
         const opt = document.createElement('option');
         opt.value = key;
-        opt.textContent = `قطار ${t.number} - ${t.name}`;
+        opt.textContent = `قطار [ ${t.number} ] - ${t.name}`;
         select.appendChild(opt);
       });
 
@@ -739,6 +757,7 @@
       roleSec.style.display = 'block';
       badgeSec.style.display = 'flex';
 
+      // إظهار الرقم بلون ذهبي بارز
       document.getElementById('trainTitle').textContent = `قطار رقم ${train.number}`;
       document.getElementById('trainRouteName').textContent = train.name;
 
@@ -842,7 +861,6 @@
       submitVerifiedMovement(trainId, selectedIdx, 'ARRIVE');
     }
 
-    // التحقق المنطقي والجغرافي
     function submitVerifiedMovement(trainId, targetStationIndex, actionType) {
       const train = trainsData[trainId];
       const curIdx = train.status.stationIndex;
@@ -869,15 +887,13 @@
         if (toSchedMins !== null) {
           let timeDiff = currentMins - toSchedMins;
           if (timeDiff < -720) timeDiff += 1440;
-          else if (timeDiff > 720) timeDiff -= 1440;
+          else if (timeDiff > 720) diff -= 1440;
 
-          // إذا كان التحديث قبل الموعد بأكثر من 15 دقيقة
           if (timeDiff < -15) {
             showCustomAlert('error', 'محاولة تحديث مبكرة', `متبقي أكثر من 15 دقيقة على موعد وصول محطة (${targetStation.name}) المجدول [${targetStation.scheduled}]. لا يمكن تسجيل الوصول الآن.`);
             return;
           }
 
-          // إذا كان بعد الموعد بأكثر من ساعتين
           if (timeDiff > 120) {
             showCustomAlert('error', 'تأخير كبير جداً', `القطار متأخر بأكثر من ساعتين عن موعده المجدول، يرجى اعتماد التحديث من المشرف.`);
             return;
@@ -1048,7 +1064,6 @@
       train.stations.forEach((st, idx) => {
         const isStoppedHere = (train.status.state === 'AT_STATION' && train.status.stationIndex === idx);
 
-        // شارة التأخير المضيئة
         const delayVal = getStationDelay(st);
         let delayHtml = '';
         if (delayVal !== null) {
