@@ -61,10 +61,48 @@
     .btn-primary { background: #0284c7; color: white; width: 100%; font-size: 14px; padding: 12px; }
     .btn-danger { background: #dc2626; color: white; }
     .btn-warning { background: #d97706; color: white; }
+    .btn-reset { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #f59e0b; }
+    .btn-reset:hover { background: #f59e0b; color: #000; }
     .btn-caution { background: #b91c1c; color: #fecaca; border: 1px dashed #ef4444; }
     .btn-add { background: #10b981; color: white; }
     .btn-secondary { background: #334155; color: #e2e8f0; }
     .btn:hover { opacity: 0.85; }
+
+    /* جدول الفصل الواضح بين رقم القطار واسم الرحلة */
+    .train-split-panel {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 10px;
+      align-items: center;
+      background: #0b1120;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 15px;
+    }
+    .train-split-num {
+      background: #854d0e;
+      color: #fef08a;
+      border: 1.5px solid #facc15;
+      padding: 5px 14px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      text-shadow: 0 0 6px rgba(250, 204, 21, 0.6);
+      white-space: nowrap;
+    }
+    .train-split-route {
+      font-size: 14px;
+      font-weight: bold;
+      color: #f8fafc;
+      padding: 0 8px;
+      border-right: 2px solid #1e293b;
+    }
+    .train-split-actions {
+      display: flex;
+      gap: 6px;
+    }
 
     .station-control-row {
       background: #0f172a; padding: 12px; border-radius: 8px; margin-bottom: 12px;
@@ -115,7 +153,7 @@
     .times-inputs div { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #cbd5e1; }
     .times-inputs input { width: 105px; padding: 5px 8px; margin: 0; font-size: 12px; }
 
-    /* شارات التأخير البارزة بالأحمر بجوار المجدول */
+    /* شارات التأخير البارزة بالأحمر */
     .delay-label-red {
       color: #ffffff !important;
       background: #dc2626 !important;
@@ -250,7 +288,7 @@
       background: rgba(239, 68, 68, 0.15); border: 2px solid #ef4444;
       box-shadow: 0 0 20px rgba(239, 68, 68, 0.45);
     }
-    .modal-error .modal-title { color: #f87171; }
+    .modal-error .modal-title { color: #f87171; font-size: 17px; font-weight: 800; margin-bottom: 10px; }
     .modal-error .modal-btn { background: #dc2626; color: #fff; }
     .modal-error .modal-btn:hover { background: #b91c1c; }
 
@@ -259,11 +297,10 @@
       background: rgba(34, 197, 94, 0.15); border: 2px solid #22c55e;
       box-shadow: 0 0 20px rgba(34, 197, 94, 0.45);
     }
-    .modal-success .modal-title { color: #4ade80; }
+    .modal-success .modal-title { color: #4ade80; font-size: 17px; font-weight: 800; margin-bottom: 10px; }
     .modal-success .modal-btn { background: #10b981; color: #fff; }
     .modal-success .modal-btn:hover { background: #059669; }
 
-    .modal-title { font-size: 17px; font-weight: 800; margin-bottom: 10px; }
     .modal-message { font-size: 13.5px; line-height: 1.65; color: #cbd5e1; margin-bottom: 20px; white-space: pre-line; word-break: break-word; }
     .modal-btn {
       width: 100%; padding: 12px; border: none; border-radius: 10px;
@@ -313,9 +350,17 @@
     <div class="box">
       <h2>1. المراقبة والتحكم الميداني وتعديل المحطات</h2>
       <label>اختر القطار للإدارة والتعديل:</label>
-      <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-        <select id="selectedTrain" onchange="renderControlBoard()" style="margin: 0;"></select>
-        <button id="btnDeleteTrain" class="btn btn-danger" onclick="deleteCurrentTrain()" style="display: none;">حذف القطار</button>
+      
+      <select id="selectedTrain" onchange="renderControlBoard()" style="font-weight: bold;"></select>
+
+      <!-- بطاقة الفصل الواضحة بين رقم القطار واسم الرحلة وأزرار التحكم -->
+      <div id="trainSplitPanel" class="train-split-panel" style="display: none;">
+        <div class="train-split-num" id="splitTrainNum">--</div>
+        <div class="train-split-route" id="splitTrainRoute">--</div>
+        <div class="train-split-actions">
+          <button class="btn btn-reset" onclick="resetCurrentTrain()" title="تصفير أوقات الوصول والتأخير والبدء من جديد">🔄 تصفير الأوقات</button>
+          <button class="btn btn-danger" onclick="deleteCurrentTrain()" title="حذف هذا القطار نهائياً">🗑️ حذف</button>
+        </div>
       </div>
 
       <div id="controlPanel">
@@ -339,7 +384,7 @@
       <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px;">
         <div>
           <label>رقم القطار:</label>
-          <input type="text" id="newTrainNumber" placeholder="مثال: 905">
+          <input type="text" id="newTrainNumber" placeholder="مثال: 905" style="font-weight: bold; color: #facc15;">
         </div>
         <div>
           <label>اسم الرحلة / الوصف:</label>
@@ -365,7 +410,6 @@
   <script>
     const DEFAULT_ADMIN_PASSWORD = "admin2026";
 
-    // دوال المودال المنبثق
     function showCustomAlert(type, title, message) {
       const overlay = document.getElementById('customModalOverlay');
       const card = overlay.querySelector('.custom-modal-card');
@@ -403,7 +447,6 @@
       document.getElementById('customModalOverlay').style.display = 'none';
     }
 
-    // دوال الأوقات والحساب المنضبط للتأخير
     function normalizeTimeDigits(str) {
       if (!str) return '';
       return String(str)
@@ -539,39 +582,26 @@
     if (cached) {
       try { 
         trainsData = JSON.parse(cached); 
-        checkAndApplyDailyReset();
         refreshTrainList();
       } catch(e){}
     }
 
-    function getTodayKey() {
-      const d = new Date();
-      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-    }
+    // تصفير تلقائي ذكي عند بداية رحلة جديدة للقطار
+    function autoResetIfNewTrip(trainId, stationIndex) {
+      const train = trainsData[trainId];
+      if (!train) return;
 
-    function checkAndApplyDailyReset() {
-      const today = getTodayKey();
-      let modified = false;
-
-      Object.keys(trainsData).forEach(trainId => {
-        const train = trainsData[trainId];
-        if (train.lastActiveDate !== today) {
-          train.lastActiveDate = today;
-          train.status = {
-            state: 'AT_STATION',
-            stationIndex: 0,
-            updatedBy: 'بدء جدول اليوم الجديد تلقائياً'
-          };
-          train.stations.forEach(st => {
-            st.actual = '--';
-            delete st.delayMinutes;
+      // إذا تم التحديث عند المحطة الأولى (البداية)، ولديه محطات لاحقة مسجلة بأوقات قديمة
+      if (stationIndex === 0) {
+        let hasLaterActuals = train.stations.slice(1).some(s => s.actual && s.actual !== '--');
+        if (hasLaterActuals) {
+          train.stations.forEach((st, idx) => {
+            if (idx > 0) {
+              st.actual = '--';
+              delete st.delayMinutes;
+            }
           });
-          modified = true;
         }
-      });
-
-      if (modified) {
-        broadcastData();
       }
     }
 
@@ -596,7 +626,6 @@
           const data = JSON.parse(message.payloadString);
           if (data && typeof data === 'object') {
             trainsData = data;
-            checkAndApplyDailyReset();
             localStorage.setItem('local_trains_cache', JSON.stringify(data));
             refreshTrainList();
           }
@@ -634,13 +663,13 @@
     function refreshTrainList() {
       const select = document.getElementById('selectedTrain');
       const currentVal = select.value;
-      select.innerHTML = '<option value="">-- اختر قطاراً للتحكم --</option>';
+      select.innerHTML = '<option value="">-- اضغط لاختيار القطار المراد إدارته --</option>';
       const keys = Object.keys(trainsData);
 
       keys.forEach(k => {
         const opt = document.createElement('option');
         opt.value = k;
-        opt.textContent = `قطار ${trainsData[k].number} - ${trainsData[k].name}`;
+        opt.textContent = `[ قطار ${trainsData[k].number} ]  ⟵  ${trainsData[k].name}`;
         select.appendChild(opt);
       });
 
@@ -654,19 +683,24 @@
       const trainId = document.getElementById('selectedTrain').value;
       const container = document.getElementById('controlPanel');
       const addSection = document.getElementById('addStationSection');
-      const btnDelete = document.getElementById('btnDeleteTrain');
+      const splitPanel = document.getElementById('trainSplitPanel');
       container.innerHTML = '';
 
       if (!trainId || !trainsData[trainId]) {
         container.innerHTML = '<p style="color:#64748b; text-align:center; padding: 20px;">👈 برجاء اختيار قطار من القائمة أعلاه لبدء المراقبة وتعديل المحطات.</p>';
         addSection.style.display = 'none';
-        btnDelete.style.display = 'none';
+        splitPanel.style.display = 'none';
         return;
       }
 
       addSection.style.display = 'block';
-      btnDelete.style.display = 'block';
+      splitPanel.style.display = 'grid';
+
       const train = trainsData[trainId];
+
+      // فصل وتحديث رقم القطار واسم الرحلة في اللوحة
+      document.getElementById('splitTrainNum').textContent = `قطار ${train.number}`;
+      document.getElementById('splitTrainRoute').textContent = train.name;
 
       train.stations.forEach((st, idx) => {
         const isStopped = (train.status.state === 'AT_STATION' && train.status.stationIndex === idx);
@@ -692,7 +726,6 @@
           alertBetweenHtml = `<div class="between-alert">⚠️ تنبيه: القطار متوقف حالياً في السكة الحديد بين محطة [${st.name}] ومحطة [${nextSt.name}]</div>`;
         }
 
-        // حساب التأخير الفوري وعرض الشارة بالأحمر الفاقع
         const delayVal = getStationDelay(st);
         let delayText = '';
         if (delayVal !== null) {
@@ -738,6 +771,31 @@
       });
     }
 
+    // زر ريسيت أوقات الرحلة والتأخير لهذا القطار
+    function resetCurrentTrain() {
+      const trainId = document.getElementById('selectedTrain').value;
+      if (!trainId || !trainsData[trainId]) return;
+
+      const train = trainsData[trainId];
+      if (confirm(`هل أنت متأكد من تصفير وإعادة ضبط رحلة قطار (${train.number})؟\n\nسيتم مسح جميع أوقات الوصول والتأخيرات وإعادة ضبط القطار للبداية.`)) {
+        train.status = {
+          state: 'AT_STATION',
+          stationIndex: 0,
+          updatedBy: 'إعادة ضبط من المشرف',
+          departedAt: null
+        };
+
+        train.stations.forEach(st => {
+          st.actual = '--';
+          delete st.delayMinutes;
+        });
+
+        broadcastData();
+        renderControlBoard();
+        showCustomAlert('success', 'تم التصفير', `تم تصفير أوقات وتأخيرات قطار (${train.number}) بالكامل.`);
+      }
+    }
+
     function updateStationName(trainId, stationIndex, newName) {
       const val = newName.trim();
       if (!val) {
@@ -778,6 +836,8 @@
     }
 
     function setTrainAtStation(trainId, stationIndex) {
+      autoResetIfNewTrip(trainId, stationIndex);
+
       const timeString = formatCurrentTime();
 
       trainsData[trainId].status = { 
@@ -799,6 +859,8 @@
     }
 
     function setTrainMoving(trainId, fromStationIndex) {
+      autoResetIfNewTrip(trainId, fromStationIndex);
+
       const timeString = formatCurrentTime();
 
       trainsData[trainId].status = { 
@@ -953,7 +1015,6 @@
       trainsData[num] = {
         number: num,
         name: name,
-        lastActiveDate: getTodayKey(),
         status: { state: 'AT_STATION', stationIndex: 0, updatedBy: 'جدول الرحلة الأساسي' },
         stations: parsedStationsList
       };
@@ -982,7 +1043,6 @@
       }
     }
 
-    setInterval(checkAndApplyDailyReset, 60000);
     checkLoginStatus();
   </script>
 </body>
