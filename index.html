@@ -50,7 +50,8 @@
       border: 1px solid #334155; 
       border-radius: 10px; 
       color: #fff; 
-      font-size: 14px; 
+      font-size: 14.5px; 
+      font-weight: bold;
       outline: none; 
       cursor: pointer;
     }
@@ -109,17 +110,36 @@
     .btn-depart { background: #eab308; color: #000; }
     .btn-caution { background: #b91c1c; color: #fecaca; border: 1px solid #f87171; }
 
+    /* لوحة الفصل بين رقم القطار واسم الرحلة في شاشة الراكب */
     .train-info-badge { 
       background: #0f172a; 
-      padding: 12px; 
+      padding: 12px 14px; 
       border-radius: 12px; 
-      border-right: 4px solid #38bdf8; 
+      border-right: 5px solid #f59e0b; 
+      border-top: 1px solid #334155;
+      border-bottom: 1px solid #334155;
+      border-left: 1px solid #334155;
       margin-bottom: 15px; 
       display: flex; 
       justify-content: space-between; 
       align-items: center; 
+      gap: 10px;
     }
-    .status-badge { font-size: 11px; padding: 5px 8px; border-radius: 20px; font-weight: bold; }
+    .train-highlight-num {
+      display: inline-block;
+      background: #854d0e;
+      color: #fef08a;
+      border: 1.5px solid #facc15;
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      text-shadow: 0 0 6px rgba(250, 204, 21, 0.6);
+      margin-bottom: 4px;
+    }
+
+    .status-badge { font-size: 11px; padding: 5px 8px; border-radius: 20px; font-weight: bold; white-space: nowrap; }
     .status-moving { background: rgba(234, 179, 8, 0.2); color: #facc15; }
     .status-stopped { background: rgba(239, 68, 68, 0.2); color: #f87171; }
     .status-between { background: rgba(220, 38, 38, 0.35); color: #fca5a5; border: 1px solid #ef4444; }
@@ -184,7 +204,6 @@
       font-size: 11px;
     }
 
-    /* شارات التأخير البارزة */
     .delay-badge-red {
       color: #ffffff !important;
       background: #dc2626 !important;
@@ -262,7 +281,6 @@
       100% { transform: scale(1.4); opacity: 0.3; }
     }
 
-    /* نافذة المودال المخصصة المطابقة للمشرف */
     .custom-modal-overlay {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
@@ -347,7 +365,7 @@
     <div id="connStatus" class="status-alert status-wait">⏳ جاري الاتصال بالسيرفر السحابي...</div>
 
     <div class="selector-box">
-      <label>اختر رقم القطار:</label>
+      <label>اختر رقم القطار للمتابعة:</label>
       <select id="trainSelect" onchange="loadSelectedTrain()"></select>
     </div>
 
@@ -370,11 +388,12 @@
       <div id="crowdControls"></div>
     </div>
 
+    <!-- بطاقة معلومات القطار مع فصل رقم القطار عن اسم الرحلة -->
     <div class="train-info-badge" id="trainBadgeSection" style="display: none;">
       <div>
-        <div style="font-weight: bold;" id="trainTitle">--</div>
-        <div style="font-size: 12px; color: #94a3b8;" id="trainRouteName">--</div>
-        <div id="updateSourceText" style="font-size: 11px; color: #64748b; margin-top: 4px;"></div>
+        <div class="train-highlight-num" id="trainTitle">--</div>
+        <div style="font-size: 13.5px; color: #f1f5f9; font-weight: bold;" id="trainRouteName">--</div>
+        <div id="updateSourceText" style="font-size: 11px; color: #94a3b8; margin-top: 4px;"></div>
       </div>
       <div id="statusBadge" class="status-badge">--</div>
     </div>
@@ -396,7 +415,6 @@
     let currentUserRole = 'VIEWER';
     let client = null;
 
-    // دوال المودال المنبثق
     function showCustomAlert(type, title, message) {
       const overlay = document.getElementById('customModalOverlay');
       const card = overlay.querySelector('.custom-modal-card');
@@ -434,7 +452,6 @@
       document.getElementById('customModalOverlay').style.display = 'none';
     }
 
-    // دوال تحويل الأوقات وحساب التأخير
     function normalizeTimeDigits(str) {
       if (!str) return '';
       return String(str)
@@ -502,93 +519,25 @@
     if (cached) {
       try { 
         trainsData = JSON.parse(cached);
-        checkAndApplyDailyReset();
         populateTrainDropdown();
       } catch(e){}
     }
 
-    function getTodayKey() {
-      const d = new Date();
-      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-    }
+    // تصفير تلقائي ذكي عند بداية رحلة جديدة للقطار
+    function autoResetIfNewTrip(trainId, stationIndex) {
+      const train = trainsData[trainId];
+      if (!train) return;
 
-    function checkAndApplyDailyReset() {
-      const today = getTodayKey();
-      let modified = false;
-
-      Object.keys(trainsData).forEach(trainId => {
-        const train = trainsData[trainId];
-        if (train.lastActiveDate !== today) {
-          train.lastActiveDate = today;
-          train.status = {
-            state: 'AT_STATION',
-            stationIndex: 0,
-            updatedBy: 'بدء جدول اليوم الجديد تلقائياً'
-          };
-          train.stations.forEach(st => {
-            st.actual = '--';
-            delete st.delayMinutes;
+      if (stationIndex === 0) {
+        let hasLaterActuals = train.stations.slice(1).some(s => s.actual && s.actual !== '--');
+        if (hasLaterActuals) {
+          train.stations.forEach((st, idx) => {
+            if (idx > 0) {
+              st.actual = '--';
+              delete st.delayMinutes;
+            }
           });
-          modified = true;
         }
-      });
-
-      if (modified) {
-        broadcastData();
-      }
-    }
-
-    function initMQTT() {
-      const box = document.getElementById('connStatus');
-      box.className = 'status-alert status-wait';
-      box.textContent = "⏳ جاري الاتصال بالسيرفر السحابي...";
-
-      const clientId = "pass_" + Math.random().toString(16).substr(2, 8);
-      client = new Paho.MQTT.Client(BROKER_HOST, Number(BROKER_PORT), BROKER_PATH, clientId);
-
-      client.onConnectionLost = () => {
-        box.className = 'status-alert status-wait';
-        box.textContent = "⏳ انقطع الاتصال، جاري إعادة المحاولة...";
-        setTimeout(initMQTT, 2000);
-      };
-
-      client.onMessageArrived = (message) => {
-        try {
-          const data = JSON.parse(message.payloadString);
-          if (data && typeof data === 'object') {
-            trainsData = data;
-            checkAndApplyDailyReset();
-            localStorage.setItem('local_trains_cache', JSON.stringify(trainsData));
-            populateTrainDropdown();
-          }
-        } catch (e) {}
-      };
-
-      client.connect({
-        useSSL: true,
-        timeout: 5,
-        cleanSession: true,
-        onSuccess: () => {
-          box.className = 'status-alert status-ok';
-          box.textContent = "✅ متصل بالسيرفر السحابي مباشرة";
-          client.subscribe(SYNC_TOPIC, { qos: 1 });
-        },
-        onFailure: () => {
-          box.className = 'status-alert status-wait';
-          box.textContent = "⏳ تعذر الاتصال، جاري إعادة المحاولة...";
-          setTimeout(initMQTT, 2500);
-        }
-      });
-    }
-
-    function broadcastData() {
-      localStorage.setItem('local_trains_cache', JSON.stringify(trainsData));
-      if (client && client.isConnected()) {
-        const message = new Paho.MQTT.Message(JSON.stringify(trainsData));
-        message.destinationName = SYNC_TOPIC;
-        message.retained = true;
-        message.qos = 1;
-        client.send(message);
       }
     }
 
@@ -691,6 +640,59 @@
       return null;
     }
 
+    function initMQTT() {
+      const box = document.getElementById('connStatus');
+      box.className = 'status-alert status-wait';
+      box.textContent = "⏳ جاري الاتصال بالسيرفر السحابي...";
+
+      const clientId = "pass_" + Math.random().toString(16).substr(2, 8);
+      client = new Paho.MQTT.Client(BROKER_HOST, Number(BROKER_PORT), BROKER_PATH, clientId);
+
+      client.onConnectionLost = () => {
+        box.className = 'status-alert status-wait';
+        box.textContent = "⏳ انقطع الاتصال، جاري إعادة المحاولة...";
+        setTimeout(initMQTT, 2000);
+      };
+
+      client.onMessageArrived = (message) => {
+        try {
+          const data = JSON.parse(message.payloadString);
+          if (data && typeof data === 'object') {
+            trainsData = data;
+            localStorage.setItem('local_trains_cache', JSON.stringify(trainsData));
+            populateTrainDropdown();
+          }
+        } catch (e) {}
+      };
+
+      client.connect({
+        useSSL: true,
+        timeout: 5,
+        cleanSession: true,
+        onSuccess: () => {
+          box.className = 'status-alert status-ok';
+          box.textContent = "✅ متصل بالسيرفر السحابي مباشرة";
+          client.subscribe(SYNC_TOPIC, { qos: 1 });
+        },
+        onFailure: () => {
+          box.className = 'status-alert status-wait';
+          box.textContent = "⏳ تعذر الاتصال، جاري إعادة المحاولة...";
+          setTimeout(initMQTT, 2500);
+        }
+      });
+    }
+
+    function broadcastData() {
+      localStorage.setItem('local_trains_cache', JSON.stringify(trainsData));
+      if (client && client.isConnected()) {
+        const message = new Paho.MQTT.Message(JSON.stringify(trainsData));
+        message.destinationName = SYNC_TOPIC;
+        message.retained = true;
+        message.qos = 1;
+        client.send(message);
+      }
+    }
+
     function setUserRole(role) {
       currentUserRole = role;
       document.getElementById('btnRolePassenger').className = 'role-btn ' + (role === 'PASSENGER' ? 'active' : '');
@@ -702,14 +704,14 @@
     function populateTrainDropdown() {
       const select = document.getElementById('trainSelect');
       const currentVal = select.value;
-      select.innerHTML = '<option value="">-- اختر رقم القطار لمتابعته --</option>';
+      select.innerHTML = '<option value="">-- اضغط هنا لاختيار رقم القطار --</option>';
       
       const keys = Object.keys(trainsData);
       keys.forEach(key => {
         const t = trainsData[key];
         const opt = document.createElement('option');
         opt.value = key;
-        opt.textContent = `قطار ${t.number} - ${t.name}`;
+        opt.textContent = `[ قطار ${t.number} ]  ⟵  ${t.name}`;
         select.appendChild(opt);
       });
 
@@ -842,7 +844,6 @@
       submitVerifiedMovement(trainId, selectedIdx, 'ARRIVE');
     }
 
-    // التحقق المنطقي والجغرافي
     function submitVerifiedMovement(trainId, targetStationIndex, actionType) {
       const train = trainsData[trainId];
       const curIdx = train.status.stationIndex;
@@ -852,7 +853,7 @@
       const now = new Date();
       const currentMins = now.getHours() * 60 + now.getMinutes();
 
-      // 1. فحص الاتجاه: منع التحديث للخلف
+      // فحص الاتجاه: منع التحديث للخلف
       if (actionType === 'ARRIVE') {
         if (targetStationIndex < curIdx) {
           showCustomAlert('error', 'محطة سابقة', `القطار تجاوز محطة (${targetStation.name}) بالفعل، لا يمكن التحديث للخلف.`);
@@ -864,27 +865,25 @@
           return;
         }
 
-        // 2. التحقق من الوقت المجدول (منع الوصول المبكر > 15 دقيقة أو المتأخر > ساعتين)
+        // منع الوصول المبكر > 15 دقيقة أو المتأخر > ساعتين
         const toSchedMins = timeStringToMinutes(targetStation.scheduled);
         if (toSchedMins !== null) {
           let timeDiff = currentMins - toSchedMins;
           if (timeDiff < -720) timeDiff += 1440;
-          else if (timeDiff > 720) timeDiff -= 1440;
+          else if (timeDiff > 720) diff -= 1440;
 
-          // إذا كان التحديث قبل الموعد بأكثر من 15 دقيقة
           if (timeDiff < -15) {
             showCustomAlert('error', 'محاولة تحديث مبكرة', `متبقي أكثر من 15 دقيقة على موعد وصول محطة (${targetStation.name}) المجدول [${targetStation.scheduled}]. لا يمكن تسجيل الوصول الآن.`);
             return;
           }
 
-          // إذا كان بعد الموعد بأكثر من ساعتين
           if (timeDiff > 120) {
             showCustomAlert('error', 'تأخير كبير جداً', `القطار متأخر بأكثر من ساعتين عن موعده المجدول، يرجى اعتماد التحديث من المشرف.`);
             return;
           }
         }
 
-        // 3. فحص واقعية سرعة القطار
+        // فحص واقعية سرعة القطار
         if (train.status.departedAt || (curStation.actual && curStation.actual !== '--')) {
           let elapsedMinutes = null;
 
@@ -1004,6 +1003,8 @@
     }
 
     function applyTrainUpdate(trainId, stationIndex, actionType) {
+      autoResetIfNewTrip(trainId, stationIndex);
+
       const timeStr = formatCurrentTime();
       const train = trainsData[trainId];
 
@@ -1048,7 +1049,6 @@
       train.stations.forEach((st, idx) => {
         const isStoppedHere = (train.status.state === 'AT_STATION' && train.status.stationIndex === idx);
 
-        // شارة التأخير المضيئة
         const delayVal = getStationDelay(st);
         let delayHtml = '';
         if (delayVal !== null) {
@@ -1099,7 +1099,6 @@
       });
     }
 
-    setInterval(checkAndApplyDailyReset, 60000);
     initMQTT();
   </script>
 </body>
