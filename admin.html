@@ -79,196 +79,93 @@
     .btn-edit-active { background: #8b5cf6; color: white; }
     .btn:hover { opacity: 0.88; }
 
-    /* نفس تنسيقات قائمة الـ Combo المنسدلة من index.html بالكامل */
-    .combo-wrapper {
-      position: relative;
-      width: 100%;
-      margin-bottom: 12px;
-    }
+    .combo-wrapper { position: relative; width: 100%; margin-bottom: 12px; }
     .combo-input {
-      width: 100%;
-      padding: 12px 14px;
-      background: #0b1120;
-      border: 1.5px solid #334155;
-      border-radius: 10px;
-      color: #fff;
-      font-size: 13.5px;
-      outline: none;
-      cursor: text;
-      transition: all 0.2s;
+      width: 100%; padding: 12px 14px; background: #0b1120; border: 1.5px solid #334155;
+      border-radius: 10px; color: #fff; font-size: 13.5px; outline: none; transition: all 0.2s;
     }
-    .combo-input:focus {
-      border-color: #38bdf8;
-      box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
-    }
+    .combo-input:focus { border-color: #38bdf8; box-shadow: 0 0 10px rgba(56, 189, 248, 0.2); }
     .combo-dropdown {
-      position: absolute;
-      top: calc(100% + 4px);
-      left: 0;
-      right: 0;
-      background: #131d2e;
-      border: 1px solid #334155;
-      border-radius: 10px;
-      max-height: 220px;
-      overflow-y: auto;
-      z-index: 999;
-      display: none;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.7);
+      position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: #131d2e;
+      border: 1px solid #334155; border-radius: 10px; max-height: 220px; overflow-y: auto;
+      z-index: 999; display: none; box-shadow: 0 10px 25px rgba(0,0,0,0.7);
     }
     .combo-item {
-      padding: 10px 14px;
-      font-size: 13px;
-      color: #f1f5f9;
-      cursor: pointer;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-      transition: background 0.15s;
+      padding: 10px 14px; font-size: 13px; color: #f1f5f9; cursor: pointer;
+      border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s;
     }
     .combo-item:last-child { border: none; }
-    .combo-item:hover, .combo-item.selected {
-      background: #0284c7;
-      color: #ffffff;
-    }
+    .combo-item:hover { background: #0284c7; color: #ffffff; }
 
-    /* أزرار الإجراءات تحت خانة البحث مباشرة */
     .train-actions-bar {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      align-items: center;
-      margin-bottom: 15px;
+      display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 15px;
     }
 
-    /* شريط عرض القطار وشريط التعديل */
     .train-info-display-bar {
-      background: #0f172a;
-      border: 1px solid #1e293b;
-      border-radius: 10px;
-      padding: 10px 14px;
-      margin-bottom: 15px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
+      background: #0f172a; border: 1px solid #1e293b; border-radius: 10px;
+      padding: 12px 14px; margin-bottom: 15px; display: flex;
+      justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
     }
+
+    .status-pill { font-size: 11.5px; padding: 4px 10px; border-radius: 20px; font-weight: bold; }
+    .status-pill-idle { background: rgba(148, 163, 184, 0.15); color: #94a3b8; border: 1px solid #475569; }
+    .status-pill-stop { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; }
+    .status-pill-move { background: rgba(234, 179, 8, 0.2); color: #facc15; border: 1px solid #eab308; }
+    .status-pill-between { background: rgba(220, 38, 38, 0.35); color: #fca5a5; border: 1px solid #ef4444; }
+
     .train-edit-bar {
-      background: #0f172a;
-      border: 1px dashed #38bdf8;
-      border-radius: 10px;
-      padding: 12px 14px;
-      margin-bottom: 15px;
+      background: #0f172a; border: 1px dashed #38bdf8; border-radius: 10px;
+      padding: 12px 14px; margin-bottom: 15px;
     }
     .train-edit-grid {
-      display: grid;
-      grid-template-columns: 120px 160px 1fr;
-      gap: 12px;
-      align-items: center;
+      display: grid; grid-template-columns: 120px 160px 1fr; gap: 12px; align-items: center;
     }
-    .train-edit-grid input {
-      margin-bottom: 0;
-      padding: 9px 12px;
-      font-size: 13.5px;
-    }
+    .train-edit-grid input { margin-bottom: 0; padding: 9px 12px; font-size: 13.5px; }
 
     @media (max-width: 640px) {
-      .train-edit-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-      .train-edit-grid > div:last-child {
-        grid-column: span 2;
-      }
+      .train-edit-grid { grid-template-columns: 1fr 1fr; }
+      .train-edit-grid > div:last-child { grid-column: span 2; }
     }
 
     .station-control-row {
       background: #0f172a; padding: 12px; border-radius: 8px; margin-bottom: 12px;
-      border-right: 5px solid #3b82f6;
+      border-right: 5px solid #334155; transition: border-color 0.2s;
     }
     .station-head { 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center; 
-      margin-bottom: 10px; 
-      gap: 10px;
-      flex-wrap: wrap;
+      display: flex; justify-content: space-between; align-items: center; 
+      margin-bottom: 10px; gap: 10px; flex-wrap: wrap;
     }
     .station-title-view {
-      font-size: 15px;
-      font-weight: bold;
-      color: #38bdf8;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      font-size: 15px; font-weight: bold; color: #38bdf8; display: flex; align-items: center; gap: 8px;
     }
-    .station-edit-group {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex: 1;
-      min-width: 250px;
-    }
+    .station-edit-group { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 250px; }
     .station-order-input {
-      width: 55px !important;
-      padding: 6px !important;
-      margin: 0 !important;
-      text-align: center;
-      font-weight: bold;
-      color: #38bdf8 !important;
-      border-color: #0284c7 !important;
+      width: 55px !important; padding: 6px !important; margin: 0 !important;
+      text-align: center; font-weight: bold; color: #38bdf8 !important; border-color: #0284c7 !important;
     }
     .station-name-input {
-      flex: 1;
-      margin: 0 !important;
-      padding: 6px 10px !important;
-      font-weight: bold;
-      color: #f8fafc !important;
+      flex: 1; margin: 0 !important; padding: 6px 10px !important; font-weight: bold; color: #f8fafc !important;
     }
     
     .times-inputs {
-      display: flex; 
-      gap: 10px; 
-      flex-wrap: wrap; 
-      margin-bottom: 10px;
-      background: #1e293b; 
-      padding: 8px 12px; 
-      border-radius: 6px;
-      align-items: center;
+      display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;
+      background: #1e293b; padding: 8px 12px; border-radius: 6px; align-items: center;
     }
     .times-inputs div { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #cbd5e1; }
     .times-inputs input { width: 105px; padding: 5px 8px; margin: 0; font-size: 12px; }
 
-    /* شارات التأخير البارزة */
     .delay-label-red {
-      color: #ffffff !important;
-      background: #dc2626 !important;
-      border: 1px solid #ef4444 !important;
-      padding: 3px 8px !important;
-      border-radius: 6px !important;
-      font-weight: 800 !important;
-      font-size: 11px !important;
-      white-space: nowrap !important;
-      box-shadow: 0 0 12px rgba(239, 68, 68, 0.75) !important;
-      display: inline-flex !important;
-      align-items: center !important;
+      color: #ffffff !important; background: #dc2626 !important; border: 1px solid #ef4444 !important;
+      padding: 3px 8px !important; border-radius: 6px !important; font-weight: 800 !important;
+      font-size: 11px !important; white-space: nowrap !important;
     }
     .delay-label-ontime {
-      color: #38bdf8;
-      background: rgba(56, 189, 248, 0.15);
-      border: 1px solid #0284c7;
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-weight: bold;
-      font-size: 11px;
-      white-space: nowrap;
+      color: #38bdf8; background: rgba(56, 189, 248, 0.15); border: 1px solid #0284c7;
+      padding: 3px 8px; border-radius: 6px; font-weight: bold; font-size: 11px; white-space: nowrap;
     }
     .delay-label-early {
-      color: #4ade80;
-      background: rgba(34, 197, 94, 0.15);
-      border: 1px solid #22c55e;
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-weight: bold;
-      font-size: 11px;
-      white-space: nowrap;
+      color: #4ade80; background: rgba(34, 197, 94, 0.15); border: 1px solid #22c55e;
+      padding: 3px 8px; border-radius: 6px; font-weight: bold; font-size: 11px; white-space: nowrap;
     }
 
     .btn-group { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -280,8 +177,8 @@
     }
 
     .preview-box {
-      background: #0b1120; border: 1px dashed #38bdf8;
-      border-radius: 8px; padding: 12px; margin-bottom: 15px; display: none;
+      background: #0b1120; border: 1px dashed #38bdf8; border-radius: 8px;
+      padding: 12px; margin-bottom: 15px; display: none;
     }
     .preview-table { width: 100%; border-collapse: collapse; font-size: 13px; }
     .preview-table td { padding: 4px 8px; border-bottom: 1px solid #1e293b; }
@@ -297,98 +194,40 @@
     }
     .add-station-bar input { margin: 0; }
 
-    /* شاشة تسجيل الدخول */
     .login-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: #090d16;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      padding: 16px;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #090d16;
+      display: flex; justify-content: center; align-items: center; z-index: 9999; padding: 16px;
     }
     .login-card {
-      background: #131d2e;
-      border: 1px solid #1e293b;
-      border-radius: 16px;
-      padding: 24px;
-      width: 100%;
-      max-width: 380px;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      background: #131d2e; border: 1px solid #1e293b; border-radius: 16px; padding: 24px;
+      width: 100%; max-width: 380px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.6);
     }
     .login-card h2 { color: #38bdf8; font-size: 18px; margin-bottom: 8px; }
     .login-card p { font-size: 13px; color: #94a3b8; margin-bottom: 16px; }
-    .login-error {
-      color: #ef4444;
-      font-size: 12px;
-      margin-top: 8px;
-      display: none;
-    }
+    .login-error { color: #ef4444; font-size: 12px; margin-top: 8px; display: none; }
 
-    /* نافذة المودال */
     .custom-modal-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(5, 9, 18, 0.82);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 100000;
-      padding: 16px;
-      animation: modalFadeIn 0.2s ease-out;
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(5, 9, 18, 0.82); backdrop-filter: blur(6px); display: flex;
+      align-items: center; justify-content: center; z-index: 100000; padding: 16px;
     }
-
-    @keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
-
     .custom-modal-card {
-      background: #131d2e;
-      border-radius: 20px;
-      width: 100%;
-      max-width: 380px;
-      padding: 24px 20px;
-      text-align: center;
-      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
-      animation: modalPopUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      direction: rtl;
+      background: #131d2e; border-radius: 20px; width: 100%; max-width: 380px;
+      padding: 24px 20px; text-align: center; box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7); direction: rtl;
     }
-
-    @keyframes modalPopUp {
-      from { opacity: 0; transform: scale(0.9) translateY(12px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
-    }
-
-    .modal-icon-container {
-      width: 64px; height: 64px; border-radius: 50%;
-      margin: 0 auto 14px; display: flex; align-items: center; justify-content: center;
-    }
-
+    .modal-icon-container { width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 14px; display: flex; align-items: center; justify-content: center; }
     .modal-error { border: 1px solid rgba(239, 68, 68, 0.45); }
-    .modal-error .modal-icon-container {
-      background: rgba(239, 68, 68, 0.15); border: 2px solid #ef4444;
-      box-shadow: 0 0 20px rgba(239, 68, 68, 0.45);
-    }
+    .modal-error .modal-icon-container { background: rgba(239, 68, 68, 0.15); border: 2px solid #ef4444; }
     .modal-error .modal-title { color: #f87171; font-size: 17px; font-weight: 800; margin-bottom: 10px; }
     .modal-error .modal-btn { background: #dc2626; color: #fff; }
-    .modal-error .modal-btn:hover { background: #b91c1c; }
 
     .modal-success { border: 1px solid rgba(34, 197, 94, 0.45); }
-    .modal-success .modal-icon-container {
-      background: rgba(34, 197, 94, 0.15); border: 2px solid #22c55e;
-      box-shadow: 0 0 20px rgba(34, 197, 94, 0.45);
-    }
+    .modal-success .modal-icon-container { background: rgba(34, 197, 94, 0.15); border: 2px solid #22c55e; }
     .modal-success .modal-title { color: #4ade80; font-size: 17px; font-weight: 800; margin-bottom: 10px; }
     .modal-success .modal-btn { background: #10b981; color: #fff; }
-    .modal-success .modal-btn:hover { background: #059669; }
 
     .modal-message { font-size: 13.5px; line-height: 1.65; color: #cbd5e1; margin-bottom: 20px; white-space: pre-line; word-break: break-word; }
-    .modal-btn {
-      width: 100%; padding: 12px; border: none; border-radius: 10px;
-      font-weight: 700; font-size: 14px; cursor: pointer; transition: 0.2s; font-family: inherit;
-    }
+    .modal-btn { width: 100%; padding: 12px; border: none; border-radius: 10px; font-weight: 700; font-size: 14px; cursor: pointer; }
   </style>
 </head>
 <body>
@@ -434,24 +273,20 @@
       <h2>1. المراقبة والتحكم الميداني وتعديل المحطات</h2>
       <label>اختر القطار:</label>
       
-      <!-- قائمة الاختيار والبحث المطابقة تماماً لـ index.html -->
       <div class="combo-wrapper" id="trainComboWrapper">
         <input type="text" id="directTrainInput" class="combo-input" placeholder="اضغط للاختيار أو اكتب رقم القطار..." autocomplete="off">
         <div class="combo-dropdown" id="directTrainDropdown"></div>
       </div>
 
-      <!-- أزرار التصفير والحذف والتعديل والحفظ تحت خانة البحث مباشرة -->
       <div class="train-actions-bar" id="trainActionsRow" style="display: none;">
-        <button id="btnResetTrain" class="btn btn-warning" onclick="resetCurrentTrain()" title="تصفير الأوقات والتأخيرات">🔄 تصفير</button>
+        <button id="btnResetTrain" class="btn btn-warning" onclick="resetCurrentTrain()" title="تصفير الأوقات وإعادة ضبط الرحلة للبداية بدون محطة">🔄 تصفير للبداية</button>
         <button id="btnDeleteTrain" class="btn btn-danger" onclick="deleteCurrentTrain()" title="حذف القطار نهائياً">🗑️ حذف</button>
         <button id="btnToggleEdit" class="btn btn-secondary" onclick="toggleEditMode()" title="تعديل بيانات ومحطات القطار">✏️ تعديل</button>
         <button id="btnSaveAll" class="btn btn-add" style="display: none;" onclick="saveAllTrainEdits()" title="حفظ جميع التعديلات">💾 حفظ</button>
       </div>
 
-      <!-- شريط ملخص بيانات القطار في الوضع العادي -->
       <div id="trainInfoDisplayBar" class="train-info-display-bar" style="display: none;"></div>
 
-      <!-- شريط تعديل بيانات القطار (يظهر فقط في وضع التعديل) -->
       <div id="trainEditInfoBar" class="train-edit-bar" style="display: none;">
         <div style="font-size: 13px; font-weight: bold; color: #38bdf8; margin-bottom: 10px;">✏️ تعديل بيانات القطار الأساسية:</div>
         <div class="train-edit-grid">
@@ -474,7 +309,6 @@
         <p style="color:#64748b; text-align:center; padding: 20px;">👈 برجاء اختيار قطار من خانة البحث أعلاه لبدء المراقبة والتحكم.</p>
       </div>
 
-      <!-- إضافة محطة جديدة (تظهر فقط عند الضغط على زر تعديل) -->
       <div id="addStationSection" style="display: none;">
         <label style="margin-top: 15px; font-weight: bold; color: #38bdf8;">➕ إضافة محطة جديدة لهذا القطار:</label>
         <div class="add-station-bar">
@@ -595,8 +429,7 @@
       const period = hours >= 12 ? 'م' : 'ص';
       hours = hours % 12;
       if (hours === 0) hours = 12;
-      const hoursStr = String(hours).padStart(2, '0');
-      return `${hoursStr}:${minutes} ${period}`;
+      return `${String(hours).padStart(2, '0')}:${minutes} ${period}`;
     }
 
     function timeStringToMinutes(str) {
@@ -703,9 +536,7 @@
 
     const cached = localStorage.getItem('local_trains_cache');
     if (cached) {
-      try { 
-        trainsData = JSON.parse(cached);
-      } catch(e){}
+      try { trainsData = JSON.parse(cached); } catch(e){}
     }
 
     function initMQTT() {
@@ -738,9 +569,7 @@
       };
 
       client.connect({
-        useSSL: true,
-        timeout: 5,
-        cleanSession: true,
+        useSSL: true, timeout: 5, cleanSession: true,
         onSuccess: () => {
           box.className = 'status-alert status-ok';
           box.textContent = "✅ متصل بالسيرفر السحابي (أي تعديل يصل للركاب فوراً)";
@@ -765,9 +594,6 @@
       }
     }
 
-    /* ============================================================
-       نظام الـ Combobox المطابق لصفحة index.html بالضبط
-    ============================================================ */
     function getAllTrainsList() {
       return Object.keys(trainsData).map(k => {
         const t = trainsData[k];
@@ -836,12 +662,9 @@
         if (exact) {
           onSelectCallback(exact);
         } else {
-          // محاولة المطابقة المباشرة برقم القطار
           const cleanNum = normalizeTimeDigits(input.value.trim());
           const matchByNum = allItems.find(item => item.number === cleanNum);
-          if (matchByNum) {
-            onSelectCallback(matchByNum);
-          }
+          if (matchByNum) onSelectCallback(matchByNum);
         }
       };
     }
@@ -850,9 +673,7 @@
       document.querySelectorAll('.combo-dropdown').forEach(d => d.style.display = 'none');
     }
 
-    document.addEventListener('click', () => {
-      closeAllComboboxes();
-    });
+    document.addEventListener('click', () => { closeAllComboboxes(); });
 
     function initTrainSelector() {
       setupCombobox('directTrainInput', 'directTrainDropdown', getAllTrainsList, (selected) => {
@@ -861,9 +682,7 @@
         } else {
           const raw = document.getElementById('directTrainInput').value.trim();
           let matched = Object.keys(trainsData).find(k => trainsData[k].number === raw || trainsData[k].number === normalizeTimeDigits(raw));
-          if (matched) {
-            selectTrain(matched);
-          }
+          if (matched) selectTrain(matched);
         }
       });
     }
@@ -879,9 +698,6 @@
       renderControlBoard();
     }
 
-    /* ============================================================
-       التحكم في وضع التعديل (Edit Mode)
-    ============================================================ */
     function toggleEditMode() {
       if (!selectedTrainId || !trainsData[selectedTrainId]) return;
       isEditMode = !isEditMode;
@@ -911,6 +727,8 @@
       const train = trainsData[selectedTrainId];
       actionsRow.style.display = 'flex';
 
+      const isNotStarted = (!train.status || train.status.state === 'NOT_STARTED' || train.status.stationIndex === null || train.status.stationIndex === undefined);
+
       if (isEditMode) {
         btnToggleEdit.className = 'btn btn-edit-active';
         btnToggleEdit.innerHTML = '✖️ إلغاء التعديل';
@@ -930,52 +748,66 @@
         addSection.style.display = 'none';
 
         displayBar.style.display = 'flex';
+
+        let statusPillHtml = '';
+        if (isNotStarted) {
+          statusPillHtml = `<span class="status-pill status-pill-idle">⏳ بانتظار بدء الرحلة (لم تبدأ بعد)</span>`;
+        } else if (train.status.state === 'MOVING') {
+          const nextName = (train.stations[train.status.stationIndex + 1]?.name || '').replace(/محطة/g, '').trim();
+          statusPillHtml = `<span class="status-pill status-pill-move">🚀 متحرك باتجاه ${nextName}</span>`;
+        } else if (train.status.state === 'STOPPED_BETWEEN') {
+          const curName = (train.stations[train.status.stationIndex]?.name || '').replace(/محطة/g, '').trim();
+          const nextName = (train.stations[train.status.stationIndex + 1]?.name || '').replace(/محطة/g, '').trim();
+          statusPillHtml = `<span class="status-pill status-pill-between">⚠️ متوقف بين ${curName} و ${nextName}</span>`;
+        } else {
+          const curName = (train.stations[train.status.stationIndex]?.name || '').replace(/محطة/g, '').trim();
+          statusPillHtml = `<span class="status-pill status-pill-stop">🛑 متوقف برصيف ${curName}</span>`;
+        }
+
         displayBar.innerHTML = `
           <div>
             <span style="font-size:15px; font-weight:bold; color:#38bdf8;">قطار ${train.number}</span>
             <span style="font-size:13px; color:#cbd5e1; margin-right:8px;">${train.name}</span>
+            ${train.type ? `<span style="font-size:11.5px; background:#1e293b; padding:2px 8px; border-radius:6px; color:#c084fc; border:1px solid #334155; margin-right:6px;">${train.type}</span>` : ''}
           </div>
-          ${train.type ? `<span style="font-size:12px; background:#1e293b; padding:3px 10px; border-radius:6px; color:#94a3b8; border:1px solid #334155;">النوع: <b>${train.type}</b></span>` : ''}
+          <div>${statusPillHtml}</div>
         `;
       }
 
       train.stations.forEach((st, idx) => {
-        const isStopped = (train.status.state === 'AT_STATION' && train.status.stationIndex === idx);
-        const isMoving = (train.status.state === 'MOVING' && train.status.stationIndex === idx);
-        const isStoppedBetween = (train.status.state === 'STOPPED_BETWEEN' && train.status.stationIndex === idx);
+        const isCurrentStopped = (!isNotStarted && train.status.state === 'AT_STATION' && train.status.stationIndex === idx);
+        const isCurrentMoving = (!isNotStarted && train.status.state === 'MOVING' && train.status.stationIndex === idx);
+        const isCurrentBetween = (!isNotStarted && train.status.state === 'STOPPED_BETWEEN' && train.status.stationIndex === idx);
 
         const card = document.createElement('div');
         card.className = 'station-control-row';
-        card.style.borderColor = isStopped ? '#ef4444' : (isMoving ? '#facc15' : (isStoppedBetween ? '#b91c1c' : '#334155'));
+        card.style.borderColor = isCurrentStopped ? '#ef4444' : (isCurrentMoving ? '#facc15' : (isCurrentBetween ? '#b91c1c' : '#334155'));
 
+        const cleanStName = st.name.replace(/محطة/g, '').trim();
         const nextSt = train.stations[idx + 1];
+        const cleanNextName = nextSt ? nextSt.name.replace(/محطة/g, '').trim() : '';
 
         let actionButtons = '';
         if (nextSt) {
           actionButtons = `
-            <button class="btn btn-warning" onclick="setTrainMoving('${selectedTrainId}', ${idx})">🚀 غادر باتجاه ${nextSt.name}</button>
-            <button class="btn btn-caution" onclick="setTrainStoppedBetween('${selectedTrainId}', ${idx})">⚠️ متوقف بين ${st.name} و ${nextSt.name}</button>
+            <button class="btn btn-warning" onclick="setTrainMoving('${selectedTrainId}', ${idx})">🚀 غادر باتجاه ${cleanNextName}</button>
+            <button class="btn btn-caution" onclick="setTrainStoppedBetween('${selectedTrainId}', ${idx})">⚠️ متوقف بين ${cleanStName} و ${cleanNextName}</button>
           `;
         }
 
         let alertBetweenHtml = '';
-        if (isStoppedBetween && nextSt) {
-          alertBetweenHtml = `<div class="between-alert">⚠️ تنبيه: القطار متوقف حالياً في السكة الحديد بين [${st.name}] و [${nextSt.name}]</div>`;
+        if (isCurrentBetween && nextSt) {
+          alertBetweenHtml = `<div class="between-alert">⚠️ تنبيه: القطار متوقف حالياً في السكة بين [${cleanStName}] و [${cleanNextName}]</div>`;
         }
 
         const delayVal = getStationDelay(st);
         let delayText = '';
         if (delayVal !== null) {
-          if (delayVal > 0) {
-            delayText = `<span class="delay-label-red">⚠️ تأخير: +${delayVal} د</span>`;
-          } else if (delayVal < 0) {
-            delayText = `<span class="delay-label-early">⚡ متقدم: ${Math.abs(delayVal)} د</span>`;
-          } else {
-            delayText = `<span class="delay-label-ontime">🟢 في الموعد</span>`;
-          }
+          if (delayVal > 0) delayText = `<span class="delay-label-red">⚠️ تأخير: +${delayVal} د</span>`;
+          else if (delayVal < 0) delayText = `<span class="delay-label-early">⚡ متقدم: ${Math.abs(delayVal)} د</span>`;
+          else delayText = `<span class="delay-label-ontime">🟢 في الموعد</span>`;
         }
 
-        // رأس المحطة: تم إزالة كلمة "محطة" بناءً على طلبك تماماً
         let stationHeadHtml = '';
         if (isEditMode) {
           stationHeadHtml = `
@@ -983,7 +815,7 @@
               <span style="font-size:12px; color:#94a3b8;">رقم:</span>
               <input type="number" class="station-order-input" id="stOrder_${idx}" min="1" max="${train.stations.length}" value="${idx + 1}" title="تغيير ترتيب المحطة">
               <span style="font-size:12px; color:#94a3b8;">اسم:</span>
-              <input type="text" class="station-name-input" id="stName_${idx}" value="${st.name}" placeholder="اسم المحطة">
+              <input type="text" class="station-name-input" id="stName_${idx}" value="${cleanStName}" placeholder="اسم المحطة">
             </div>
             <button class="btn btn-danger" style="padding: 5px 10px; font-size:11.5px;" onclick="removeStation('${selectedTrainId}', ${idx})">🗑️ حذف</button>
           `;
@@ -991,12 +823,11 @@
           stationHeadHtml = `
             <div class="station-title-view">
               <span style="background:#1e293b; color:#38bdf8; padding:2px 8px; border-radius:6px; font-size:12px;">#${idx + 1}</span>
-              <span>${st.name}</span>
+              <span>${cleanStName}</span>
             </div>
           `;
         }
 
-        // أوقات المحطة
         let schedTimeHtml = '';
         if (isEditMode) {
           schedTimeHtml = `
@@ -1016,10 +847,7 @@
 
         card.innerHTML = `
           ${alertBetweenHtml}
-          <div class="station-head">
-            ${stationHeadHtml}
-          </div>
-
+          <div class="station-head">${stationHeadHtml}</div>
           <div class="times-inputs">
             ${schedTimeHtml}
             ${delayText}
@@ -1028,9 +856,8 @@
               <input type="text" value="${st.actual}" onchange="updateActualTimeManual('${selectedTrainId}', ${idx}, this.value)" placeholder="الفعلي">
             </div>
           </div>
-
           <div class="btn-group">
-            <button class="btn btn-danger" onclick="setTrainAtStation('${selectedTrainId}', ${idx})">🛑 وصل رصيف ${st.name}</button>
+            <button class="btn btn-danger" onclick="setTrainAtStation('${selectedTrainId}', ${idx})">🛑 وصل رصيف ${cleanStName}</button>
             ${actionButtons}
           </div>
         `;
@@ -1038,9 +865,6 @@
       });
     }
 
-    /* ============================================================
-       حفظ جميع التعديلات عند الضغط على زر حفظ
-    ============================================================ */
     function saveAllTrainEdits() {
       if (!selectedTrainId || !trainsData[selectedTrainId]) return;
 
@@ -1084,9 +908,8 @@
 
         updatedStations.push({
           targetOrder: desiredOrder,
-          originalIndex: i,
           station: {
-            name: desiredName,
+            name: desiredName.replace(/محطة/g, '').trim(),
             scheduled: desiredSched,
             actual: currentActual,
             delayMinutes: newDelay
@@ -1113,13 +936,14 @@
       showCustomAlert('success', 'تم الحفظ بنجاح', `تم حفظ وتحديث بيانات ومحطات قطار (${newNum}) سحابياً.`);
     }
 
+    // تصفير القطار للوضع الافتراضي (NOT_STARTED) وبدون أي محطة مختارة
     function resetCurrentTrain() {
       if (!selectedTrainId || !trainsData[selectedTrainId]) return;
       const train = trainsData[selectedTrainId];
-      if (confirm(`هل أنت متأكد من تصفير وإعادة ضبط رحلة قطار (${train.number})؟\n\nسيتم مسح جميع أوقات الوصول والتأخيرات وإعادة ضبط القطار للبداية.`)) {
+      if (confirm(`هل أنت متأكد من تصفير وإعادة ضبط رحلة قطار (${train.number})؟\n\nسيتم مسح جميع أوقات الوصول والتأخيرات وإرجاع حالة القطار إلى (بانتظار بدء الرحلة) بدون اختيار أي محطة.`)) {
         train.status = {
-          state: 'AT_STATION',
-          stationIndex: 0,
+          state: 'NOT_STARTED',
+          stationIndex: null,
           updatedBy: 'إعادة ضبط من المشرف',
           departedAt: null
         };
@@ -1130,7 +954,7 @@
 
         broadcastData();
         renderControlBoard();
-        showCustomAlert('success', 'تم التصفير', `تم تصفير أوقات وتأخيرات قطار (${train.number}) بالكامل.`);
+        showCustomAlert('success', 'تم التصفير للبداية', `تم تصفير رحلة قطار (${train.number}) بالكامل، والقطار الآن بانتظار بدء الرحلة بدون تحديد أي محطة.`);
       }
     }
 
@@ -1147,26 +971,8 @@
       }
     }
 
-    function autoResetIfNewTrip(trainId, stationIndex) {
-      const train = trainsData[trainId];
-      if (!train) return;
-      if (stationIndex === 0) {
-        let hasLaterActuals = train.stations.slice(1).some(s => s.actual && s.actual !== '--');
-        if (hasLaterActuals) {
-          train.stations.forEach((st, idx) => {
-            if (idx > 0) {
-              st.actual = '--';
-              delete st.delayMinutes;
-            }
-          });
-        }
-      }
-    }
-
     function setTrainAtStation(trainId, stationIndex) {
-      autoResetIfNewTrip(trainId, stationIndex);
       const timeString = formatCurrentTime();
-
       trainsData[trainId].status = { 
         state: 'AT_STATION', 
         stationIndex: stationIndex,
@@ -1182,13 +988,12 @@
 
       broadcastData();
       renderControlBoard();
-      showCustomAlert('success', 'تم اعتماد الوصول', `تم تسجيل وصول القطار إلى (${trainsData[trainId].stations[stationIndex].name}) ونشر ذلك للركاب فوراً.`);
+      const cleanName = trainsData[trainId].stations[stationIndex].name.replace(/محطة/g, '').trim();
+      showCustomAlert('success', 'تم اعتماد الوصول', `تم تسجيل وصول القطار إلى (${cleanName}) ونشر ذلك للركاب فوراً.`);
     }
 
     function setTrainMoving(trainId, fromStationIndex) {
-      autoResetIfNewTrip(trainId, fromStationIndex);
       const timeString = formatCurrentTime();
-
       trainsData[trainId].status = { 
         state: 'MOVING', 
         stationIndex: fromStationIndex,
@@ -1202,11 +1007,13 @@
 
     function setTrainStoppedBetween(trainId, fromStationIndex) {
       const timeString = formatCurrentTime();
+      const curName = trainsData[trainId].stations[fromStationIndex].name.replace(/محطة/g, '').trim();
+      const nextName = trainsData[trainId].stations[fromStationIndex + 1]?.name.replace(/محطة/g, '').trim() || '';
 
       trainsData[trainId].status = { 
         state: 'STOPPED_BETWEEN', 
         stationIndex: fromStationIndex,
-        updatedBy: `المشرف: متوقف بالسكة (${timeString})`
+        updatedBy: `المشرف: متوقف بين ${curName} و ${nextName} (${timeString})`
       };
       broadcastData();
       renderControlBoard();
@@ -1230,7 +1037,7 @@
       const nameInput = document.getElementById('newStationName');
       const timeInput = document.getElementById('newStationTime');
 
-      const name = nameInput.value.trim();
+      const name = nameInput.value.trim().replace(/محطة/g, '').trim();
       const time = timeInput.value.trim() || '--';
 
       if (!name) {
@@ -1257,9 +1064,10 @@
         showCustomAlert('error', 'إجراء غير مسموح', 'لا يمكن حذف آخر محطة متبقية في مسار القطار!');
         return;
       }
-      if (confirm(`هل أنت متأكد من حذف محطة (${train.stations[index].name}) من مسار هذا القطار؟`)) {
+      const stName = train.stations[index].name.replace(/محطة/g, '').trim();
+      if (confirm(`هل أنت متأكد من حذف محطة (${stName}) من مسار هذا القطار؟`)) {
         train.stations.splice(index, 1);
-        if (train.status.stationIndex >= train.stations.length) {
+        if (train.status.stationIndex !== null && train.status.stationIndex >= train.stations.length) {
           train.status.stationIndex = train.stations.length - 1;
         }
         broadcastData();
@@ -1268,9 +1076,6 @@
       }
     }
 
-    /* ============================================================
-       إضافة قطار جديد باللصق الذكي
-    ============================================================ */
     function parsePastedStations() {
       const rawText = document.getElementById('smartPasteInput').value.trim();
       const previewBox = document.getElementById('previewContainer');
@@ -1301,6 +1106,8 @@
           name = line.replace(/[-–—,،:|\t]/g, ' ').trim();
         }
 
+        name = name.replace(/محطة/g, '').trim();
+
         if (name && !name.includes("هل تحتاج إلى معرفة")) {
           parsedStationsList.push({ name: name, scheduled: time, actual: '--' });
           const row = document.createElement('tr');
@@ -1317,6 +1124,7 @@
       }
     }
 
+    // إضافة قطار جديد بالوضع الافتراضي (NOT_STARTED) وبدون محطة مختارة مسبقاً
     function addNewTrain() {
       const num = document.getElementById('newTrainNumber').value.trim();
       const type = document.getElementById('newTrainType').value.trim();
@@ -1336,14 +1144,19 @@
         number: num,
         type: type || '',
         name: name,
-        status: { state: 'AT_STATION', stationIndex: 0, updatedBy: 'جدول الرحلة الأساسي' },
+        status: { 
+          state: 'NOT_STARTED', 
+          stationIndex: null, 
+          updatedBy: 'جدول الرحلة الأساسي',
+          departedAt: null 
+        },
         stations: parsedStationsList
       };
 
       broadcastData();
       selectTrain(num);
 
-      showCustomAlert('success', 'تم نشر الرحلة', `تم حفظ ونشر قطار (${num}) في السحابة فوراً.`);
+      showCustomAlert('success', 'تم نشر الرحلة', `تم حفظ ونشر قطار (${num}) في السحابة فوراً وهو الآن بانتظار بدء الرحلة.`);
       document.getElementById('newTrainNumber').value = '';
       document.getElementById('newTrainType').value = '';
       document.getElementById('newTrainName').value = '';
@@ -1352,7 +1165,6 @@
       parsedStationsList = [];
     }
 
-    // تهيئة نظام البحث والتحقق من الدخول
     initTrainSelector();
     checkLoginStatus();
   </script>
