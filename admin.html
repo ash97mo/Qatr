@@ -57,45 +57,107 @@
     }
     textarea { font-family: monospace; line-height: 1.6; }
     
-    .btn { padding: 8px 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 12px; }
+    .btn { 
+      padding: 8px 14px; 
+      border: none; 
+      border-radius: 8px; 
+      font-weight: bold; 
+      cursor: pointer; 
+      transition: 0.2s; 
+      font-size: 12px; 
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
     .btn-primary { background: #0284c7; color: white; width: 100%; font-size: 14px; padding: 12px; }
     .btn-danger { background: #dc2626; color: white; }
     .btn-warning { background: #d97706; color: white; }
     .btn-caution { background: #b91c1c; color: #fecaca; border: 1px dashed #ef4444; }
     .btn-add { background: #10b981; color: white; }
     .btn-secondary { background: #334155; color: #e2e8f0; }
-    .btn:hover { opacity: 0.85; }
+    .btn-edit-active { background: #8b5cf6; color: white; }
+    .btn:hover { opacity: 0.88; }
 
-    /* شريط تعديل بيانات القطار: تعديل وحفظ جنب بعض والخانات متسعة بالكامل */
+    /* نفس تنسيقات قائمة الـ Combo المنسدلة من index.html بالكامل */
+    .combo-wrapper {
+      position: relative;
+      width: 100%;
+      margin-bottom: 12px;
+    }
+    .combo-input {
+      width: 100%;
+      padding: 12px 14px;
+      background: #0b1120;
+      border: 1.5px solid #334155;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 13.5px;
+      outline: none;
+      cursor: text;
+      transition: all 0.2s;
+    }
+    .combo-input:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+    }
+    .combo-dropdown {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      background: #131d2e;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      max-height: 220px;
+      overflow-y: auto;
+      z-index: 999;
+      display: none;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.7);
+    }
+    .combo-item {
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #f1f5f9;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      transition: background 0.15s;
+    }
+    .combo-item:last-child { border: none; }
+    .combo-item:hover, .combo-item.selected {
+      background: #0284c7;
+      color: #ffffff;
+    }
+
+    /* أزرار الإجراءات تحت خانة البحث مباشرة */
+    .train-actions-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    /* شريط عرض القطار وشريط التعديل */
+    .train-info-display-bar {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
     .train-edit-bar {
       background: #0f172a;
-      border: 1px solid #334155;
+      border: 1px dashed #38bdf8;
       border-radius: 10px;
       padding: 12px 14px;
       margin-bottom: 15px;
     }
-    .train-edit-header-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-    .btn-save-inline {
-      background: #0284c7;
-      color: #fff;
-      border: none;
-      padding: 5px 14px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: bold;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      transition: 0.2s;
-    }
-    .btn-save-inline:hover { background: #0369a1; }
-
     .train-edit-grid {
       display: grid;
       grid-template-columns: 120px 160px 1fr;
@@ -128,6 +190,14 @@
       margin-bottom: 10px; 
       gap: 10px;
       flex-wrap: wrap;
+    }
+    .station-title-view {
+      font-size: 15px;
+      font-weight: bold;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     .station-edit-group {
       display: flex;
@@ -166,7 +236,7 @@
     .times-inputs div { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #cbd5e1; }
     .times-inputs input { width: 105px; padding: 5px 8px; margin: 0; font-size: 12px; }
 
-    /* شارات التأخير البارزة بالأحمر بجوار المجدول */
+    /* شارات التأخير البارزة */
     .delay-label-red {
       color: #ffffff !important;
       background: #dc2626 !important;
@@ -257,7 +327,7 @@
       display: none;
     }
 
-    /* نافذة المودال المخصصة */
+    /* نافذة المودال */
     .custom-modal-overlay {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
@@ -362,20 +432,28 @@
     <!-- 1. المراقبة والتحكم الميداني -->
     <div class="box">
       <h2>1. المراقبة والتحكم الميداني وتعديل المحطات</h2>
-      <label>اختر القطار للإدارة والتعديل:</label>
+      <label>اختر القطار:</label>
       
-      <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 15px;">
-        <select id="selectedTrain" onchange="renderControlBoard()" style="margin: 0; flex: 1;"></select>
-        <button id="btnResetTrain" class="btn btn-warning" style="display: none; padding: 6px 10px; font-size: 11px; white-space: nowrap;" onclick="resetCurrentTrain()" title="تصفير الأوقات والتأخيرات">🔄 تصفير</button>
-        <button id="btnDeleteTrain" class="btn btn-danger" style="display: none; padding: 6px 10px; font-size: 11px; white-space: nowrap;" onclick="deleteCurrentTrain()" title="حذف القطار">🗑️ حذف</button>
+      <!-- قائمة الاختيار والبحث المطابقة تماماً لـ index.html -->
+      <div class="combo-wrapper" id="trainComboWrapper">
+        <input type="text" id="directTrainInput" class="combo-input" placeholder="اضغط للاختيار أو اكتب رقم القطار..." autocomplete="off">
+        <div class="combo-dropdown" id="directTrainDropdown"></div>
       </div>
 
-      <!-- شريط تعديل بيانات القطار المختار (تعديل + حفظ جنب بعض وخانات واضحة وكاملة) -->
+      <!-- أزرار التصفير والحذف والتعديل والحفظ تحت خانة البحث مباشرة -->
+      <div class="train-actions-bar" id="trainActionsRow" style="display: none;">
+        <button id="btnResetTrain" class="btn btn-warning" onclick="resetCurrentTrain()" title="تصفير الأوقات والتأخيرات">🔄 تصفير</button>
+        <button id="btnDeleteTrain" class="btn btn-danger" onclick="deleteCurrentTrain()" title="حذف القطار نهائياً">🗑️ حذف</button>
+        <button id="btnToggleEdit" class="btn btn-secondary" onclick="toggleEditMode()" title="تعديل بيانات ومحطات القطار">✏️ تعديل</button>
+        <button id="btnSaveAll" class="btn btn-add" style="display: none;" onclick="saveAllTrainEdits()" title="حفظ جميع التعديلات">💾 حفظ</button>
+      </div>
+
+      <!-- شريط ملخص بيانات القطار في الوضع العادي -->
+      <div id="trainInfoDisplayBar" class="train-info-display-bar" style="display: none;"></div>
+
+      <!-- شريط تعديل بيانات القطار (يظهر فقط في وضع التعديل) -->
       <div id="trainEditInfoBar" class="train-edit-bar" style="display: none;">
-        <div class="train-edit-header-row">
-          <span style="color:#38bdf8; font-weight:bold; font-size: 13.5px;">✏️ تعديل</span>
-          <button class="btn-save-inline" onclick="saveTrainInfoEdits()">💾 حفظ</button>
-        </div>
+        <div style="font-size: 13px; font-weight: bold; color: #38bdf8; margin-bottom: 10px;">✏️ تعديل بيانات القطار الأساسية:</div>
         <div class="train-edit-grid">
           <div>
             <label>رقم القطار:</label>
@@ -393,15 +471,15 @@
       </div>
 
       <div id="controlPanel">
-        <p style="color:#64748b; text-align:center; padding: 20px;">👈 برجاء اختيار قطار من القائمة أعلاه لبدء المراقبة وتعديل المحطات.</p>
+        <p style="color:#64748b; text-align:center; padding: 20px;">👈 برجاء اختيار قطار من خانة البحث أعلاه لبدء المراقبة والتحكم.</p>
       </div>
 
-      <!-- إضافة محطة جديدة -->
+      <!-- إضافة محطة جديدة (تظهر فقط عند الضغط على زر تعديل) -->
       <div id="addStationSection" style="display: none;">
         <label style="margin-top: 15px; font-weight: bold; color: #38bdf8;">➕ إضافة محطة جديدة لهذا القطار:</label>
         <div class="add-station-bar">
           <input type="text" id="newStationName" placeholder="اسم المحطة (مثال: بنها)">
-          <input type="text" id="newStationTime" placeholder="الوقت (مثال: 04:30 م)">
+          <input type="text" id="newStationTime" placeholder="الوقت المجدول (مثال: 04:30 م)">
           <button class="btn btn-add" onclick="addStationToCurrentTrain()">+ إضافة للمسار</button>
         </div>
       </div>
@@ -442,6 +520,16 @@
 
   <script>
     const DEFAULT_ADMIN_PASSWORD = "admin2026";
+    const SYNC_TOPIC = "egy_train_master_sync_2026";
+    const BROKER_HOST = "broker.emqx.io";
+    const BROKER_PORT = 8084;
+    const BROKER_PATH = "/mqtt";
+
+    let trainsData = {};
+    let parsedStationsList = [];
+    let client = null;
+    let selectedTrainId = null;
+    let isEditMode = false;
 
     function showCustomAlert(type, title, message) {
       const overlay = document.getElementById('customModalOverlay');
@@ -487,6 +575,17 @@
         .replace(/[٣۳]/g, '3').replace(/[٤۴]/g, '4').replace(/[٥۵]/g, '5')
         .replace(/[٦۶]/g, '6').replace(/[٧۷]/g, '7').replace(/[٨۸]/g, '8')
         .replace(/[٩۹]/g, '9');
+    }
+
+    function normalizeStationName(name) {
+      if (!name) return '';
+      return normalizeTimeDigits(String(name))
+        .replace(/محطة/g, '')
+        .replace(/[أإآ]/g, 'ا')
+        .replace(/ة/g, 'ه')
+        .replace(/[\u200B-\u200D\uFEFF]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
     }
 
     function formatCurrentTime() {
@@ -602,38 +701,11 @@
       showCustomAlert('success', 'تم التغيير', 'تم تغيير كلمة مرور المشرف بنجاح!');
     }
 
-    const SYNC_TOPIC = "egy_train_master_sync_2026";
-    const BROKER_HOST = "broker.emqx.io";
-    const BROKER_PORT = 8084;
-    const BROKER_PATH = "/mqtt";
-
-    let trainsData = {};
-    let parsedStationsList = [];
-    let client = null;
-
     const cached = localStorage.getItem('local_trains_cache');
     if (cached) {
       try { 
-        trainsData = JSON.parse(cached); 
-        refreshTrainList();
+        trainsData = JSON.parse(cached);
       } catch(e){}
-    }
-
-    function autoResetIfNewTrip(trainId, stationIndex) {
-      const train = trainsData[trainId];
-      if (!train) return;
-
-      if (stationIndex === 0) {
-        let hasLaterActuals = train.stations.slice(1).some(s => s.actual && s.actual !== '--');
-        if (hasLaterActuals) {
-          train.stations.forEach((st, idx) => {
-            if (idx > 0) {
-              st.actual = '--';
-              delete st.delayMinutes;
-            }
-          });
-        }
-      }
     }
 
     function initMQTT() {
@@ -658,7 +730,9 @@
           if (data && typeof data === 'object') {
             trainsData = data;
             localStorage.setItem('local_trains_cache', JSON.stringify(data));
-            refreshTrainList();
+            if (selectedTrainId && trainsData[selectedTrainId]) {
+              renderControlBoard();
+            }
           }
         } catch (e) {}
       };
@@ -691,55 +765,179 @@
       }
     }
 
-    function refreshTrainList() {
-      const select = document.getElementById('selectedTrain');
-      const currentVal = select.value;
-      select.innerHTML = '<option value="">-- اختر قطاراً للتحكم --</option>';
-      const keys = Object.keys(trainsData);
-
-      keys.forEach(k => {
-        const opt = document.createElement('option');
-        opt.value = k;
-        const typeStr = trainsData[k].type ? ` [${trainsData[k].type}]` : '';
-        opt.textContent = `قطار ${trainsData[k].number}${typeStr} - ${trainsData[k].name}`;
-        select.appendChild(opt);
+    /* ============================================================
+       نظام الـ Combobox المطابق لصفحة index.html بالضبط
+    ============================================================ */
+    function getAllTrainsList() {
+      return Object.keys(trainsData).map(k => {
+        const t = trainsData[k];
+        const typeStr = t.type ? ` [${t.type}]` : '';
+        return { id: k, label: `قطار ${t.number}${typeStr} - ${t.name}`, number: t.number };
       });
+    }
 
-      if (currentVal && trainsData[currentVal]) {
-        select.value = currentVal;
+    function setupCombobox(inputId, dropdownId, getItemsCallback, onSelectCallback) {
+      const input = document.getElementById(inputId);
+      const dropdown = document.getElementById(dropdownId);
+
+      function renderItems(filterText = '', forceShowAll = false) {
+        const query = normalizeStationName(filterText).toLowerCase();
+        const allItems = getItemsCallback();
+        
+        let filtered = allItems;
+        if (!forceShowAll && query) {
+          filtered = allItems.filter(item => {
+            const text = normalizeStationName(typeof item === 'string' ? item : item.label).toLowerCase();
+            return text.includes(query);
+          });
+        }
+
+        dropdown.innerHTML = '';
+        if (filtered.length === 0) {
+          dropdown.innerHTML = '<div class="combo-item" style="color:#94a3b8; cursor:default;">⚠️ لا توجد نتائج مطابقة</div>';
+        } else {
+          filtered.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'combo-item';
+            div.textContent = typeof item === 'string' ? item : item.label;
+            div.onclick = (e) => {
+              e.stopPropagation();
+              input.value = typeof item === 'string' ? item : item.label;
+              dropdown.style.display = 'none';
+              onSelectCallback(item);
+            };
+            dropdown.appendChild(div);
+          });
+        }
+      }
+
+      input.onfocus = () => {
+        closeAllComboboxes();
+        renderItems('', true);
+        dropdown.style.display = 'block';
+        input.select();
+      };
+
+      input.onclick = (e) => {
+        e.stopPropagation();
+        closeAllComboboxes();
+        renderItems('', true);
+        dropdown.style.display = 'block';
+      };
+
+      input.oninput = () => {
+        renderItems(input.value, false);
+        dropdown.style.display = 'block';
+        const allItems = getItemsCallback();
+        const exact = allItems.find(item => {
+          const text = typeof item === 'string' ? item : item.label;
+          return normalizeStationName(text).toLowerCase() === normalizeStationName(input.value).toLowerCase();
+        });
+        if (exact) {
+          onSelectCallback(exact);
+        } else {
+          // محاولة المطابقة المباشرة برقم القطار
+          const cleanNum = normalizeTimeDigits(input.value.trim());
+          const matchByNum = allItems.find(item => item.number === cleanNum);
+          if (matchByNum) {
+            onSelectCallback(matchByNum);
+          }
+        }
+      };
+    }
+
+    function closeAllComboboxes() {
+      document.querySelectorAll('.combo-dropdown').forEach(d => d.style.display = 'none');
+    }
+
+    document.addEventListener('click', () => {
+      closeAllComboboxes();
+    });
+
+    function initTrainSelector() {
+      setupCombobox('directTrainInput', 'directTrainDropdown', getAllTrainsList, (selected) => {
+        if (selected && selected.id) {
+          selectTrain(selected.id);
+        } else {
+          const raw = document.getElementById('directTrainInput').value.trim();
+          let matched = Object.keys(trainsData).find(k => trainsData[k].number === raw || trainsData[k].number === normalizeTimeDigits(raw));
+          if (matched) {
+            selectTrain(matched);
+          }
+        }
+      });
+    }
+
+    function selectTrain(trainId) {
+      selectedTrainId = trainId;
+      isEditMode = false;
+      const train = trainsData[trainId];
+      if (train) {
+        const typeStr = train.type ? ` [${train.type}]` : '';
+        document.getElementById('directTrainInput').value = `قطار ${train.number}${typeStr} - ${train.name}`;
       }
       renderControlBoard();
     }
 
+    /* ============================================================
+       التحكم في وضع التعديل (Edit Mode)
+    ============================================================ */
+    function toggleEditMode() {
+      if (!selectedTrainId || !trainsData[selectedTrainId]) return;
+      isEditMode = !isEditMode;
+      renderControlBoard();
+    }
+
     function renderControlBoard() {
-      const trainId = document.getElementById('selectedTrain').value;
       const container = document.getElementById('controlPanel');
+      const actionsRow = document.getElementById('trainActionsRow');
       const addSection = document.getElementById('addStationSection');
-      const btnDelete = document.getElementById('btnDeleteTrain');
-      const btnReset = document.getElementById('btnResetTrain');
       const editBar = document.getElementById('trainEditInfoBar');
+      const displayBar = document.getElementById('trainInfoDisplayBar');
+      const btnToggleEdit = document.getElementById('btnToggleEdit');
+      const btnSaveAll = document.getElementById('btnSaveAll');
+
       container.innerHTML = '';
 
-      if (!trainId || !trainsData[trainId]) {
-        container.innerHTML = '<p style="color:#64748b; text-align:center; padding: 20px;">👈 برجاء اختيار قطار من القائمة أعلاه لبدء المراقبة وتعديل المحطات.</p>';
+      if (!selectedTrainId || !trainsData[selectedTrainId]) {
+        container.innerHTML = '<p style="color:#64748b; text-align:center; padding: 20px;">👈 برجاء اختيار قطار من خانة البحث أعلاه لبدء المراقبة والتحكم.</p>';
+        actionsRow.style.display = 'none';
         addSection.style.display = 'none';
-        btnDelete.style.display = 'none';
-        btnReset.style.display = 'none';
         editBar.style.display = 'none';
+        displayBar.style.display = 'none';
         return;
       }
 
-      addSection.style.display = 'block';
-      btnDelete.style.display = 'inline-block';
-      btnReset.style.display = 'inline-block';
-      editBar.style.display = 'block';
+      const train = trainsData[selectedTrainId];
+      actionsRow.style.display = 'flex';
 
-      const train = trainsData[trainId];
+      if (isEditMode) {
+        btnToggleEdit.className = 'btn btn-edit-active';
+        btnToggleEdit.innerHTML = '✖️ إلغاء التعديل';
+        btnSaveAll.style.display = 'inline-flex';
+        editBar.style.display = 'block';
+        displayBar.style.display = 'none';
+        addSection.style.display = 'block';
 
-      // ملء بيانات شريط التعديل المتسع
-      document.getElementById('editTrainNumber').value = train.number;
-      document.getElementById('editTrainType').value = train.type || '';
-      document.getElementById('editTrainName').value = train.name;
+        document.getElementById('editTrainNumber').value = train.number;
+        document.getElementById('editTrainType').value = train.type || '';
+        document.getElementById('editTrainName').value = train.name;
+      } else {
+        btnToggleEdit.className = 'btn btn-secondary';
+        btnToggleEdit.innerHTML = '✏️ تعديل';
+        btnSaveAll.style.display = 'none';
+        editBar.style.display = 'none';
+        addSection.style.display = 'none';
+
+        displayBar.style.display = 'flex';
+        displayBar.innerHTML = `
+          <div>
+            <span style="font-size:15px; font-weight:bold; color:#38bdf8;">قطار ${train.number}</span>
+            <span style="font-size:13px; color:#cbd5e1; margin-right:8px;">${train.name}</span>
+          </div>
+          ${train.type ? `<span style="font-size:12px; background:#1e293b; padding:3px 10px; border-radius:6px; color:#94a3b8; border:1px solid #334155;">النوع: <b>${train.type}</b></span>` : ''}
+        `;
+      }
 
       train.stations.forEach((st, idx) => {
         const isStopped = (train.status.state === 'AT_STATION' && train.status.stationIndex === idx);
@@ -755,14 +953,14 @@
         let actionButtons = '';
         if (nextSt) {
           actionButtons = `
-            <button class="btn btn-warning" onclick="setTrainMoving('${trainId}', ${idx})">🚀 غادر باتجاه ${nextSt.name}</button>
-            <button class="btn btn-caution" onclick="setTrainStoppedBetween('${trainId}', ${idx})">⚠️ متوقف بين ${st.name} و ${nextSt.name}</button>
+            <button class="btn btn-warning" onclick="setTrainMoving('${selectedTrainId}', ${idx})">🚀 غادر باتجاه ${nextSt.name}</button>
+            <button class="btn btn-caution" onclick="setTrainStoppedBetween('${selectedTrainId}', ${idx})">⚠️ متوقف بين ${st.name} و ${nextSt.name}</button>
           `;
         }
 
         let alertBetweenHtml = '';
         if (isStoppedBetween && nextSt) {
-          alertBetweenHtml = `<div class="between-alert">⚠️ تنبيه: القطار متوقف حالياً في السكة الحديد بين محطة [${st.name}] ومحطة [${nextSt.name}]</div>`;
+          alertBetweenHtml = `<div class="between-alert">⚠️ تنبيه: القطار متوقف حالياً في السكة الحديد بين [${st.name}] و [${nextSt.name}]</div>`;
         }
 
         const delayVal = getStationDelay(st);
@@ -777,32 +975,62 @@
           }
         }
 
+        // رأس المحطة: تم إزالة كلمة "محطة" بناءً على طلبك تماماً
+        let stationHeadHtml = '';
+        if (isEditMode) {
+          stationHeadHtml = `
+            <div class="station-edit-group">
+              <span style="font-size:12px; color:#94a3b8;">رقم:</span>
+              <input type="number" class="station-order-input" id="stOrder_${idx}" min="1" max="${train.stations.length}" value="${idx + 1}" title="تغيير ترتيب المحطة">
+              <span style="font-size:12px; color:#94a3b8;">اسم:</span>
+              <input type="text" class="station-name-input" id="stName_${idx}" value="${st.name}" placeholder="اسم المحطة">
+            </div>
+            <button class="btn btn-danger" style="padding: 5px 10px; font-size:11.5px;" onclick="removeStation('${selectedTrainId}', ${idx})">🗑️ حذف</button>
+          `;
+        } else {
+          stationHeadHtml = `
+            <div class="station-title-view">
+              <span style="background:#1e293b; color:#38bdf8; padding:2px 8px; border-radius:6px; font-size:12px;">#${idx + 1}</span>
+              <span>${st.name}</span>
+            </div>
+          `;
+        }
+
+        // أوقات المحطة
+        let schedTimeHtml = '';
+        if (isEditMode) {
+          schedTimeHtml = `
+            <div>
+              <span style="color:#94a3b8;">المجدول:</span>
+              <input type="text" id="stSched_${idx}" value="${st.scheduled}" placeholder="الوقت">
+            </div>
+          `;
+        } else {
+          schedTimeHtml = `
+            <div>
+              <span style="color:#94a3b8;">المجدول:</span>
+              <b style="color:#f8fafc; font-size:13px;">${st.scheduled}</b>
+            </div>
+          `;
+        }
+
         card.innerHTML = `
           ${alertBetweenHtml}
           <div class="station-head">
-            <div class="station-edit-group">
-              <span style="font-size:12px; color:#94a3b8;">رقم:</span>
-              <input type="number" class="station-order-input" min="1" max="${train.stations.length}" value="${idx + 1}" onchange="reorderStation('${trainId}', ${idx}, this.value)" title="غيّر الرقم لتبديل ترتيب المحطة">
-              <span style="font-size:12px; color:#94a3b8;">اسم:</span>
-              <input type="text" class="station-name-input" value="${st.name}" onchange="updateStationName('${trainId}', ${idx}, this.value)" placeholder="اسم المحطة">
-            </div>
-            <button class="btn btn-danger" style="padding: 4px 8px; font-size:11px;" onclick="removeStation('${trainId}', ${idx})">🗑️ حذف</button>
+            ${stationHeadHtml}
           </div>
 
           <div class="times-inputs">
-            <div>
-              <span>المجدول:</span>
-              <input type="text" value="${st.scheduled}" onchange="updateScheduledTime('${trainId}', ${idx}, this.value)" placeholder="الوقت">
-            </div>
+            ${schedTimeHtml}
             ${delayText}
             <div>
-              <span>الفعلي:</span>
-              <input type="text" value="${st.actual}" onchange="updateActualTimeManual('${trainId}', ${idx}, this.value)" placeholder="الفعلي">
+              <span style="color:#94a3b8;">الفعلي:</span>
+              <input type="text" value="${st.actual}" onchange="updateActualTimeManual('${selectedTrainId}', ${idx}, this.value)" placeholder="الفعلي">
             </div>
           </div>
 
           <div class="btn-group">
-            <button class="btn btn-danger" onclick="setTrainAtStation('${trainId}', ${idx})">🛑 وصل رصيف ${st.name}</button>
+            <button class="btn btn-danger" onclick="setTrainAtStation('${selectedTrainId}', ${idx})">🛑 وصل رصيف ${st.name}</button>
             ${actionButtons}
           </div>
         `;
@@ -810,54 +1038,84 @@
       });
     }
 
-    // حفظ التعديلات على الرقم والنوع والاسم للقطار المختار
-    function saveTrainInfoEdits() {
-      const trainId = document.getElementById('selectedTrain').value;
-      if (!trainId || !trainsData[trainId]) return;
+    /* ============================================================
+       حفظ جميع التعديلات عند الضغط على زر حفظ
+    ============================================================ */
+    function saveAllTrainEdits() {
+      if (!selectedTrainId || !trainsData[selectedTrainId]) return;
 
       const newNum = document.getElementById('editTrainNumber').value.trim();
       const newType = document.getElementById('editTrainType').value.trim();
       const newName = document.getElementById('editTrainName').value.trim();
 
-      if (!newNum) {
-        showCustomAlert('error', 'بيانات ناقصة', 'لا يمكن ترك رقم القطار فارغاً!');
-        return;
-      }
-      if (!newName) {
-        showCustomAlert('error', 'بيانات ناقصة', 'لا يمكن ترك اسم الرحلة فارغاً!');
-        return;
-      }
+      if (!newNum) { showCustomAlert('error', 'بيانات ناقصة', 'لا يمكن ترك رقم القطار فارغاً!'); return; }
+      if (!newName) { showCustomAlert('error', 'بيانات ناقصة', 'لا يمكن ترك اسم الرحلة فارغاً!'); return; }
 
-      // إذا تم تغيير رقم القطار، نتأكد من عدم التكرار مع قطار آخر
-      if (newNum !== trainId && trainsData[newNum]) {
+      if (newNum !== selectedTrainId && trainsData[newNum]) {
         showCustomAlert('error', 'رقم مكرر', `يوجد قطار آخر يحمل الرقم (${newNum}) بالفعل!`);
         return;
       }
 
-      const trainObj = trainsData[trainId];
+      const trainObj = trainsData[selectedTrainId];
       trainObj.number = newNum;
       trainObj.type = newType;
       trainObj.name = newName;
 
-      // لو الرقم اتغير ننقل البيانات تحت المفتاح الجديد
-      if (newNum !== trainId) {
-        trainsData[newNum] = trainObj;
-        delete trainsData[trainId];
+      let updatedStations = [];
+      for (let i = 0; i < trainObj.stations.length; i++) {
+        const orderInput = document.getElementById(`stOrder_${i}`);
+        const nameInput = document.getElementById(`stName_${i}`);
+        const schedInput = document.getElementById(`stSched_${i}`);
+
+        const desiredOrder = orderInput ? parseInt(orderInput.value) || (i + 1) : (i + 1);
+        const desiredName = nameInput ? nameInput.value.trim() : trainObj.stations[i].name;
+        const desiredSched = schedInput ? schedInput.value.trim() : trainObj.stations[i].scheduled;
+
+        if (!desiredName) {
+          showCustomAlert('error', 'اسم محطة فارغ', `لا يمكن ترك اسم المحطة رقم (${i + 1}) فارغاً!`);
+          return;
+        }
+
+        const currentActual = trainObj.stations[i].actual;
+        let newDelay = trainObj.stations[i].delayMinutes;
+        if (currentActual && currentActual !== '--') {
+          newDelay = calculateDelayMinutes(desiredSched, currentActual);
+        }
+
+        updatedStations.push({
+          targetOrder: desiredOrder,
+          originalIndex: i,
+          station: {
+            name: desiredName,
+            scheduled: desiredSched,
+            actual: currentActual,
+            delayMinutes: newDelay
+          }
+        });
       }
 
+      updatedStations.sort((a, b) => a.targetOrder - b.targetOrder);
+      trainObj.stations = updatedStations.map(item => item.station);
+
+      if (newNum !== selectedTrainId) {
+        trainsData[newNum] = trainObj;
+        delete trainsData[selectedTrainId];
+        selectedTrainId = newNum;
+      }
+
+      isEditMode = false;
       broadcastData();
-      refreshTrainList();
-      document.getElementById('selectedTrain').value = newNum;
+      
+      const typeStr = trainObj.type ? ` [${trainObj.type}]` : '';
+      document.getElementById('directTrainInput').value = `قطار ${trainObj.number}${typeStr} - ${trainObj.name}`;
+      
       renderControlBoard();
-      showCustomAlert('success', 'تم التعديل بنجاح', `تم تحديث بيانات قطار (${newNum}) سحابياً.`);
+      showCustomAlert('success', 'تم الحفظ بنجاح', `تم حفظ وتحديث بيانات ومحطات قطار (${newNum}) سحابياً.`);
     }
 
-    // زر تصفير الأوقات والتأخيرات للقطار المحدد
     function resetCurrentTrain() {
-      const trainId = document.getElementById('selectedTrain').value;
-      if (!trainId || !trainsData[trainId]) return;
-
-      const train = trainsData[trainId];
+      if (!selectedTrainId || !trainsData[selectedTrainId]) return;
+      const train = trainsData[selectedTrainId];
       if (confirm(`هل أنت متأكد من تصفير وإعادة ضبط رحلة قطار (${train.number})؟\n\nسيتم مسح جميع أوقات الوصول والتأخيرات وإعادة ضبط القطار للبداية.`)) {
         train.status = {
           state: 'AT_STATION',
@@ -865,7 +1123,6 @@
           updatedBy: 'إعادة ضبط من المشرف',
           departedAt: null
         };
-
         train.stations.forEach(st => {
           st.actual = '--';
           delete st.delayMinutes;
@@ -877,48 +1134,37 @@
       }
     }
 
-    function updateStationName(trainId, stationIndex, newName) {
-      const val = newName.trim();
-      if (!val) {
-        showCustomAlert('error', 'اسم فارغ', 'لا يمكن ترك اسم المحطة فارغاً!');
+    function deleteCurrentTrain() {
+      if (!selectedTrainId || !trainsData[selectedTrainId]) return;
+      if (confirm(`هل أنت متأكد من حذف قطار ${selectedTrainId} نهائياً؟`)) {
+        delete trainsData[selectedTrainId];
+        broadcastData();
+        selectedTrainId = null;
+        isEditMode = false;
+        document.getElementById('directTrainInput').value = '';
         renderControlBoard();
-        return;
+        showCustomAlert('success', 'تم الحذف', 'تم حذف القطار نهائياً من السيرفر السحابي.');
       }
-      trainsData[trainId].stations[stationIndex].name = val;
-      broadcastData();
-      renderControlBoard();
     }
 
-    function reorderStation(trainId, currentIndex, targetPosition) {
+    function autoResetIfNewTrip(trainId, stationIndex) {
       const train = trainsData[trainId];
-      const newPos = parseInt(targetPosition) - 1;
-
-      if (isNaN(newPos) || newPos < 0 || newPos >= train.stations.length) {
-        showCustomAlert('error', 'رقم غير صحيح', `يرجى إدخال رقم ترتيب صحيح بين 1 و ${train.stations.length}`);
-        renderControlBoard();
-        return;
+      if (!train) return;
+      if (stationIndex === 0) {
+        let hasLaterActuals = train.stations.slice(1).some(s => s.actual && s.actual !== '--');
+        if (hasLaterActuals) {
+          train.stations.forEach((st, idx) => {
+            if (idx > 0) {
+              st.actual = '--';
+              delete st.delayMinutes;
+            }
+          });
+        }
       }
-
-      if (newPos === currentIndex) return;
-
-      const [movedStation] = train.stations.splice(currentIndex, 1);
-      train.stations.splice(newPos, 0, movedStation);
-
-      if (train.status.stationIndex === currentIndex) {
-        train.status.stationIndex = newPos;
-      } else if (currentIndex < train.status.stationIndex && newPos >= train.status.stationIndex) {
-        train.status.stationIndex--;
-      } else if (currentIndex > train.status.stationIndex && newPos <= train.status.stationIndex) {
-        train.status.stationIndex++;
-      }
-
-      broadcastData();
-      renderControlBoard();
     }
 
     function setTrainAtStation(trainId, stationIndex) {
       autoResetIfNewTrip(trainId, stationIndex);
-
       const timeString = formatCurrentTime();
 
       trainsData[trainId].status = { 
@@ -936,12 +1182,11 @@
 
       broadcastData();
       renderControlBoard();
-      showCustomAlert('success', 'تم اعتماد الوصول', `تم تسجيل وصول القطار لمحطة (${trainsData[trainId].stations[stationIndex].name}) ونشر ذلك للركاب فوراً.`);
+      showCustomAlert('success', 'تم اعتماد الوصول', `تم تسجيل وصول القطار إلى (${trainsData[trainId].stations[stationIndex].name}) ونشر ذلك للركاب فوراً.`);
     }
 
     function setTrainMoving(trainId, fromStationIndex) {
       autoResetIfNewTrip(trainId, fromStationIndex);
-
       const timeString = formatCurrentTime();
 
       trainsData[trainId].status = { 
@@ -968,16 +1213,6 @@
       showCustomAlert('error', 'تنبيه توقف بالسكة', `تم تسجيل حالة التوقف الفجائي بين المحطتين وإبلاغ المسافرين.`);
     }
 
-    function updateScheduledTime(trainId, stationIndex, newTime) {
-      trainsData[trainId].stations[stationIndex].scheduled = newTime.trim();
-      const act = trainsData[trainId].stations[stationIndex].actual;
-      if (act && act !== '--') {
-        trainsData[trainId].stations[stationIndex].delayMinutes = calculateDelayMinutes(newTime.trim(), act);
-      }
-      broadcastData();
-      renderControlBoard();
-    }
-
     function updateActualTimeManual(trainId, stationIndex, newTime) {
       const val = newTime.trim();
       trainsData[trainId].stations[stationIndex].actual = val;
@@ -991,7 +1226,7 @@
     }
 
     function addStationToCurrentTrain() {
-      const trainId = document.getElementById('selectedTrain').value;
+      if (!selectedTrainId || !trainsData[selectedTrainId]) return;
       const nameInput = document.getElementById('newStationName');
       const timeInput = document.getElementById('newStationTime');
 
@@ -1003,7 +1238,7 @@
         return;
       }
 
-      trainsData[trainId].stations.push({
+      trainsData[selectedTrainId].stations.push({
         name: name,
         scheduled: time,
         actual: '--'
@@ -1013,7 +1248,7 @@
       renderControlBoard();
       nameInput.value = '';
       timeInput.value = '';
-      showCustomAlert('success', 'تمت الإضافة', `تمت إضافة محطة (${name}) إلى مسار هذا القطار بنجاح.`);
+      showCustomAlert('success', 'تمت الإضافة', `تمت إضافة (${name}) إلى مسار هذا القطار.`);
     }
 
     function removeStation(trainId, index) {
@@ -1033,6 +1268,9 @@
       }
     }
 
+    /* ============================================================
+       إضافة قطار جديد باللصق الذكي
+    ============================================================ */
     function parsePastedStations() {
       const rawText = document.getElementById('smartPasteInput').value.trim();
       const previewBox = document.getElementById('previewContainer');
@@ -1103,9 +1341,7 @@
       };
 
       broadcastData();
-      refreshTrainList();
-      document.getElementById('selectedTrain').value = num;
-      renderControlBoard();
+      selectTrain(num);
 
       showCustomAlert('success', 'تم نشر الرحلة', `تم حفظ ونشر قطار (${num}) في السحابة فوراً.`);
       document.getElementById('newTrainNumber').value = '';
@@ -1116,17 +1352,8 @@
       parsedStationsList = [];
     }
 
-    function deleteCurrentTrain() {
-      const trainId = document.getElementById('selectedTrain').value;
-      if (!trainId) return;
-      if (confirm(`هل أنت متأكد من حذف قطار ${trainId} نهائياً؟`)) {
-        delete trainsData[trainId];
-        broadcastData();
-        refreshTrainList();
-        showCustomAlert('success', 'تم الحذف', `تم حذف قطار (${trainId}) نهائياً من السيرفر السحابي.`);
-      }
-    }
-
+    // تهيئة نظام البحث والتحقق من الدخول
+    initTrainSelector();
     checkLoginStatus();
   </script>
 </body>
