@@ -1,7 +1,9 @@
+--- START OF FILE manifest.json ---
 {
-  "name": "تتبع حركة القطارات",
+  "name": "تتبع حركة القطارات - الراكب التشاركي",
   "short_name": "القطارات",
-  "description": "تطبيق التتبع اللحظي لحركة القطارات التشاركي",
+  "id": "./index.html",
+  "description": "تطبيق التتبع اللحظي لحركة القطارات ومواعيدها التشاركي بالـ GPS",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
@@ -10,12 +12,20 @@
   "orientation": "portrait",
   "dir": "rtl",
   "lang": "ar",
+  "categories": ["travel", "navigation", "utilities"],
   "icons": [
     {
       "src": "icon.svg",
       "sizes": "192x192 512x512",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
     }
   ]
 }
+--- END OF FILE manifest.json ---
