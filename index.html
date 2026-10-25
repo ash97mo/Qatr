@@ -502,7 +502,36 @@
       return null;
     }
 
-    // التحقق الصريح مما إذا كان القطار قد حصل له أي تحديث حي فعلي من مشرف أو راكب
+    function getTrainPropagatedDelay(train, targetStationIndex) {
+      if (!train || !train.stations) return 0;
+      
+      if (targetStationIndex !== undefined && targetStationIndex !== null) {
+        const targetSt = train.stations[targetStationIndex];
+        if (targetSt) {
+          const directDelay = getStationDelay(targetSt);
+          if (directDelay !== null && directDelay !== undefined) {
+            return directDelay;
+          }
+        }
+      }
+
+      const curIdx = (train.status && train.status.stationIndex !== null && train.status.stationIndex !== undefined) 
+                     ? train.status.stationIndex 
+                     : -1;
+
+      const searchStart = (curIdx >= 0) ? curIdx : train.stations.length - 1;
+      for (let i = searchStart; i >= 0; i--) {
+        const st = train.stations[i];
+        if (st) {
+          const d = getStationDelay(st);
+          if (d !== null && d !== undefined) {
+            return d;
+          }
+        }
+      }
+      return 0;
+    }
+
     function hasLiveUpdate(train) {
       if (!train || !train.status) return false;
       if (train.status.state === 'NOT_STARTED') return false;
@@ -629,7 +658,6 @@
       return (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
     }
 
-    // حساب البعد العمودي عن شريط السكة الحديد وموضع الراكب الطولي t
     function getTrackMetrics(pLat, pLng, aLat, aLng, bLat, bLng) {
       const latMid = (aLat + bLat) / 2;
       const kx = 111.0 * Math.cos(latMid * Math.PI / 180);
@@ -962,7 +990,7 @@
       );
     }
 
-    // البحث بالمسار: إذا لم يحصل أي تحديث للقطار، تختفي خانة موقعه تماماً
+    // البحث بالمسار: الترتيب من الأقرب موعداً للمحطة المختارة بناءً على الوقت المجدول
     function findClosestTrains() {
       const fromSt = document.getElementById('fromStationInput').value.trim();
       const toSt = document.getElementById('toStationInput').value.trim();
@@ -990,20 +1018,38 @@
 
         if (fromIdx !== -1 && toIdx !== -1 && fromIdx < toIdx) {
           const isLive = hasLiveUpdate(train);
-          let hasPassed = false;
-          
-          if (isLive) {
-            const curTrainIdx = train.status.stationIndex;
-            hasPassed = (curTrainIdx > fromIdx) || (curTrainIdx === fromIdx && (train.status.state === 'MOVING' || train.status.state === 'STOPPED_BETWEEN'));
-          }
-
-          const depStation = train.stations[fromIdx];
+          const depStation = train.stations[fromIdx]; // المحطة المختارة (محطة القيام)
           const arrStation = train.stations[toIdx];
           const schedMins = timeStringToMinutes(depStation.scheduled);
 
           if (schedMins !== null) {
-            let diffMins = schedMins - currentMins;
-            const delay = depStation.delayMinutes || 0;
+            const delay = isLive ? getTrainPropagatedDelay(train, fromIdx) : 0;
+            const curTrainIdx = isLive ? train.status.stationIndex : -1;
+
+            let hasPassed = false;
+            let isAtPlatformNow = false;
+
+            if (isLive) {
+              if (curTrainIdx > fromIdx) {
+                hasPassed = true;
+              } else if (curTrainIdx === fromIdx) {
+                if (train.status.state === 'MOVING' || train.status.state === 'STOPPED_BETWEEN') {
+                  hasPassed = true;
+                } else if (train.status.state === 'AT_STATION') {
+                  isAtPlatformNow = true;
+                }
+              }
+            }
+
+            // حساب الترتيب بناءً على الوقت المجدول لمحطة القيام المختارة مقارنة بالوقت الحالي
+            let diffFromNow = schedMins - currentMins;
+            let sortKey = diffFromNow;
+
+            // إذا كان القطار قد مر موعده المجدول بأكثر من 10 دقائق أو سجل مغادرة حية
+            // يتم ترحيله لنهاية القائمة حتى تظهر القطارات القادمة في البداية أولاً
+            if ((isLive && hasPassed) || sortKey < -10) {
+              sortKey += 1440;
+            }
 
             let tripDuration = '';
             const arrSched = timeStringToMinutes(arrStation.scheduled);
@@ -1018,17 +1064,19 @@
               train: train,
               fromStation: depStation,
               schedMins: schedMins,
-              diffMins: diffMins,
+              sortKey: sortKey,
               delay: delay,
               tripDuration: tripDuration,
               hasPassed: hasPassed,
+              isAtPlatformNow: isAtPlatformNow,
               isLive: isLive
             });
           }
         }
       });
 
-      availableList.sort((a, b) => a.schedMins - b.schedMins);
+      // الترتيب: من الأقرب موعداً للمحطة المختارة بالنسبة للوقت الحالي
+      availableList.sort((a, b) => a.sortKey - b.sortKey);
 
       if (availableList.length === 0) {
         resultBox.style.display = 'block';
@@ -1042,30 +1090,42 @@
       resultBox.style.display = 'flex';
       resultBox.innerHTML = '';
 
-      const firstUpcomingIndex = availableList.findIndex(t => !t.hasPassed && t.diffMins >= -15);
-
       availableList.forEach((item, index) => {
-        const isNextUpcoming = (index === firstUpcomingIndex);
+        // تمييز أول قطار قادم في الترتيب
+        const isNextUpcoming = (index === 0 && !item.hasPassed);
         const card = document.createElement('div');
         card.className = `available-train-card ${item.hasPassed ? 'departed-card' : ''} ${isNextUpcoming ? 'first-train' : ''}`;
 
         let countdownHtml = '';
-        if (item.hasPassed) {
-          countdownHtml = `<span class="card-time-departed">⚠️ غادر</span>`;
-        } else if (item.diffMins >= 0) {
-          countdownHtml = `<span class="card-time-remaining">باقي ${formatDuration(item.diffMins)}</span>`;
+        if (item.isLive && item.hasPassed) {
+          countdownHtml = `<span class="card-time-departed">⚠️ غادر المحطة</span>`;
+        } else if (item.isLive && item.isAtPlatformNow) {
+          countdownHtml = `<span class="card-time-remaining" style="color:#38bdf8; font-weight:800;">🛑 متوقف على الرصيف الآن</span>`;
+        } else {
+          let rawDiff = item.schedMins - currentMins;
+          if (rawDiff >= -10 && rawDiff <= 0) {
+            countdownHtml = `<span class="card-time-remaining" style="color:#facc15;">⚡ موعد قيامه الآن</span>`;
+          } else {
+            if (rawDiff < -10) {
+              rawDiff += 1440;
+            }
+            countdownHtml = `<span class="card-time-remaining">⏳ باقي ${formatDuration(rawDiff)}</span>`;
+          }
         }
+
+        const timeSchedHtml = `🕒 المجدول: <b>${item.fromStation.scheduled}</b>`;
 
         let delayTag = '';
         if (item.isLive) {
           if (item.delay > 0) {
-            delayTag = `<span style="color:#ef4444; font-weight:bold;">⚠️ تأخير: +${formatDuration(item.delay)}</span>`;
+            delayTag = `<span style="color:#ef4444; font-weight:bold;">⏱️ تأخير: +${formatDuration(item.delay)}</span>`;
           } else if (item.delay < 0) {
             delayTag = `<span style="color:#4ade80; font-weight:bold;">⚡ متقدم: ${formatDuration(Math.abs(item.delay))}</span>`;
+          } else {
+            delayTag = `<span style="color:#38bdf8; font-weight:bold;">🟢 في الموعد</span>`;
           }
         }
 
-        // إذا لم يبدأ التحديث الحي لا يُكتب أي شيء عن مكانه الحالي
         let locationHtml = '';
         if (item.isLive) {
           const rawCur = item.train.stations[item.train.status.stationIndex]?.name || '';
@@ -1075,7 +1135,7 @@
 
           let stateText = '';
           if (item.train.status.state === 'MOVING') {
-            stateText = `🚀 متحرك باتجاه ${cleanNext}`;
+            stateText = `🚀 متحرك من ${cleanCur} إلى ${cleanNext}`;
           } else if (item.train.status.state === 'STOPPED_BETWEEN') {
             stateText = `⚠️ متوقف بين ${cleanCur} و ${cleanNext}`;
           } else {
@@ -1097,7 +1157,7 @@
           </div>
 
           <div class="card-middle-row">
-            <span class="card-time-sched">🕒 المجدول: <b>${item.fromStation.scheduled}</b></span>
+            <span class="card-time-sched">${timeSchedHtml}</span>
             ${countdownHtml}
           </div>
 
@@ -1141,7 +1201,7 @@
       roleSec.style.display = 'block';
       badgeSec.style.display = 'flex';
 
-      document.getElementById('trainTitle').textContent = `قطار رقم ${train.number}`;
+      document.getElementById('trainTitle').textContent = `قطار ${train.number}`;
       
       const typeBadge = document.getElementById('trainTypeBadge');
       if (train.type) {
@@ -1171,7 +1231,7 @@
 
         if (train.status.state === 'MOVING') {
           badge.className = 'status-badge status-moving';
-          badge.textContent = `متحرك: ${curStation} ⟵ ${nextStation}`;
+          badge.textContent = `متحرك من ${curStation} إلى ${nextStation}`;
         } else if (train.status.state === 'STOPPED_BETWEEN') {
           badge.className = 'status-badge status-between';
           badge.textContent = `⚠️ متوقف بين ${curStation} و ${nextStation}`;
@@ -1207,7 +1267,6 @@
       const cleanSecond = secondSt ? secondSt.name.replace(/محطة/g, '').trim() : '';
 
       if (currentUserRole === 'PASSENGER') {
-        // حالة عدم بدء الرحلة بعد: خيارات أول محطة
         if (!isLive) {
           controls.innerHTML = `
             <p style="font-size:12px; margin-bottom:8px; color:#cbd5e1;">الرحلة لم تبدأ بعد. إذا كنت في <b>${cleanFirst}</b> الآن:</p>
@@ -1293,7 +1352,6 @@
       submitVerifiedMovement(trainId, selectedIdx, 'ARRIVE');
     }
 
-    // التحقق الجغرافي الصارم بالـ GPS (شاملاً المحطة الأولى ومسار الخروج منها)
     function submitVerifiedMovement(trainId, targetStationIndex, actionType) {
       const train = trainsData[trainId];
       const curIdx = hasLiveUpdate(train) ? train.status.stationIndex : 0;
@@ -1352,7 +1410,6 @@
             return;
           }
 
-          // 1. فحص الوصول إلى رصيف المحطة (بما فيها المحطة الأولى)
           if (actionType === 'ARRIVE') {
             const stCoords = getStationCoordinates(targetStation.name);
             if (!stCoords) {
@@ -1363,7 +1420,7 @@
 
             const distanceKm = calculateDistanceKm(userLat, userLng, stCoords.lat, stCoords.lng);
             const distanceMeters = Math.round(distanceKm * 1000);
-            const MAX_ALLOWED_METERS = 400; // رصيف المحطة
+            const MAX_ALLOWED_METERS = 400;
 
             if (distanceMeters > MAX_ALLOWED_METERS) {
               document.getElementById('gpsDistanceStatus').textContent = "❌ تم الرفض";
@@ -1377,7 +1434,6 @@
             }
           }
 
-          // 2. فحص التحرك (DEPART) أو التوقف بين المحطتين (STOP_BETWEEN)
           if (actionType === 'DEPART' || actionType === 'STOP_BETWEEN') {
             const fromSt = train.stations[curIdx];
             const toSt = train.stations[curIdx + 1];
@@ -1399,7 +1455,6 @@
             const cleanNextName = toSt.name.replace(/محطة/g, '').trim();
             const metrics = getTrackMetrics(userLat, userLng, c1.lat, c1.lng, c2.lat, c2.lng);
 
-            // أ) البعد العمودي عن شريط السكة (كشف الكتل السكنية والمنازل)
             const MAX_PERP_METERS = 350;
             if (metrics.perpDistMeters > MAX_PERP_METERS) {
               document.getElementById('gpsDistanceStatus').textContent = "❌ في المنازل";
@@ -1412,7 +1467,6 @@
               return;
             }
 
-            // ب) فحص التحرك (DEPART) من المحطة الحالية (سواء الأولى أو غيرها)
             if (actionType === 'DEPART') {
               const distFromDepartureStation = calculateDistanceKm(userLat, userLng, c1.lat, c1.lng) * 1000;
               
@@ -1453,7 +1507,6 @@
               }
             }
 
-            // ج) فحص التوقف بين المحطتين (STOP_BETWEEN)
             if (actionType === 'STOP_BETWEEN') {
               if (hasLiveUpdate(train) && train.status.state === 'AT_STATION') {
                 showCustomAlert('error', 'القطار بالمحطة', 'القطار مسجل حالياً برصيف المحطة، يجب تسجيل المغادرة أولاً قبل تسجيل أي توقف بالسكة.');
