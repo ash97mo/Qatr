@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>لوحة المشرف - إدارة حركة القطارات</title>
+  <title>لوحة التحكم</title>
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script>
 
@@ -37,10 +37,10 @@
       flex-wrap: wrap;
       gap: 10px;
     }
-    h1 { color: #38bdf8; font-size: 20px; margin: 0; }
+    h1 { color: #38bdf8; font-size: 21px; margin: 0; font-weight: 800; }
     h2 { font-size: 15px; color: #cbd5e1; margin-bottom: 12px; }
 
-    .header-actions { display: flex; gap: 8px; }
+    .header-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 
     .box { background: #1a263d; border-radius: 10px; padding: 16px; margin-bottom: 18px; }
     label { display: block; font-size: 13px; color: #94a3b8; margin-bottom: 6px; }
@@ -82,9 +82,9 @@
     .combo-wrapper { position: relative; width: 100%; margin-bottom: 12px; }
     .combo-input {
       width: 100%; padding: 12px 14px; background: #0b1120; border: 1.5px solid #334155;
-      border-radius: 10px; color: #fff; font-size: 13.5px; outline: none; transition: all 0.2s;
+      border-radius: 10px; color: #fff; font-size: 13.5px; outline: none;
     }
-    .combo-input:focus { border-color: #38bdf8; box-shadow: 0 0 10px rgba(56, 189, 248, 0.2); }
+    .combo-input:focus { border-color: #38bdf8; }
     .combo-dropdown {
       position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: #131d2e;
       border: 1px solid #334155; border-radius: 10px; max-height: 220px; overflow-y: auto;
@@ -92,9 +92,8 @@
     }
     .combo-item {
       padding: 10px 14px; font-size: 13px; color: #f1f5f9; cursor: pointer;
-      border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
     }
-    .combo-item:last-child { border: none; }
     .combo-item:hover { background: #0284c7; color: #ffffff; }
 
     .train-actions-bar {
@@ -138,7 +137,9 @@
     .station-title-view {
       font-size: 15px; font-weight: bold; color: #38bdf8; display: flex; align-items: center; gap: 8px;
     }
-    .station-edit-group { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 250px; }
+    .station-edit-group {
+      display: flex; align-items: center; gap: 8px; flex: 1; min-width: 250px;
+    }
     .station-order-input {
       width: 55px !important; padding: 6px !important; margin: 0 !important;
       text-align: center; font-weight: bold; color: #38bdf8 !important; border-color: #0284c7 !important;
@@ -158,6 +159,7 @@
       color: #ffffff !important; background: #dc2626 !important; border: 1px solid #ef4444 !important;
       padding: 3px 8px !important; border-radius: 6px !important; font-weight: 800 !important;
       font-size: 11px !important; white-space: nowrap !important;
+      box-shadow: 0 0 12px rgba(239, 68, 68, 0.75) !important; display: inline-flex !important; align-items: center !important;
     }
     .delay-label-ontime {
       color: #38bdf8; background: rgba(56, 189, 248, 0.15); border: 1px solid #0284c7;
@@ -195,12 +197,14 @@
     .add-station-bar input { margin: 0; }
 
     .login-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #090d16;
-      display: flex; justify-content: center; align-items: center; z-index: 9999; padding: 16px;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: #090d16; display: flex; justify-content: center; align-items: center;
+      z-index: 9999; padding: 16px;
     }
     .login-card {
-      background: #131d2e; border: 1px solid #1e293b; border-radius: 16px; padding: 24px;
-      width: 100%; max-width: 380px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      background: #131d2e; border: 1px solid #1e293b; border-radius: 16px;
+      padding: 24px; width: 100%; max-width: 380px; text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
     }
     .login-card h2 { color: #38bdf8; font-size: 18px; margin-bottom: 8px; }
     .login-card p { font-size: 13px; color: #94a3b8; margin-bottom: 16px; }
@@ -208,14 +212,21 @@
 
     .custom-modal-overlay {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(5, 9, 18, 0.82); backdrop-filter: blur(6px); display: flex;
-      align-items: center; justify-content: center; z-index: 100000; padding: 16px;
+      background: rgba(5, 9, 18, 0.82); backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center; z-index: 100000; padding: 16px;
+      animation: modalFadeIn 0.2s ease-out;
     }
+    @keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
+
     .custom-modal-card {
       background: #131d2e; border-radius: 20px; width: 100%; max-width: 380px;
-      padding: 24px 20px; text-align: center; box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7); direction: rtl;
+      padding: 24px 20px; text-align: center; box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
+      direction: rtl;
     }
-    .modal-icon-container { width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 14px; display: flex; align-items: center; justify-content: center; }
+    .modal-icon-container {
+      width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 14px;
+      display: flex; align-items: center; justify-content: center;
+    }
     .modal-error { border: 1px solid rgba(239, 68, 68, 0.45); }
     .modal-error .modal-icon-container { background: rgba(239, 68, 68, 0.15); border: 2px solid #ef4444; }
     .modal-error .modal-title { color: #f87171; font-size: 17px; font-weight: 800; margin-bottom: 10px; }
@@ -228,6 +239,12 @@
 
     .modal-message { font-size: 13.5px; line-height: 1.65; color: #cbd5e1; margin-bottom: 20px; white-space: pre-line; word-break: break-word; }
     .modal-btn { width: 100%; padding: 12px; border: none; border-radius: 10px; font-weight: 700; font-size: 14px; cursor: pointer; }
+
+    .admin-account-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 8px 10px; border-bottom: 1px solid #1e293b; font-size: 13px;
+    }
+    .admin-account-item:last-child { border-bottom: none; }
   </style>
 </head>
 <body>
@@ -242,25 +259,49 @@
     </div>
   </div>
 
-  <!-- نافذة تسجيل دخول المشرف -->
+  <!-- نافذة إدارة المشرفين -->
+  <div id="adminMgmtModal" class="custom-modal-overlay" style="display: none;" onclick="if(event.target===this) closeAdminMgmtModal()">
+    <div class="custom-modal-card" style="max-width: 440px; text-align: right;">
+      <h3 style="color: #38bdf8; margin-bottom: 12px; text-align: center; font-size: 17px;">👥 إدارة حسابات المشرفين</h3>
+      
+      <label style="font-size: 12px; color: #94a3b8;">قائمة المشرفين المسجلين:</label>
+      <div id="adminsListContainer" style="max-height: 160px; overflow-y: auto; margin-bottom: 15px; border: 1px solid #334155; border-radius: 8px; background: #0f172a;"></div>
+      
+      <div style="border-top: 1px solid #334155; padding-top: 12px;">
+        <label style="font-size: 12.5px; color: #38bdf8; font-weight: bold; margin-bottom: 6px;">➕ إضافة مشرف جديد:</label>
+        <input type="text" id="newAdminUser" placeholder="اسم المستخدم الجديد..." style="margin-bottom: 8px;">
+        <input type="password" id="newAdminPass" placeholder="كلمة المرور..." style="margin-bottom: 10px;">
+        <button class="btn btn-add" style="width: 100%; margin-bottom: 8px;" onclick="addNewAdminAccount()">+ حفظ المشرف الجديد</button>
+      </div>
+      
+      <button class="btn btn-secondary" style="width: 100%; margin-top: 4px;" onclick="closeAdminMgmtModal()">إغلاق</button>
+    </div>
+  </div>
+
+  <!-- نافذة تسجيل دخول المشرف (اسم مستخدم + باسورد) -->
   <div id="loginOverlay" class="login-overlay">
     <div class="login-card">
       <div style="font-size: 40px; margin-bottom: 10px;">🔐</div>
       <h2>دخول المشرف المعتمد</h2>
-      <p>أدخل كلمة المرور للوصول إلى لوحة التحكم المباشرة</p>
+      <p>أدخل اسم المستخدم وكلمة المرور للوصول إلى لوحة التحكم</p>
       
+      <input type="text" id="adminUserInput" placeholder="اسم المستخدم..." onkeydown="if(event.key==='Enter') attemptLogin()">
       <input type="password" id="adminPassInput" placeholder="كلمة المرور..." onkeydown="if(event.key==='Enter') attemptLogin()">
       <button class="btn btn-primary" onclick="attemptLogin()">تسجيل الدخول 🚀</button>
       
-      <div id="loginErrorMsg" class="login-error">❌ كلمة المرور غير صحيحة، يرجى المحاولة ثانية!</div>
+      <div id="loginErrorMsg" class="login-error">❌ اسم المستخدم أو كلمة المرور غير صحيحة!</div>
     </div>
   </div>
 
   <!-- لوحة التحكم الرئيسية -->
   <div class="admin-container" id="adminMainContainer" style="display: none;">
     <div class="admin-header">
-      <h1>🛠️ لوحة تحكم حركة القطارات (المشرف)</h1>
+      <div>
+        <h1>🛠️ لوحة التحكم</h1>
+        <div id="currentAdminBadge" style="font-size: 12px; color: #94a3b8; margin-top: 3px;"></div>
+      </div>
       <div class="header-actions">
+        <button class="btn btn-secondary" onclick="openAdminMgmtModal()">👥 إدارة المشرفين</button>
         <button class="btn btn-secondary" onclick="changeAdminPassword()">🔑 تغيير كلمة السر</button>
         <button class="btn btn-danger" onclick="logoutAdmin()">🚪 خروج</button>
       </div>
@@ -273,20 +314,24 @@
       <h2>1. المراقبة والتحكم الميداني وتعديل المحطات</h2>
       <label>اختر القطار:</label>
       
+      <!-- قائمة اختيار وبحث القطار -->
       <div class="combo-wrapper" id="trainComboWrapper">
         <input type="text" id="directTrainInput" class="combo-input" placeholder="اضغط للاختيار أو اكتب رقم القطار..." autocomplete="off">
         <div class="combo-dropdown" id="directTrainDropdown"></div>
       </div>
 
+      <!-- أزرار الإجراءات للقطار المختار -->
       <div class="train-actions-bar" id="trainActionsRow" style="display: none;">
-        <button id="btnResetTrain" class="btn btn-warning" onclick="resetCurrentTrain()" title="تصفير الأوقات وإعادة ضبط الرحلة للبداية بدون محطة">🔄 تصفير للبداية</button>
+        <button id="btnResetTrain" class="btn btn-warning" onclick="resetCurrentTrain()" title="تصفير أوقات وتأخيرات القطار">🔄 تصفير</button>
         <button id="btnDeleteTrain" class="btn btn-danger" onclick="deleteCurrentTrain()" title="حذف القطار نهائياً">🗑️ حذف</button>
         <button id="btnToggleEdit" class="btn btn-secondary" onclick="toggleEditMode()" title="تعديل بيانات ومحطات القطار">✏️ تعديل</button>
         <button id="btnSaveAll" class="btn btn-add" style="display: none;" onclick="saveAllTrainEdits()" title="حفظ جميع التعديلات">💾 حفظ</button>
       </div>
 
+      <!-- ملخص القطار مع شارة حالته اللحظية -->
       <div id="trainInfoDisplayBar" class="train-info-display-bar" style="display: none;"></div>
 
+      <!-- شريط تعديل بيانات القطار -->
       <div id="trainEditInfoBar" class="train-edit-bar" style="display: none;">
         <div style="font-size: 13px; font-weight: bold; color: #38bdf8; margin-bottom: 10px;">✏️ تعديل بيانات القطار الأساسية:</div>
         <div class="train-edit-grid">
@@ -309,6 +354,7 @@
         <p style="color:#64748b; text-align:center; padding: 20px;">👈 برجاء اختيار قطار من خانة البحث أعلاه لبدء المراقبة والتحكم.</p>
       </div>
 
+      <!-- إضافة محطة جديدة -->
       <div id="addStationSection" style="display: none;">
         <label style="margin-top: 15px; font-weight: bold; color: #38bdf8;">➕ إضافة محطة جديدة لهذا القطار:</label>
         <div class="add-station-bar">
@@ -353,7 +399,168 @@
   </div>
 
   <script>
-    const DEFAULT_ADMIN_PASSWORD = "admin2026";
+    const DEFAULT_ADMINS = {
+      "admin": { "password": "admin2026", "name": "المشرف الرئيسي" }
+    };
+
+    function getAdmins() {
+      const stored = localStorage.getItem('app_admins_db');
+      if (stored) {
+        try { return JSON.parse(stored); } catch(e){}
+      }
+      return DEFAULT_ADMINS;
+    }
+
+    function saveAdmins(admins) {
+      localStorage.setItem('app_admins_db', JSON.stringify(admins));
+    }
+
+    function checkLoginStatus() {
+      const isAuth = sessionStorage.getItem('admin_authenticated');
+      const currentUser = sessionStorage.getItem('current_admin_user');
+      if (isAuth === 'true' && currentUser) {
+        document.getElementById('loginOverlay').style.display = 'none';
+        document.getElementById('adminMainContainer').style.display = 'block';
+        document.getElementById('currentAdminBadge').innerHTML = `👤 المشرف الحالي: <b style="color:#38bdf8;">${currentUser}</b>`;
+        initMQTT();
+      } else {
+        document.getElementById('loginOverlay').style.display = 'flex';
+        document.getElementById('adminMainContainer').style.display = 'none';
+        setTimeout(() => document.getElementById('adminUserInput').focus(), 100);
+      }
+    }
+
+    function attemptLogin() {
+      const user = document.getElementById('adminUserInput').value.trim();
+      const pass = document.getElementById('adminPassInput').value.trim();
+      const errBox = document.getElementById('loginErrorMsg');
+      const admins = getAdmins();
+
+      if (admins[user] && admins[user].password === pass) {
+        errBox.style.display = 'none';
+        sessionStorage.setItem('admin_authenticated', 'true');
+        sessionStorage.setItem('current_admin_user', user);
+        document.getElementById('adminUserInput').value = '';
+        document.getElementById('adminPassInput').value = '';
+        checkLoginStatus();
+      } else {
+        errBox.style.display = 'block';
+      }
+    }
+
+    function logoutAdmin() {
+      if (confirm("هل تريد تسجيل الخروج من لوحة التحكم؟")) {
+        sessionStorage.removeItem('admin_authenticated');
+        sessionStorage.removeItem('current_admin_user');
+        checkLoginStatus();
+      }
+    }
+
+    function changeAdminPassword() {
+      const currentUser = sessionStorage.getItem('current_admin_user');
+      if (!currentUser) return;
+      const admins = getAdmins();
+      if (!admins[currentUser]) return;
+
+      const oldPass = prompt(`أدخل كلمة المرور الحالية للمشرف (${currentUser}):`);
+      if (!oldPass) return;
+      if (oldPass !== admins[currentUser].password) {
+        showCustomAlert('error', 'خطأ في التحقق', 'كلمة المرور الحالية غير صحيحة!');
+        return;
+      }
+
+      const newPass = prompt("أدخل كلمة المرور الجديدة (يجب ألا تقل عن 4 خانات):");
+      if (!newPass || newPass.trim().length < 4) {
+        showCustomAlert('error', 'كلمة سر قصيرة', 'كلمة المرور قصيرة جداً، لم يتم التغيير.');
+        return;
+      }
+
+      admins[currentUser].password = newPass.trim();
+      saveAdmins(admins);
+      showCustomAlert('success', 'تم التغيير', `تم تغيير كلمة المرور للمشرف (${currentUser}) بنجاح!`);
+    }
+
+    function openAdminMgmtModal() {
+      renderAdminsList();
+      document.getElementById('adminMgmtModal').style.display = 'flex';
+    }
+
+    function closeAdminMgmtModal() {
+      document.getElementById('adminMgmtModal').style.display = 'none';
+    }
+
+    function renderAdminsList() {
+      const container = document.getElementById('adminsListContainer');
+      const admins = getAdmins();
+      const currentUser = sessionStorage.getItem('current_admin_user');
+      container.innerHTML = '';
+
+      Object.keys(admins).forEach(u => {
+        const row = document.createElement('div');
+        row.className = 'admin-account-item';
+        const isSelf = (u === currentUser);
+        row.innerHTML = `
+          <div>
+            <b style="color:${isSelf ? '#38bdf8' : '#f1f5f9'};">👤 ${u}</b>
+            ${isSelf ? '<span style="font-size:11px; color:#4ade80; margin-right:4px;">(أنت)</span>' : ''}
+          </div>
+          <div>
+            ${!isSelf ? `<button class="btn btn-danger" style="padding:3px 8px; font-size:11px;" onclick="removeAdminAccount('${u}')">🗑️ حذف</button>` : ''}
+          </div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function addNewAdminAccount() {
+      const user = document.getElementById('newAdminUser').value.trim();
+      const pass = document.getElementById('newAdminPass').value.trim();
+
+      if (!user || user.length < 3) {
+        showCustomAlert('error', 'بيانات ناقصة', 'اسم المستخدم يجب أن يتكون من 3 حروف على الأقل.');
+        return;
+      }
+      if (!pass || pass.length < 4) {
+        showCustomAlert('error', 'بيانات ناقصة', 'كلمة المرور يجب ألا تقل عن 4 خانات.');
+        return;
+      }
+
+      const admins = getAdmins();
+      if (admins[user]) {
+        showCustomAlert('error', 'مشرف موجود', 'اسم المستخدم هذا مسجل مسبقاً لمشرف آخر!');
+        return;
+      }
+
+      admins[user] = { password: pass, name: user };
+      saveAdmins(admins);
+
+      document.getElementById('newAdminUser').value = '';
+      document.getElementById('newAdminPass').value = '';
+      renderAdminsList();
+      showCustomAlert('success', 'تمت الإضافة', `تمت إضافة المشرف (${user}) بنجاح.`);
+    }
+
+    function removeAdminAccount(username) {
+      const currentUser = sessionStorage.getItem('current_admin_user');
+      if (username === currentUser) {
+        showCustomAlert('error', 'إجراء غير مسموح', 'لا يمكنك حذف حسابك الحالي أثناء تسجيل الدخول به!');
+        return;
+      }
+
+      const admins = getAdmins();
+      if (Object.keys(admins).length <= 1) {
+        showCustomAlert('error', 'إجراء غير مسموح', 'يجب أن يتبقى مشرف واحد على الأقل بالنظام!');
+        return;
+      }
+
+      if (confirm(`هل أنت متأكد من حذف حساب المشرف (${username}) نهائياً؟`)) {
+        delete admins[username];
+        saveAdmins(admins);
+        renderAdminsList();
+        showCustomAlert('success', 'تم الحذف', `تم حذف حساب المشرف (${username}).`);
+      }
+    }
+
     const SYNC_TOPIC = "egy_train_master_sync_2026";
     const BROKER_HOST = "broker.emqx.io";
     const BROKER_PORT = 8084;
@@ -473,65 +680,6 @@
         }
       }
       return null;
-    }
-
-    function getAdminPassword() {
-      return localStorage.getItem('app_admin_pass') || DEFAULT_ADMIN_PASSWORD;
-    }
-
-    function checkLoginStatus() {
-      const isAuth = sessionStorage.getItem('admin_authenticated');
-      if (isAuth === 'true') {
-        document.getElementById('loginOverlay').style.display = 'none';
-        document.getElementById('adminMainContainer').style.display = 'block';
-        initMQTT();
-      } else {
-        document.getElementById('loginOverlay').style.display = 'flex';
-        document.getElementById('adminMainContainer').style.display = 'none';
-        setTimeout(() => document.getElementById('adminPassInput').focus(), 100);
-      }
-    }
-
-    function attemptLogin() {
-      const enteredPass = document.getElementById('adminPassInput').value.trim();
-      const actualPass = getAdminPassword();
-      const errBox = document.getElementById('loginErrorMsg');
-
-      if (enteredPass === actualPass) {
-        errBox.style.display = 'none';
-        sessionStorage.setItem('admin_authenticated', 'true');
-        document.getElementById('adminPassInput').value = '';
-        checkLoginStatus();
-      } else {
-        errBox.style.display = 'block';
-        document.getElementById('adminPassInput').value = '';
-        document.getElementById('adminPassInput').focus();
-      }
-    }
-
-    function logoutAdmin() {
-      if (confirm("هل تريد تسجيل الخروج من لوحة التحكم؟")) {
-        sessionStorage.removeItem('admin_authenticated');
-        checkLoginStatus();
-      }
-    }
-
-    function changeAdminPassword() {
-      const current = prompt("أدخل كلمة المرور الحالية:");
-      if (!current) return;
-      if (current !== getAdminPassword()) {
-        showCustomAlert('error', 'خطأ في التحقق', 'كلمة المرور الحالية غير صحيحة!');
-        return;
-      }
-
-      const newPass = prompt("أدخل كلمة المرور الجديدة (يجب ألا تقل عن 4 خانات):");
-      if (!newPass || newPass.trim().length < 4) {
-        showCustomAlert('error', 'كلمة سر قصيرة', 'كلمة المرور قصيرة جداً أو فارغة، لم يتم التغيير.');
-        return;
-      }
-
-      localStorage.setItem('app_admin_pass', newPass.trim());
-      showCustomAlert('success', 'تم التغيير', 'تم تغيير كلمة مرور المشرف بنجاح!');
     }
 
     const cached = localStorage.getItem('local_trains_cache');
@@ -727,8 +875,6 @@
       const train = trainsData[selectedTrainId];
       actionsRow.style.display = 'flex';
 
-      const isNotStarted = (!train.status || train.status.state === 'NOT_STARTED' || train.status.stationIndex === null || train.status.stationIndex === undefined);
-
       if (isEditMode) {
         btnToggleEdit.className = 'btn btn-edit-active';
         btnToggleEdit.innerHTML = '✖️ إلغاء التعديل';
@@ -750,62 +896,64 @@
         displayBar.style.display = 'flex';
 
         let statusPillHtml = '';
-        if (isNotStarted) {
-          statusPillHtml = `<span class="status-pill status-pill-idle">⏳ بانتظار بدء الرحلة (لم تبدأ بعد)</span>`;
+        if (!train.status || train.status.state === 'NOT_STARTED' || train.status.stationIndex === null) {
+          statusPillHtml = `<span class="status-pill status-pill-idle">⏳ بانتظار بدء الرحلة</span>`;
         } else if (train.status.state === 'MOVING') {
-          const nextName = (train.stations[train.status.stationIndex + 1]?.name || '').replace(/محطة/g, '').trim();
-          statusPillHtml = `<span class="status-pill status-pill-move">🚀 متحرك باتجاه ${nextName}</span>`;
+          const nextName = train.stations[train.status.stationIndex + 1]?.name || '';
+          statusPillHtml = `<span class="status-pill status-pill-move">🚀 متحرك إلى ${nextName}</span>`;
         } else if (train.status.state === 'STOPPED_BETWEEN') {
-          const curName = (train.stations[train.status.stationIndex]?.name || '').replace(/محطة/g, '').trim();
-          const nextName = (train.stations[train.status.stationIndex + 1]?.name || '').replace(/محطة/g, '').trim();
-          statusPillHtml = `<span class="status-pill status-pill-between">⚠️ متوقف بين ${curName} و ${nextName}</span>`;
+          statusPillHtml = `<span class="status-pill status-pill-between">⚠️ متوقف بالسكة</span>`;
         } else {
-          const curName = (train.stations[train.status.stationIndex]?.name || '').replace(/محطة/g, '').trim();
-          statusPillHtml = `<span class="status-pill status-pill-stop">🛑 متوقف برصيف ${curName}</span>`;
+          const curName = train.stations[train.status.stationIndex]?.name || '';
+          statusPillHtml = `<span class="status-pill status-pill-stop">🛑 برصيف ${curName}</span>`;
         }
 
         displayBar.innerHTML = `
           <div>
             <span style="font-size:15px; font-weight:bold; color:#38bdf8;">قطار ${train.number}</span>
             <span style="font-size:13px; color:#cbd5e1; margin-right:8px;">${train.name}</span>
-            ${train.type ? `<span style="font-size:11.5px; background:#1e293b; padding:2px 8px; border-radius:6px; color:#c084fc; border:1px solid #334155; margin-right:6px;">${train.type}</span>` : ''}
+            ${train.type ? `<span style="font-size:11px; background:#1e293b; padding:2px 8px; border-radius:4px; color:#94a3b8; border:1px solid #334155; margin-right:6px;">${train.type}</span>` : ''}
           </div>
           <div>${statusPillHtml}</div>
         `;
       }
 
+      const isLive = Boolean(train.status && train.status.state !== 'NOT_STARTED' && train.status.stationIndex !== null);
+
       train.stations.forEach((st, idx) => {
-        const isCurrentStopped = (!isNotStarted && train.status.state === 'AT_STATION' && train.status.stationIndex === idx);
-        const isCurrentMoving = (!isNotStarted && train.status.state === 'MOVING' && train.status.stationIndex === idx);
-        const isCurrentBetween = (!isNotStarted && train.status.state === 'STOPPED_BETWEEN' && train.status.stationIndex === idx);
+        const isStopped = isLive && (train.status.state === 'AT_STATION' && train.status.stationIndex === idx);
+        const isMoving = isLive && (train.status.state === 'MOVING' && train.status.stationIndex === idx);
+        const isStoppedBetween = isLive && (train.status.state === 'STOPPED_BETWEEN' && train.status.stationIndex === idx);
 
         const card = document.createElement('div');
         card.className = 'station-control-row';
-        card.style.borderColor = isCurrentStopped ? '#ef4444' : (isCurrentMoving ? '#facc15' : (isCurrentBetween ? '#b91c1c' : '#334155'));
+        card.style.borderColor = isStopped ? '#ef4444' : (isMoving ? '#facc15' : (isStoppedBetween ? '#b91c1c' : '#334155'));
 
-        const cleanStName = st.name.replace(/محطة/g, '').trim();
         const nextSt = train.stations[idx + 1];
-        const cleanNextName = nextSt ? nextSt.name.replace(/محطة/g, '').trim() : '';
 
         let actionButtons = '';
         if (nextSt) {
           actionButtons = `
-            <button class="btn btn-warning" onclick="setTrainMoving('${selectedTrainId}', ${idx})">🚀 غادر باتجاه ${cleanNextName}</button>
-            <button class="btn btn-caution" onclick="setTrainStoppedBetween('${selectedTrainId}', ${idx})">⚠️ متوقف بين ${cleanStName} و ${cleanNextName}</button>
+            <button class="btn btn-warning" onclick="setTrainMoving('${selectedTrainId}', ${idx})">🚀 غادر باتجاه ${nextSt.name}</button>
+            <button class="btn btn-caution" onclick="setTrainStoppedBetween('${selectedTrainId}', ${idx})">⚠️ متوقف بين ${st.name} و ${nextSt.name}</button>
           `;
         }
 
         let alertBetweenHtml = '';
-        if (isCurrentBetween && nextSt) {
-          alertBetweenHtml = `<div class="between-alert">⚠️ تنبيه: القطار متوقف حالياً في السكة بين [${cleanStName}] و [${cleanNextName}]</div>`;
+        if (isStoppedBetween && nextSt) {
+          alertBetweenHtml = `<div class="between-alert">⚠️ تنبيه: القطار متوقف حالياً في السكة الحديد بين [${st.name}] و [${nextSt.name}]</div>`;
         }
 
-        const delayVal = getStationDelay(st);
+        const delayVal = isLive ? getStationDelay(st) : null;
         let delayText = '';
         if (delayVal !== null) {
-          if (delayVal > 0) delayText = `<span class="delay-label-red">⚠️ تأخير: +${delayVal} د</span>`;
-          else if (delayVal < 0) delayText = `<span class="delay-label-early">⚡ متقدم: ${Math.abs(delayVal)} د</span>`;
-          else delayText = `<span class="delay-label-ontime">🟢 في الموعد</span>`;
+          if (delayVal > 0) {
+            delayText = `<span class="delay-label-red">⚠️ تأخير: +${delayVal} د</span>`;
+          } else if (delayVal < 0) {
+            delayText = `<span class="delay-label-early">⚡ متقدم: ${Math.abs(delayVal)} د</span>`;
+          } else {
+            delayText = `<span class="delay-label-ontime">🟢 في الموعد</span>`;
+          }
         }
 
         let stationHeadHtml = '';
@@ -813,9 +961,9 @@
           stationHeadHtml = `
             <div class="station-edit-group">
               <span style="font-size:12px; color:#94a3b8;">رقم:</span>
-              <input type="number" class="station-order-input" id="stOrder_${idx}" min="1" max="${train.stations.length}" value="${idx + 1}" title="تغيير ترتيب المحطة">
+              <input type="number" class="station-order-input" id="stOrder_${idx}" min="1" max="${train.stations.length}" value="${idx + 1}">
               <span style="font-size:12px; color:#94a3b8;">اسم:</span>
-              <input type="text" class="station-name-input" id="stName_${idx}" value="${cleanStName}" placeholder="اسم المحطة">
+              <input type="text" class="station-name-input" id="stName_${idx}" value="${st.name}" placeholder="اسم المحطة">
             </div>
             <button class="btn btn-danger" style="padding: 5px 10px; font-size:11.5px;" onclick="removeStation('${selectedTrainId}', ${idx})">🗑️ حذف</button>
           `;
@@ -823,7 +971,7 @@
           stationHeadHtml = `
             <div class="station-title-view">
               <span style="background:#1e293b; color:#38bdf8; padding:2px 8px; border-radius:6px; font-size:12px;">#${idx + 1}</span>
-              <span>${cleanStName}</span>
+              <span>${st.name}</span>
             </div>
           `;
         }
@@ -857,7 +1005,7 @@
             </div>
           </div>
           <div class="btn-group">
-            <button class="btn btn-danger" onclick="setTrainAtStation('${selectedTrainId}', ${idx})">🛑 وصل رصيف ${cleanStName}</button>
+            <button class="btn btn-danger" onclick="setTrainAtStation('${selectedTrainId}', ${idx})">🛑 وصل رصيف ${st.name}</button>
             ${actionButtons}
           </div>
         `;
@@ -908,8 +1056,9 @@
 
         updatedStations.push({
           targetOrder: desiredOrder,
+          originalIndex: i,
           station: {
-            name: desiredName.replace(/محطة/g, '').trim(),
+            name: desiredName,
             scheduled: desiredSched,
             actual: currentActual,
             delayMinutes: newDelay
@@ -936,11 +1085,11 @@
       showCustomAlert('success', 'تم الحفظ بنجاح', `تم حفظ وتحديث بيانات ومحطات قطار (${newNum}) سحابياً.`);
     }
 
-    // تصفير القطار للوضع الافتراضي (NOT_STARTED) وبدون أي محطة مختارة
+    // تصفير القطار: يعود لحالة NOT_STARTED وبدون أي محطة مختارة
     function resetCurrentTrain() {
       if (!selectedTrainId || !trainsData[selectedTrainId]) return;
       const train = trainsData[selectedTrainId];
-      if (confirm(`هل أنت متأكد من تصفير وإعادة ضبط رحلة قطار (${train.number})؟\n\nسيتم مسح جميع أوقات الوصول والتأخيرات وإرجاع حالة القطار إلى (بانتظار بدء الرحلة) بدون اختيار أي محطة.`)) {
+      if (confirm(`هل أنت متأكد من تصفير وإعادة ضبط رحلة قطار (${train.number})؟\n\nسيعود القطار لحالة بانتظار بدء الرحلة ومسح جميع أوقات الوصول والتأخيرات.`)) {
         train.status = {
           state: 'NOT_STARTED',
           stationIndex: null,
@@ -954,7 +1103,7 @@
 
         broadcastData();
         renderControlBoard();
-        showCustomAlert('success', 'تم التصفير للبداية', `تم تصفير رحلة قطار (${train.number}) بالكامل، والقطار الآن بانتظار بدء الرحلة بدون تحديد أي محطة.`);
+        showCustomAlert('success', 'تم التصفير', `تم تصفير رحلة قطار (${train.number}) وإعادته لحالة بانتظار بدء الرحلة.`);
       }
     }
 
@@ -971,12 +1120,31 @@
       }
     }
 
+    function autoResetIfNewTrip(trainId, stationIndex) {
+      const train = trainsData[trainId];
+      if (!train) return;
+      if (stationIndex === 0) {
+        let hasLaterActuals = train.stations.slice(1).some(s => s.actual && s.actual !== '--');
+        if (hasLaterActuals) {
+          train.stations.forEach((st, idx) => {
+            if (idx > 0) {
+              st.actual = '--';
+              delete st.delayMinutes;
+            }
+          });
+        }
+      }
+    }
+
     function setTrainAtStation(trainId, stationIndex) {
+      autoResetIfNewTrip(trainId, stationIndex);
       const timeString = formatCurrentTime();
+      const currentAdmin = sessionStorage.getItem('current_admin_user') || 'المشرف';
+
       trainsData[trainId].status = { 
         state: 'AT_STATION', 
         stationIndex: stationIndex,
-        updatedBy: `المشرف (${timeString})`,
+        updatedBy: `المشرف ${currentAdmin} (${timeString})`,
         departedAt: null
       };
       trainsData[trainId].stations[stationIndex].actual = timeString;
@@ -988,16 +1156,18 @@
 
       broadcastData();
       renderControlBoard();
-      const cleanName = trainsData[trainId].stations[stationIndex].name.replace(/محطة/g, '').trim();
-      showCustomAlert('success', 'تم اعتماد الوصول', `تم تسجيل وصول القطار إلى (${cleanName}) ونشر ذلك للركاب فوراً.`);
+      showCustomAlert('success', 'تم اعتماد الوصول', `تم تسجيل وصول القطار إلى (${trainsData[trainId].stations[stationIndex].name}) ونشر ذلك للركاب فوراً.`);
     }
 
     function setTrainMoving(trainId, fromStationIndex) {
+      autoResetIfNewTrip(trainId, fromStationIndex);
       const timeString = formatCurrentTime();
+      const currentAdmin = sessionStorage.getItem('current_admin_user') || 'المشرف';
+
       trainsData[trainId].status = { 
         state: 'MOVING', 
         stationIndex: fromStationIndex,
-        updatedBy: `المشرف (${timeString})`,
+        updatedBy: `المشرف ${currentAdmin} (${timeString})`,
         departedAt: Date.now()
       };
       broadcastData();
@@ -1007,13 +1177,12 @@
 
     function setTrainStoppedBetween(trainId, fromStationIndex) {
       const timeString = formatCurrentTime();
-      const curName = trainsData[trainId].stations[fromStationIndex].name.replace(/محطة/g, '').trim();
-      const nextName = trainsData[trainId].stations[fromStationIndex + 1]?.name.replace(/محطة/g, '').trim() || '';
+      const currentAdmin = sessionStorage.getItem('current_admin_user') || 'المشرف';
 
       trainsData[trainId].status = { 
         state: 'STOPPED_BETWEEN', 
         stationIndex: fromStationIndex,
-        updatedBy: `المشرف: متوقف بين ${curName} و ${nextName} (${timeString})`
+        updatedBy: `المشرف ${currentAdmin}: متوقف بالسكة (${timeString})`
       };
       broadcastData();
       renderControlBoard();
@@ -1037,7 +1206,7 @@
       const nameInput = document.getElementById('newStationName');
       const timeInput = document.getElementById('newStationTime');
 
-      const name = nameInput.value.trim().replace(/محطة/g, '').trim();
+      const name = nameInput.value.trim();
       const time = timeInput.value.trim() || '--';
 
       if (!name) {
@@ -1064,8 +1233,7 @@
         showCustomAlert('error', 'إجراء غير مسموح', 'لا يمكن حذف آخر محطة متبقية في مسار القطار!');
         return;
       }
-      const stName = train.stations[index].name.replace(/محطة/g, '').trim();
-      if (confirm(`هل أنت متأكد من حذف محطة (${stName}) من مسار هذا القطار؟`)) {
+      if (confirm(`هل أنت متأكد من حذف محطة (${train.stations[index].name}) من مسار هذا القطار؟`)) {
         train.stations.splice(index, 1);
         if (train.status.stationIndex !== null && train.status.stationIndex >= train.stations.length) {
           train.status.stationIndex = train.stations.length - 1;
@@ -1106,8 +1274,6 @@
           name = line.replace(/[-–—,،:|\t]/g, ' ').trim();
         }
 
-        name = name.replace(/محطة/g, '').trim();
-
         if (name && !name.includes("هل تحتاج إلى معرفة")) {
           parsedStationsList.push({ name: name, scheduled: time, actual: '--' });
           const row = document.createElement('tr');
@@ -1124,7 +1290,6 @@
       }
     }
 
-    // إضافة قطار جديد بالوضع الافتراضي (NOT_STARTED) وبدون محطة مختارة مسبقاً
     function addNewTrain() {
       const num = document.getElementById('newTrainNumber').value.trim();
       const type = document.getElementById('newTrainType').value.trim();
@@ -1140,23 +1305,19 @@
         }
       }
 
+      // إضافة القطار الجديد بحالة افتراضية نظيفة NOT_STARTED وبدون محطة مختارة
       trainsData[num] = {
         number: num,
         type: type || '',
         name: name,
-        status: { 
-          state: 'NOT_STARTED', 
-          stationIndex: null, 
-          updatedBy: 'جدول الرحلة الأساسي',
-          departedAt: null 
-        },
+        status: { state: 'NOT_STARTED', stationIndex: null, updatedBy: 'جدول الرحلة الأساسي' },
         stations: parsedStationsList
       };
 
       broadcastData();
       selectTrain(num);
 
-      showCustomAlert('success', 'تم نشر الرحلة', `تم حفظ ونشر قطار (${num}) في السحابة فوراً وهو الآن بانتظار بدء الرحلة.`);
+      showCustomAlert('success', 'تم نشر الرحلة', `تم حفظ ونشر قطار (${num}) في السحابة فوراً.`);
       document.getElementById('newTrainNumber').value = '';
       document.getElementById('newTrainType').value = '';
       document.getElementById('newTrainName').value = '';
