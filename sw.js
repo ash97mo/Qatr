@@ -1,4 +1,5 @@
-const CACHE_NAME = 'egy-trains-v2';
+--- START OF FILE sw.js ---
+const CACHE_NAME = 'egy-trains-v3';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -7,6 +8,7 @@ const ASSETS_TO_CACHE = [
   'https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js'
 ];
 
+// تثبيت ملف الخدمة وتخزين الملفات الأساسية
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -15,6 +17,7 @@ self.addEventListener('install', (event) => {
   );
 });
 
+// تفعيل ملف الخدمة وحذف الكاش القديم
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -29,26 +32,43 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+// التعامل مع طلبات الشبكة
 self.addEventListener('fetch', (event) => {
-  // عدم تخزين اتصالات السوكيت التابعة لـ MQTT
-  if (event.request.url.includes('broker.emqx.io')) {
+  const req = event.request;
+  const url = new URL(req.url);
+
+  // 1. استبعاد اتصالات MQTT السحابية ومنفذ WebSockets
+  if (url.hostname.includes('broker.emqx.io') || url.pathname.includes('/mqtt') || url.port === '8084') {
     return;
   }
 
+  // 2. معالجة طلبات GET فقط وتجاهل الإضافات (Chrome Extensions)
+  if (req.method !== 'GET' || !url.protocol.startsWith('http')) {
+    return;
+  }
+
+  // 3. استراتيجية الكاش مع التحديث بالخلفية
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        // تحديث الكاش في الخلفية
-        fetch(event.request).then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200) {
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, networkResponse));
+    caches.match(req).then((cachedResponse) => {
+      const fetchPromise = fetch(req)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200 && networkResponse.type !== 'opaque') {
+            const responseToCache = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(req, responseToCache);
+            });
           }
-        }).catch(() => {});
-        return cachedResponse;
-      }
-      return fetch(event.request).catch(() => {
-        return caches.match('./index.html');
-      });
+          return networkResponse;
+        })
+        .catch(() => {
+          // في حال انقطاع الإنترنت التام وطلب صفحة تنقل
+          if (req.mode === 'navigate') {
+            return caches.match('./index.html');
+          }
+        });
+
+      return cachedResponse || fetchPromise;
     })
   );
 });
+--- END OF FILE sw.js ---
