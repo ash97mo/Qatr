@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>تتبع القطارات - تطبيق الراكب التشاركي</title>
   
-  <!-- إعدادات تطبيق الهاتف PWA -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0b0f19">
   <meta name="mobile-web-app-capable" content="yes">
@@ -20,380 +19,150 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { 
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-      background: #0b0f19; 
-      color: #f8fafc; 
-      padding: 16px; 
-      display: flex; 
-      justify-content: center; 
-      min-height: 100vh;
+      background: #0b0f19; color: #f8fafc; padding: 16px; 
+      display: flex; justify-content: center; min-height: 100vh;
     }
     .app-container { 
-      width: 100%; 
-      max-width: 480px; 
-      background: #1e293b; 
-      border-radius: 20px; 
-      padding: 20px; 
-      box-shadow: 0 15px 35px rgba(0,0,0,0.5); 
+      width: 100%; max-width: 480px; background: #1e293b; 
+      border-radius: 20px; padding: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); 
     }
-    
     header { text-align: center; margin-bottom: 16px; }
     header h1 { font-size: 22px; color: #38bdf8; margin: 0; }
 
     .install-bar {
-      display: none;
-      background: #132238;
-      border: 1px solid #0284c7;
-      padding: 10px 14px;
-      border-radius: 12px;
-      margin-bottom: 15px;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
+      display: none; background: #132238; border: 1px solid #0284c7;
+      padding: 10px 14px; border-radius: 12px; margin-bottom: 15px;
+      align-items: center; justify-content: space-between; gap: 8px;
     }
     .install-bar span { font-size: 12.5px; color: #e2e8f0; font-weight: 600; }
     .btn-install {
-      background: #0284c7;
-      color: #fff;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.2s;
+      background: #0284c7; color: #fff; border: none; padding: 6px 12px;
+      border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer;
     }
-    .btn-install:hover { background: #0369a1; }
 
     .status-alert { 
-      padding: 8px 12px; 
-      border-radius: 8px; 
-      margin-bottom: 15px; 
-      font-size: 12px; 
-      text-align: center;
-      transition: all 0.3s ease;
+      padding: 8px 12px; border-radius: 8px; margin-bottom: 15px; 
+      font-size: 12px; text-align: center; transition: all 0.3s ease;
     }
     .status-ok { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid #22c55e; }
     .status-wait { background: rgba(234, 179, 8, 0.15); color: #facc15; border: 1px solid #eab308; }
 
     .tabs-wrapper {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
-      background: #0f172a;
-      padding: 4px;
-      border-radius: 12px;
-      margin-bottom: 15px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+      background: #0f172a; padding: 4px; border-radius: 12px; margin-bottom: 15px;
       border: 1px solid #334155;
     }
     .tab-btn {
-      padding: 9px;
-      background: transparent;
-      border: none;
-      color: #94a3b8;
-      font-size: 13px;
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.2s;
+      padding: 9px; background: transparent; border: none; color: #94a3b8;
+      font-size: 13px; font-weight: bold; border-radius: 8px; cursor: pointer;
     }
-    .tab-btn.active {
-      background: #0284c7;
-      color: #ffffff;
-      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.4);
-    }
+    .tab-btn.active { background: #0284c7; color: #fff; }
 
     .route-search-card {
-      background: #0f172a;
-      border: 1px solid #334155;
-      border-radius: 14px;
-      padding: 14px;
-      margin-bottom: 16px;
+      background: #0f172a; border: 1px solid #334155; border-radius: 14px;
+      padding: 14px; margin-bottom: 16px;
     }
-    .route-inputs-wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .field-label-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 5px;
-    }
-    .field-label-row label {
-      font-size: 12.5px;
-      color: #cbd5e1;
-      font-weight: 600;
-    }
+    .route-inputs-wrapper { display: flex; flex-direction: column; gap: 6px; }
+    .field-label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+    .field-label-row label { font-size: 12.5px; color: #cbd5e1; font-weight: 600; }
 
     .btn-gps-locate {
-      background: rgba(56, 189, 248, 0.12);
-      border: 1px solid #0284c7;
-      color: #38bdf8;
-      font-size: 11px;
-      cursor: pointer;
-      font-weight: bold;
-      padding: 3px 8px;
-      border-radius: 6px;
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-      transition: 0.2s;
+      background: rgba(56, 189, 248, 0.12); border: 1px solid #0284c7; color: #38bdf8;
+      font-size: 11px; cursor: pointer; font-weight: bold; padding: 3px 8px; border-radius: 6px;
     }
-    .btn-gps-locate:hover { background: #0284c7; color: #fff; }
 
-    .combo-wrapper {
-      position: relative;
-      width: 100%;
-    }
+    .combo-wrapper { position: relative; width: 100%; }
     .combo-input {
-      width: 100%;
-      padding: 12px 14px;
-      background: #0b1120;
-      border: 1.5px solid #334155;
-      border-radius: 10px;
-      color: #fff;
-      font-size: 13.5px;
-      outline: none;
-      cursor: text;
-      transition: all 0.2s;
+      width: 100%; padding: 12px 14px; background: #0b1120; border: 1.5px solid #334155;
+      border-radius: 10px; color: #fff; font-size: 13.5px; outline: none;
     }
-    .combo-input:focus {
-      border-color: #38bdf8;
-      box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
-    }
+    .combo-input:focus { border-color: #38bdf8; }
     .combo-dropdown {
-      position: absolute;
-      top: calc(100% + 4px);
-      left: 0;
-      right: 0;
-      background: #131d2e;
-      border: 1px solid #334155;
-      border-radius: 10px;
-      max-height: 220px;
-      overflow-y: auto;
-      z-index: 999;
-      display: none;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.7);
+      position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: #131d2e;
+      border: 1px solid #334155; border-radius: 10px; max-height: 220px; overflow-y: auto;
+      z-index: 999; display: none; box-shadow: 0 10px 25px rgba(0,0,0,0.7);
     }
     .combo-item {
-      padding: 10px 14px;
-      font-size: 13px;
-      color: #f1f5f9;
-      cursor: pointer;
+      padding: 10px 14px; font-size: 13px; color: #f1f5f9; cursor: pointer;
       border-bottom: 1px solid rgba(255,255,255,0.04);
-      transition: background 0.15s;
     }
-    .combo-item:last-child { border: none; }
-    .combo-item:hover, .combo-item.selected {
-      background: #0284c7;
-      color: #ffffff;
-    }
+    .combo-item:hover { background: #0284c7; color: #fff; }
 
     .train-type-pill {
-      display: inline-block;
-      background: rgba(168, 85, 247, 0.2);
-      color: #c084fc;
-      border: 1px solid rgba(168, 85, 247, 0.45);
-      padding: 2px 7px;
-      border-radius: 6px;
-      font-size: 10.5px;
-      font-weight: bold;
-      white-space: nowrap;
+      display: inline-block; background: rgba(168, 85, 247, 0.2); color: #c084fc;
+      border: 1px solid rgba(168, 85, 247, 0.45); padding: 2px 7px; border-radius: 6px;
+      font-size: 10.5px; font-weight: bold;
     }
 
-    .swap-btn-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin: 4px 0;
-    }
+    .swap-btn-container { display: flex; justify-content: center; align-items: center; margin: 4px 0; }
     .btn-swap-arrows {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      background: #1e293b;
-      border: 1px solid #38bdf8;
-      color: #38bdf8;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-      transition: all 0.2s ease;
+      width: 38px; height: 38px; border-radius: 50%; background: #1e293b;
+      border: 1px solid #38bdf8; color: #38bdf8; display: flex; align-items: center;
+      justify-content: center; cursor: pointer; transition: 0.2s;
     }
-    .btn-swap-arrows:hover {
-      background: #0284c7;
-      color: #ffffff;
-      transform: scale(1.1);
-    }
+    .btn-swap-arrows:hover { background: #0284c7; color: #fff; }
 
-    .trains-results-container {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
+    .trains-results-container { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
     .available-train-card {
-      background: #132238;
-      border: 1px solid #334155;
-      border-radius: 12px;
-      padding: 12px 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      transition: border-color 0.2s;
+      background: #132238; border: 1px solid #334155; border-radius: 12px;
+      padding: 12px 14px; display: flex; flex-direction: column; gap: 8px;
     }
-    .available-train-card.departed-card {
-      opacity: 0.72;
-      border-color: #475569;
-      background: #0c1524;
-    }
-    .available-train-card.first-train {
-      border: 1.5px solid #0284c7;
-      box-shadow: 0 4px 15px rgba(2, 132, 199, 0.2);
-    }
-    .card-top-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-    }
-    .card-train-identity {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-    .card-train-num {
-      font-size: 15px;
-      font-weight: 900;
-      color: #facc15;
-    }
-    .card-train-name {
-      font-size: 12.5px;
-      color: #f1f5f9;
-      font-weight: 600;
-    }
+    .available-train-card.departed-card { opacity: 0.72; border-color: #475569; background: #0c1524; }
+    .available-train-card.first-train { border: 1.5px solid #0284c7; box-shadow: 0 4px 15px rgba(2, 132, 199, 0.2); }
+    .card-top-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+    .card-train-identity { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .card-train-num { font-size: 15px; font-weight: 900; color: #facc15; }
+    .card-train-name { font-size: 12.5px; color: #f1f5f9; font-weight: 600; }
+    
     .btn-track-small {
-      background: #0284c7;
-      color: white;
-      border: none;
-      padding: 6px 14px;
-      border-radius: 6px;
-      font-weight: bold;
-      font-size: 12px;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: 0.2s;
+      background: #0284c7; color: white; border: none; padding: 6px 14px;
+      border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer;
     }
-    .btn-track-small:hover { background: #0369a1; }
 
     .card-middle-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 12px;
-      background: #0f172a;
-      padding: 6px 10px;
-      border-radius: 6px;
-      gap: 6px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 12px; background: #0f172a; padding: 6px 10px; border-radius: 6px; gap: 6px;
     }
-    .card-time-remaining {
-      font-weight: bold;
-      color: #4ade80;
-    }
-    .card-time-departed {
-      font-weight: bold;
-      color: #f87171;
-    }
-    .card-time-sched {
-      color: #cbd5e1;
-    }
-
-    .card-bottom-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 11.5px;
-      color: #94a3b8;
-      flex-wrap: wrap;
-      gap: 4px;
-    }
+    .card-time-remaining { font-weight: bold; color: #4ade80; }
+    .card-time-departed { font-weight: bold; color: #f87171; }
+    .card-time-sched { color: #cbd5e1; }
+    .card-bottom-row { display: flex; justify-content: space-between; align-items: center; font-size: 11.5px; color: #94a3b8; flex-wrap: wrap; gap: 4px; }
 
     .selector-box { margin-bottom: 15px; }
     .selector-box label { display: block; font-size: 13px; margin-bottom: 6px; color: #cbd5e1; font-weight: 600; }
 
     .role-card {
-      background: #0f172a;
-      border: 1px solid #3b82f6;
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 18px;
+      background: #0f172a; border: 1px solid #3b82f6; border-radius: 12px;
+      padding: 12px; margin-bottom: 18px;
     }
     .role-title { font-size: 13px; color: #93c5fd; font-weight: bold; margin-bottom: 8px; text-align: center; }
     .role-buttons { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
     .role-btn {
-      padding: 8px 4px;
-      background: #1e293b;
-      border: 1px solid #334155;
-      color: #cbd5e1;
-      border-radius: 8px;
-      font-size: 11px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: 0.2s;
+      padding: 8px 4px; background: #1e293b; border: 1px solid #334155; color: #cbd5e1;
+      border-radius: 8px; font-size: 11px; cursor: pointer; font-weight: 600;
     }
-    .role-btn.active {
-      background: #0284c7;
-      border-color: #38bdf8;
-      color: white;
-    }
+    .role-btn.active { background: #0284c7; border-color: #38bdf8; color: white; }
 
     .crowd-panel {
-      background: #132238;
-      border: 1px dashed #38bdf8;
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 18px;
+      background: #132238; border: 1px dashed #38bdf8; border-radius: 12px;
+      padding: 12px; margin-bottom: 18px;
     }
     .crowd-title { font-size: 13px; color: #38bdf8; font-weight: bold; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
     .btn-update {
-      width: 100%;
-      padding: 10px;
-      margin-top: 6px;
-      border-radius: 8px;
-      border: none;
-      font-weight: bold;
-      font-size: 12px;
-      cursor: pointer;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 6px;
-      transition: opacity 0.2s;
+      width: 100%; padding: 10px; margin-top: 6px; border-radius: 8px; border: none;
+      font-weight: bold; font-size: 12px; cursor: pointer; display: flex;
+      justify-content: center; align-items: center; gap: 6px;
     }
-    .btn-update:hover { opacity: 0.9; }
     .btn-arrive { background: #ef4444; color: white; }
     .btn-depart { background: #eab308; color: #000; }
     .btn-caution { background: #b91c1c; color: #fecaca; border: 1px solid #f87171; }
 
     .train-info-badge { 
-      background: #0f172a; 
-      padding: 12px; 
-      border-radius: 12px; 
-      border-right: 4px solid #38bdf8; 
-      margin-bottom: 15px; 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center; 
+      background: #0f172a; padding: 12px; border-radius: 12px;
+      border-right: 4px solid #38bdf8; margin-bottom: 15px; 
+      display: flex; justify-content: space-between; align-items: center; 
     }
-    .train-title-row {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 3px;
-    }
+    .train-title-row { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
     .status-badge { font-size: 11px; padding: 5px 8px; border-radius: 20px; font-weight: bold; }
     .status-moving { background: rgba(234, 179, 8, 0.2); color: #facc15; }
     .status-stopped { background: rgba(239, 68, 68, 0.2); color: #f87171; }
@@ -407,132 +176,51 @@
       background: #334155; border: 3px solid #1e293b;
       position: relative; z-index: 2; transition: all 0.3s ease;
     }
-    
     .big-dot.stopped-here {
-      background: #ef4444 !important;
-      border-color: #fca5a5;
-      box-shadow: 0 0 16px 5px rgba(239, 68, 68, 0.85);
-      transform: scale(1.25);
+      background: #ef4444 !important; border-color: #fca5a5;
+      box-shadow: 0 0 16px 5px rgba(239, 68, 68, 0.85); transform: scale(1.25);
     }
 
     .station-details { 
-      margin-right: 12px; 
-      flex-grow: 1; 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center; 
-      gap: 8px;
+      margin-right: 12px; flex-grow: 1; display: flex; 
+      justify-content: space-between; align-items: center; gap: 8px;
     }
-    .station-name { 
-      font-size: 14px; 
-      font-weight: 700; 
-      color: #f1f5f9; 
-      white-space: nowrap;
-    }
+    .station-name { font-size: 14px; font-weight: 700; color: #f1f5f9; white-space: nowrap; }
 
-    .times-box { 
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 3px;
-    }
-    
-    .time-sched-line {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-    
-    .time-sched {
-      font-size: 12px;
-      color: #94a3b8;
-    }
-    .time-sched b {
-      color: #f8fafc;
-    }
-
-    .time-act { 
-      font-weight: bold; 
-      color: #38bdf8; 
-      font-size: 11px;
-    }
+    .times-box { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+    .time-sched-line { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+    .time-sched { font-size: 12px; color: #94a3b8; }
+    .time-sched b { color: #f8fafc; }
+    .time-act { font-weight: bold; color: #38bdf8; font-size: 11px; }
 
     .delay-badge-red {
-      color: #ffffff !important;
-      background: #dc2626 !important;
-      border: 1px solid #ef4444 !important;
-      padding: 3px 8px !important;
-      border-radius: 6px !important;
-      font-weight: 800 !important;
-      font-size: 11px !important;
-      display: inline-flex !important;
-      align-items: center !important;
-      gap: 3px !important;
-      box-shadow: 0 0 12px rgba(239, 68, 68, 0.8) !important;
-      white-space: nowrap !important;
+      color: #fff !important; background: #dc2626 !important; border: 1px solid #ef4444 !important;
+      padding: 3px 8px !important; border-radius: 6px !important; font-weight: 800 !important;
+      font-size: 11px !important; white-space: nowrap !important;
     }
     .delay-badge-early {
-      color: #4ade80;
-      background: rgba(34, 197, 94, 0.15);
-      border: 1px solid #22c55e;
-      padding: 2px 7px;
-      border-radius: 6px;
-      font-weight: 700;
-      font-size: 11px;
-      white-space: nowrap;
+      color: #4ade80; background: rgba(34, 197, 94, 0.15); border: 1px solid #22c55e;
+      padding: 2px 7px; border-radius: 6px; font-weight: 700; font-size: 11px; white-space: nowrap;
     }
 
     .track-line {
-      width: 4px; height: 50px; background: #334155;
-      margin-right: 9px; position: relative;
-      display: flex; align-items: center; justify-content: center;
+      width: 4px; height: 50px; background: #334155; margin-right: 9px;
+      position: relative; display: flex; align-items: center; justify-content: center;
     }
-    
-    .small-dot {
-      width: 10px; height: 10px; border-radius: 50%;
-      background: #475569; position: absolute; right: -3px;
-    }
-    .small-dot.moving-here {
-      background: #facc15;
-      box-shadow: 0 0 14px 4px rgba(250, 204, 21, 0.9);
-      animation: pulse 0.8s infinite alternate;
-    }
-    .small-dot.stopped-between-here {
-      background: #ef4444;
-      width: 14px; height: 14px; right: -5px;
-      box-shadow: 0 0 14px 5px rgba(239, 68, 68, 0.95);
-      animation: blink 0.6s infinite alternate;
-    }
-
-    @keyframes pulse { 0% { transform: scale(1); opacity: 0.7; } 100% { transform: scale(1.6); opacity: 1; } }
-    @keyframes blink { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.4); opacity: 0.3; } }
+    .small-dot { width: 10px; height: 10px; border-radius: 50%; background: #475569; position: absolute; right: -3px; }
+    .small-dot.moving-here { background: #facc15; box-shadow: 0 0 14px 4px rgba(250, 204, 21, 0.9); }
+    .small-dot.stopped-between-here { background: #ef4444; width: 14px; height: 14px; right: -5px; box-shadow: 0 0 14px 5px rgba(239, 68, 68, 0.95); }
 
     .custom-modal-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(5, 9, 18, 0.82);
-      backdrop-filter: blur(6px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 100000;
-      padding: 16px;
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(5, 9, 18, 0.82); backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center; z-index: 100000; padding: 16px;
     }
     .custom-modal-card {
-      background: #131d2e;
-      border-radius: 20px;
-      width: 100%;
-      max-width: 380px;
-      padding: 24px 20px;
-      text-align: center;
-      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
+      background: #131d2e; border-radius: 20px; width: 100%; max-width: 380px;
+      padding: 24px 20px; text-align: center; box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
     }
-    .modal-icon-container {
-      width: 64px; height: 64px; border-radius: 50%;
-      margin: 0 auto 14px; display: flex; align-items: center; justify-content: center;
-    }
+    .modal-icon-container { width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 14px; display: flex; align-items: center; justify-content: center; }
     .modal-error { border: 1px solid rgba(239, 68, 68, 0.45); }
     .modal-error .modal-icon-container { background: rgba(239, 68, 68, 0.15); border: 2px solid #ef4444; }
     .modal-error .modal-title { color: #f87171; font-size: 17px; font-weight: 800; margin-bottom: 10px; }
@@ -768,8 +456,7 @@
       const period = hours >= 12 ? 'م' : 'ص';
       hours = hours % 12;
       if (hours === 0) hours = 12;
-      const hoursStr = String(hours).padStart(2, '0');
-      return `${hoursStr}:${minutes} ${period}`;
+      return `${String(hours).padStart(2, '0')}:${minutes} ${period}`;
     }
 
     function timeStringToMinutes(str) {
@@ -815,6 +502,16 @@
       return null;
     }
 
+    // التحقق الصريح مما إذا كان القطار قد حصل له أي تحديث حي فعلي من مشرف أو راكب
+    function hasLiveUpdate(train) {
+      if (!train || !train.status) return false;
+      if (train.status.state === 'NOT_STARTED') return false;
+      const hasAnyActual = train.stations.some(s => s.actual && s.actual !== '--');
+      const isLiveState = (train.status.state === 'MOVING' || train.status.state === 'STOPPED_BETWEEN' || train.status.departedAt);
+      const isUpdatedByHuman = train.status.updatedBy && !train.status.updatedBy.includes('جدول') && !train.status.updatedBy.includes('الأساسي');
+      return Boolean(hasAnyActual || isLiveState || isUpdatedByHuman);
+    }
+
     const cached = localStorage.getItem('local_trains_cache');
     if (cached) {
       try { 
@@ -826,7 +523,6 @@
     function autoResetIfNewTrip(trainId, stationIndex) {
       const train = trainsData[trainId];
       if (!train) return;
-
       if (stationIndex === 0) {
         let hasLaterActuals = train.stations.slice(1).some(s => s.actual && s.actual !== '--');
         if (hasLaterActuals) {
@@ -930,11 +626,10 @@
       const y = Math.sin(dLon) * Math.cos(lat2 * toRad);
       const x = Math.cos(lat1 * toRad) * Math.sin(lat2 * toRad) -
                 Math.sin(lat1 * toRad) * Math.cos(lat2 * toRad) * Math.cos(dLon);
-      let brng = Math.atan2(y, x) * 180 / Math.PI;
-      return (brng + 360) % 360;
+      return (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
     }
 
-    // المعادلة الهندسية الصارمة: حساب البعد العمودي عن شريط السكة (بالمتر) وموقع الراكب الطولي على مسار الرحلة
+    // حساب البعد العمودي عن شريط السكة الحديد وموضع الراكب الطولي t
     function getTrackMetrics(pLat, pLng, aLat, aLng, bLat, bLng) {
       const latMid = (aLat + bLat) / 2;
       const kx = 111.0 * Math.cos(latMid * Math.PI / 180);
@@ -949,25 +644,16 @@
       const segLenSq = dx * dx + dy * dy;
 
       if (segLenSq === 0) {
-        const dist = calculateDistanceKm(pLat, pLng, aLat, aLng);
-        return { t: 0, perpDistMeters: dist * 1000 };
+        return { t: 0, perpDistMeters: calculateDistanceKm(pLat, pLng, aLat, aLng) * 1000 };
       }
 
-      // النسبة الطولية t على الخط (0 عند القيام، 1 عند الوصول)
       const t = ((px - ax) * dx + (py - ay) * dy) / segLenSq;
-
-      // أقرب نقطة إسقاط على خط السكة الحديد
       const tClamped = Math.max(0, Math.min(1, t));
       const closestX = ax + tClamped * dx;
       const closestY = ay + tClamped * dy;
-
-      // المسافة العمودية الحقيقية عن شريط السكة بالمتر
       const perpDistMeters = Math.sqrt((px - closestX)**2 + (py - closestY)**2) * 1000;
 
-      return {
-        t: t,
-        perpDistMeters: perpDistMeters
-      };
+      return { t: t, perpDistMeters: perpDistMeters };
     }
 
     function normalizeStationName(name) {
@@ -1024,9 +710,7 @@
       };
 
       client.connect({
-        useSSL: true,
-        timeout: 5,
-        cleanSession: true,
+        useSSL: true, timeout: 5, cleanSession: true,
         onSuccess: () => {
           box.className = 'status-alert status-ok';
           box.textContent = "✅ متصل بالسيرفر السحابي مباشرة";
@@ -1153,11 +837,7 @@
           const text = typeof item === 'string' ? item : item.label;
           return normalizeStationName(text).toLowerCase() === normalizeStationName(input.value).toLowerCase();
         });
-        if (exact) {
-          onSelectCallback(exact);
-        } else {
-          onSelectCallback(null);
-        }
+        if (exact) onSelectCallback(exact);
       };
     }
 
@@ -1165,9 +845,7 @@
       document.querySelectorAll('.combo-dropdown').forEach(d => d.style.display = 'none');
     }
 
-    document.addEventListener('click', () => {
-      closeAllComboboxes();
-    });
+    document.addEventListener('click', () => { closeAllComboboxes(); });
 
     function getAllStationsList() {
       const stationMap = new Map();
@@ -1206,9 +884,7 @@
         } else {
           const raw = document.getElementById('directTrainInput').value.trim();
           let matched = Object.keys(trainsData).find(k => trainsData[k].number === raw || trainsData[k].number === normalizeTimeDigits(raw));
-          if (matched) {
-            loadSelectedTrain(matched);
-          }
+          if (matched) loadSelectedTrain(matched);
         }
       });
     }
@@ -1286,6 +962,7 @@
       );
     }
 
+    // البحث بالمسار: إذا لم يحصل أي تحديث للقطار، تختفي خانة موقعه تماماً
     function findClosestTrains() {
       const fromSt = document.getElementById('fromStationInput').value.trim();
       const toSt = document.getElementById('toStationInput').value.trim();
@@ -1312,8 +989,13 @@
         const toIdx = train.stations.findIndex(s => normalizeStationName(s.name) === normalizeStationName(toSt));
 
         if (fromIdx !== -1 && toIdx !== -1 && fromIdx < toIdx) {
-          const curTrainIdx = train.status.stationIndex;
-          const hasPassed = (curTrainIdx > fromIdx) || (curTrainIdx === fromIdx && (train.status.state === 'MOVING' || train.status.state === 'STOPPED_BETWEEN'));
+          const isLive = hasLiveUpdate(train);
+          let hasPassed = false;
+          
+          if (isLive) {
+            const curTrainIdx = train.status.stationIndex;
+            hasPassed = (curTrainIdx > fromIdx) || (curTrainIdx === fromIdx && (train.status.state === 'MOVING' || train.status.state === 'STOPPED_BETWEEN'));
+          }
 
           const depStation = train.stations[fromIdx];
           const arrStation = train.stations[toIdx];
@@ -1339,7 +1021,8 @@
               diffMins: diffMins,
               delay: delay,
               tripDuration: tripDuration,
-              hasPassed: hasPassed
+              hasPassed: hasPassed,
+              isLive: isLive
             });
           }
         }
@@ -1374,24 +1057,31 @@
         }
 
         let delayTag = '';
-        if (item.delay > 0) {
-          delayTag = `<span style="color:#ef4444; font-weight:bold;">⚠️ تأخير: +${formatDuration(item.delay)}</span>`;
-        } else if (item.delay < 0) {
-          delayTag = `<span style="color:#4ade80; font-weight:bold;">⚡ متقدم: ${formatDuration(Math.abs(item.delay))}</span>`;
+        if (item.isLive) {
+          if (item.delay > 0) {
+            delayTag = `<span style="color:#ef4444; font-weight:bold;">⚠️ تأخير: +${formatDuration(item.delay)}</span>`;
+          } else if (item.delay < 0) {
+            delayTag = `<span style="color:#4ade80; font-weight:bold;">⚡ متقدم: ${formatDuration(Math.abs(item.delay))}</span>`;
+          }
         }
 
-        const rawCur = item.train.stations[item.train.status.stationIndex]?.name || '';
-        const rawNext = item.train.stations[item.train.status.stationIndex + 1]?.name || '';
-        const cleanCur = rawCur.replace(/محطة/g, '').trim();
-        const cleanNext = rawNext.replace(/محطة/g, '').trim();
+        // إذا لم يبدأ التحديث الحي لا يُكتب أي شيء عن مكانه الحالي
+        let locationHtml = '';
+        if (item.isLive) {
+          const rawCur = item.train.stations[item.train.status.stationIndex]?.name || '';
+          const rawNext = item.train.stations[item.train.status.stationIndex + 1]?.name || '';
+          const cleanCur = rawCur.replace(/محطة/g, '').trim();
+          const cleanNext = rawNext.replace(/محطة/g, '').trim();
 
-        let stateText = '';
-        if (item.train.status.state === 'MOVING') {
-          stateText = `🚀 متحرك باتجاه ${cleanNext}`;
-        } else if (item.train.status.state === 'STOPPED_BETWEEN') {
-          stateText = `⚠️ متوقف بين ${cleanCur} و ${cleanNext}`;
-        } else {
-          stateText = `🛑 متوقف برصيف ${cleanCur}`;
+          let stateText = '';
+          if (item.train.status.state === 'MOVING') {
+            stateText = `🚀 متحرك باتجاه ${cleanNext}`;
+          } else if (item.train.status.state === 'STOPPED_BETWEEN') {
+            stateText = `⚠️ متوقف بين ${cleanCur} و ${cleanNext}`;
+          } else {
+            stateText = `🛑 متوقف برصيف ${cleanCur}`;
+          }
+          locationHtml = `<span>📍 ${stateText}</span>`;
         }
 
         const typeHtml = item.train.type ? `<span class="train-type-pill">${item.train.type}</span>` : '';
@@ -1412,7 +1102,7 @@
           </div>
 
           <div class="card-bottom-row">
-            <span>📍 ${stateText}</span>
+            ${locationHtml}
             ${delayTag ? `<span>${delayTag}</span>` : ''}
             ${item.tripDuration ? `<span>⏱️ مدة الرحلة: ${item.tripDuration}</span>` : ''}
           </div>
@@ -1464,23 +1154,33 @@
       document.getElementById('trainRouteName').textContent = train.name;
 
       const badge = document.getElementById('statusBadge');
-      const curIdx = train.status.stationIndex;
-      const curStation = (train.stations[curIdx]?.name || '').replace(/محطة/g, '').trim();
-      const nextStation = (train.stations[curIdx + 1]?.name || '').replace(/محطة/g, '').trim();
-
-      if (train.status.state === 'MOVING') {
-        badge.className = 'status-badge status-moving';
-        badge.textContent = `متحرك: ${curStation} ⟵ ${nextStation}`;
-      } else if (train.status.state === 'STOPPED_BETWEEN') {
-        badge.className = 'status-badge status-between';
-        badge.textContent = `⚠️ متوقف بين ${curStation} و ${nextStation}`;
-      } else {
-        badge.className = 'status-badge status-stopped';
-        badge.textContent = `متوقف برصيف ${curStation}`;
-      }
-
       const sourceBox = document.getElementById('updateSourceText');
-      sourceBox.textContent = train.status.updatedBy ? `📍 المصدر: ${train.status.updatedBy}` : "";
+
+      if (!hasLiveUpdate(train)) {
+        badge.className = 'status-badge';
+        badge.style.background = 'rgba(148, 163, 184, 0.15)';
+        badge.style.color = '#94a3b8';
+        badge.textContent = 'بانتظار بدء الرحلة';
+        sourceBox.textContent = "";
+      } else {
+        badge.style.background = '';
+        badge.style.color = '';
+        const curIdx = train.status.stationIndex;
+        const curStation = (train.stations[curIdx]?.name || '').replace(/محطة/g, '').trim();
+        const nextStation = (train.stations[curIdx + 1]?.name || '').replace(/محطة/g, '').trim();
+
+        if (train.status.state === 'MOVING') {
+          badge.className = 'status-badge status-moving';
+          badge.textContent = `متحرك: ${curStation} ⟵ ${nextStation}`;
+        } else if (train.status.state === 'STOPPED_BETWEEN') {
+          badge.className = 'status-badge status-between';
+          badge.textContent = `⚠️ متوقف بين ${curStation} و ${nextStation}`;
+        } else {
+          badge.className = 'status-badge status-stopped';
+          badge.textContent = `متوقف برصيف ${curStation}`;
+        }
+        sourceBox.textContent = train.status.updatedBy ? `📍 المصدر: ${train.status.updatedBy}` : "";
+      }
 
       renderMap(train);
       renderCrowdControls();
@@ -1500,14 +1200,35 @@
       panel.style.display = 'block';
       controls.innerHTML = '';
 
-      const currentIndex = train.status.stationIndex;
-      const currentStation = train.stations[currentIndex];
-      const nextStation = train.stations[currentIndex + 1];
-
-      const cleanCurrentName = (currentStation.name || '').replace(/محطة/g, '').trim();
-      const cleanNextName = nextStation ? (nextStation.name || '').replace(/محطة/g, '').trim() : '';
+      const isLive = hasLiveUpdate(train);
+      const firstSt = train.stations[0];
+      const secondSt = train.stations[1];
+      const cleanFirst = firstSt ? firstSt.name.replace(/محطة/g, '').trim() : '';
+      const cleanSecond = secondSt ? secondSt.name.replace(/محطة/g, '').trim() : '';
 
       if (currentUserRole === 'PASSENGER') {
+        // حالة عدم بدء الرحلة بعد: خيارات أول محطة
+        if (!isLive) {
+          controls.innerHTML = `
+            <p style="font-size:12px; margin-bottom:8px; color:#cbd5e1;">الرحلة لم تبدأ بعد. إذا كنت في <b>${cleanFirst}</b> الآن:</p>
+            <button class="btn-update btn-arrive" onclick="submitVerifiedMovement('${trainId}', 0, 'ARRIVE')">
+              🛑 القطار وصل رصيف ${cleanFirst} الآن
+            </button>
+            ${secondSt ? `
+            <button class="btn-update btn-depart" onclick="submitVerifiedMovement('${trainId}', 0, 'DEPART')">
+              🚀 تحركنا الآن باتجاه ${cleanSecond}
+            </button>` : ''}
+          `;
+          return;
+        }
+
+        const currentIndex = train.status.stationIndex;
+        const currentStation = train.stations[currentIndex];
+        const nextStation = train.stations[currentIndex + 1];
+
+        const cleanCurrentName = (currentStation.name || '').replace(/محطة/g, '').trim();
+        const cleanNextName = nextStation ? (nextStation.name || '').replace(/محطة/g, '').trim() : '';
+
         if (train.status.state === 'AT_STATION') {
           if (nextStation) {
             controls.innerHTML = `
@@ -1545,8 +1266,9 @@
 
       } else if (currentUserRole === 'WAITING') {
         let optionsHtml = '';
+        const startIndex = isLive ? train.status.stationIndex : 0;
         train.stations.forEach((st, idx) => {
-          if (idx >= currentIndex) {
+          if (idx >= startIndex) {
             optionsHtml += `<option value="${idx}">${st.name.replace(/محطة/g, '').trim()}</option>`;
           }
         });
@@ -1571,10 +1293,10 @@
       submitVerifiedMovement(trainId, selectedIdx, 'ARRIVE');
     }
 
-    // التحقق الجغرافي الصارم المانع للتحديث من المنازل أو المسافات البعيدة
+    // التحقق الجغرافي الصارم بالـ GPS (شاملاً المحطة الأولى ومسار الخروج منها)
     function submitVerifiedMovement(trainId, targetStationIndex, actionType) {
       const train = trainsData[trainId];
-      const curIdx = train.status.stationIndex;
+      const curIdx = hasLiveUpdate(train) ? train.status.stationIndex : 0;
       const curStation = train.stations[curIdx];
       const targetStation = train.stations[targetStationIndex];
 
@@ -1584,14 +1306,13 @@
       const now = new Date();
       const currentMins = now.getHours() * 60 + now.getMinutes();
 
-      // التحقق المنطقي من موعد القطار
       if (actionType === 'ARRIVE') {
-        if (targetStationIndex < curIdx) {
-          showCustomAlert('error', 'محطة سابقة', `القطار تجاوز (${cleanTarget}) بالفعل، لا يمكن التحديث للخلف.`);
+        if (hasLiveUpdate(train) && targetStationIndex < curIdx) {
+          showCustomAlert('error', 'محطة سابقة', `القطار تجاوز (${cleanTarget}) بالفعل.`);
           return;
         }
 
-        if (targetStationIndex === curIdx && train.status.state === 'AT_STATION') {
+        if (hasLiveUpdate(train) && targetStationIndex === curIdx && train.status.state === 'AT_STATION') {
           showCustomAlert('error', 'مسجل بالفعل', `القطار مسجل حالياً أنه متوقف برصيف (${cleanTarget}).`);
           return;
         }
@@ -1600,16 +1321,11 @@
         if (toSchedMins !== null) {
           let timeDiff = currentMins - toSchedMins;
           if (timeDiff < -720) timeDiff += 1440;
-          else if (timeDiff > 720) diff -= 1440;
+          else if (timeDiff > 720) timeDiff -= 1440;
 
           if (timeDiff < -30) {
             const earlyMins = Math.abs(timeDiff);
             showCustomAlert('error', 'محاولة تحديث مبكرة جداً', `متبقي أكثر من 30 دقيقة (${formatDuration(earlyMins)}) على موعد وصول (${cleanTarget}) المجدول [${targetStation.scheduled}].`);
-            return;
-          }
-
-          if (timeDiff > 120) {
-            showCustomAlert('error', 'تأخير كبير جداً', `القطار متأخر بأكثر من ساعتين عن موعده المجدول، يرجى اعتماد التحديث من المشرف.`);
             return;
           }
         }
@@ -1630,16 +1346,13 @@
           const userSpeed = position.coords.speed;
           const userHeading = position.coords.heading;
 
-          // رفض الإشارات الضعيفة غير الدقيقة
           if (accuracy > 350) {
             document.getElementById('gpsDistanceStatus').textContent = "❌ إشارة ضعيفة";
             showCustomAlert('error', 'إشارة موقع غير دقيقة', `دقة الـ GPS بهاتفك ضعيفة حالياً (${Math.round(accuracy)} متر)، يرجى الاقتراب من نافذة القطار.`);
             return;
           }
 
-          // -------------------------------------------------------------
-          // 1. فحص الوصول إلى رصيف المحطة (ARRIVE)
-          // -------------------------------------------------------------
+          // 1. فحص الوصول إلى رصيف المحطة (بما فيها المحطة الأولى)
           if (actionType === 'ARRIVE') {
             const stCoords = getStationCoordinates(targetStation.name);
             if (!stCoords) {
@@ -1650,7 +1363,7 @@
 
             const distanceKm = calculateDistanceKm(userLat, userLng, stCoords.lat, stCoords.lng);
             const distanceMeters = Math.round(distanceKm * 1000);
-            const MAX_ALLOWED_METERS = 350; // رصيف المحطة فقط
+            const MAX_ALLOWED_METERS = 400; // رصيف المحطة
 
             if (distanceMeters > MAX_ALLOWED_METERS) {
               document.getElementById('gpsDistanceStatus').textContent = "❌ تم الرفض";
@@ -1658,15 +1371,13 @@
               showCustomAlert(
                 'error',
                 'أنت بعيد عن رصيف المحطة',
-                `موقعك الحالي يبعد ${distKmFormatted} كم (${distanceMeters.toLocaleString('ar-EG')} متراً) عن (${cleanTarget}).\nيشترط التواجد الفعلي داخل رصيف المحطة (أقل من 350 متراً) لمنع التحديث من المنازل المحيطة.`
+                `موقعك الحالي يبعد ${distKmFormatted} كم (${distanceMeters.toLocaleString('ar-EG')} متراً) عن (${cleanTarget}).\nيشترط التواجد الفعلي داخل رصيف المحطة (أقل من 400 متر) لمنع التحديث من المنازل المحيطة.`
               );
               return;
             }
           }
 
-          // -------------------------------------------------------------
           // 2. فحص التحرك (DEPART) أو التوقف بين المحطتين (STOP_BETWEEN)
-          // -------------------------------------------------------------
           if (actionType === 'DEPART' || actionType === 'STOP_BETWEEN') {
             const fromSt = train.stations[curIdx];
             const toSt = train.stations[curIdx + 1];
@@ -1688,8 +1399,8 @@
             const cleanNextName = toSt.name.replace(/محطة/g, '').trim();
             const metrics = getTrackMetrics(userLat, userLng, c1.lat, c1.lng, c2.lat, c2.lng);
 
-            // أ) فحص البعد العمودي عن شريط السكة (كشف المنازل والكتل السكنية)
-            const MAX_PERP_METERS = 350; // أقصى مسافة عن قضبان السكة الحديد مباشرة
+            // أ) البعد العمودي عن شريط السكة (كشف الكتل السكنية والمنازل)
+            const MAX_PERP_METERS = 350;
             if (metrics.perpDistMeters > MAX_PERP_METERS) {
               document.getElementById('gpsDistanceStatus').textContent = "❌ في المنازل";
               const distMetersRounded = Math.round(metrics.perpDistMeters);
@@ -1701,33 +1412,30 @@
               return;
             }
 
-            // ب) فحص التحرك (DEPART): يلزم أن يكون الراكب قرب محطة القيام فعلياً
+            // ب) فحص التحرك (DEPART) من المحطة الحالية (سواء الأولى أو غيرها)
             if (actionType === 'DEPART') {
               const distFromDepartureStation = calculateDistanceKm(userLat, userLng, c1.lat, c1.lng) * 1000;
               
-              // لا يمكن تسجيل مغادرة قطار إلا وأنت داخل حرم المحطة أو غادرتها للتو (أقل من 1.8 كم)
-              if (distFromDepartureStation > 1800) {
+              if (distFromDepartureStation > 1500) {
                 document.getElementById('gpsDistanceStatus').textContent = "❌ بعيد عن القيام";
                 showCustomAlert(
                   'error',
                   'أنت بعيد عن محطة القيام',
-                  `أنت تبعد مسافة ${(distFromDepartureStation / 1000).toFixed(2)} كم عن محطة (${cleanCur}).\nلا يمكن تسجيل تحرك القطار إلا عند مغادرته الفعلية من حرم المحطة (أقل من 1.8 كم).`
+                  `أنت تبعد مسافة ${(distFromDepartureStation / 1000).toFixed(2)} كم عن محطة (${cleanCur}).\nلا يمكن تسجيل تحرك القطار إلا عند مغادرته الفعلية من حرم المحطة (أقل من 1.5 كم).`
                 );
                 return;
               }
 
-              // التحقق من اتجاه وزاوية الحركة (عدم السير للخلف)
               if (metrics.t < -0.01) {
                 document.getElementById('gpsDistanceStatus').textContent = "❌ خلف المحطة";
                 showCustomAlert(
                   'error',
                   'الاتجاه معاكس للرحلة',
-                  `موقعك الحالي خلف محطة (${cleanCur}) في الاتجاه المعاكس للمسار المتوجه إلى (${cleanNextName}).`
+                  `موقعك الحالي يقع خلف محطة (${cleanCur}) في الاتجاه المعاكس للمسار المتوجه إلى (${cleanNextName}).`
                 );
                 return;
               }
 
-              // فحص اتجاه البوصلة إذا كانت السرعة أكبر من 5 كم/س
               if (userHeading !== null && !isNaN(userHeading) && userHeading >= 0 && userSpeed !== null && userSpeed > 1.4) {
                 const expectedBearing = calculateBearing(c1.lat, c1.lng, c2.lat, c2.lng);
                 let angleDiff = Math.abs(userHeading - expectedBearing);
@@ -1745,14 +1453,13 @@
               }
             }
 
-            // ج) فحص التوقف بالسكة (STOP_BETWEEN): فحص الموضع الطولي بين المحطتين
+            // ج) فحص التوقف بين المحطتين (STOP_BETWEEN)
             if (actionType === 'STOP_BETWEEN') {
-              if (train.status.state === 'AT_STATION') {
+              if (hasLiveUpdate(train) && train.status.state === 'AT_STATION') {
                 showCustomAlert('error', 'القطار بالمحطة', 'القطار مسجل حالياً برصيف المحطة، يجب تسجيل المغادرة أولاً قبل تسجيل أي توقف بالسكة.');
                 return;
               }
 
-              // يجب أن يكون القطار في السكة طولياً بين 5% و 95% من مسافة الخط
               if (metrics.t < 0.05) {
                 document.getElementById('gpsDistanceStatus').textContent = "❌ داخل المحطة";
                 showCustomAlert('error', 'ما زلت بالمحطة', `أنت ما زلت داخل نطاق محطة (${cleanCur}) ولم يخرج القطار للسكة بين المحطتين بعد.`);
@@ -1782,7 +1489,6 @@
 
       const timeStr = formatCurrentTime();
       const train = trainsData[trainId];
-
       const cleanStation = (train.stations[stationIndex]?.name || '').replace(/محطة/g, '').trim();
 
       if (actionType === 'ARRIVE') {
@@ -1825,12 +1531,14 @@
       const map = document.getElementById('routeMap');
       map.innerHTML = '';
 
+      const isLive = hasLiveUpdate(train);
+
       train.stations.forEach((st, idx) => {
-        const isStoppedHere = (train.status.state === 'AT_STATION' && train.status.stationIndex === idx);
-        const delayVal = getStationDelay(st);
+        const isStoppedHere = isLive && (train.status.state === 'AT_STATION' && train.status.stationIndex === idx);
+        const delayVal = isLive ? getStationDelay(st) : null;
         const delayHtml = formatDelayBadge(delayVal);
         const scheduledText = st.scheduled ? st.scheduled : '--';
-        const actualText = (st.actual && st.actual !== '--') 
+        const actualText = (isLive && st.actual && st.actual !== '--') 
           ? `<div class="time-act">✅ وصل: ${st.actual}</div>` 
           : '';
 
@@ -1854,8 +1562,8 @@
         map.appendChild(row);
 
         if (idx < train.stations.length - 1) {
-          const isMovingHere = (train.status.state === 'MOVING' && train.status.stationIndex === idx);
-          const isStoppedBetweenHere = (train.status.state === 'STOPPED_BETWEEN' && train.status.stationIndex === idx);
+          const isMovingHere = isLive && (train.status.state === 'MOVING' && train.status.stationIndex === idx);
+          const isStoppedBetweenHere = isLive && (train.status.state === 'STOPPED_BETWEEN' && train.status.stationIndex === idx);
 
           let dotClass = '';
           if (isMovingHere) dotClass = 'moving-here';
