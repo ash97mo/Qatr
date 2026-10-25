@@ -8,6 +8,7 @@
   <!-- إعدادات تطبيق الهاتف PWA -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0b0f19">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="القطارات">
@@ -24,6 +25,7 @@
       padding: 16px; 
       display: flex; 
       justify-content: center; 
+      min-height: 100vh;
     }
     .app-container { 
       width: 100%; 
@@ -128,7 +130,6 @@
       font-weight: 600;
     }
 
-    /* زرار موقعي الأصلي */
     .btn-gps-locate {
       background: rgba(56, 189, 248, 0.12);
       border: 1px solid #0284c7;
@@ -145,7 +146,6 @@
     }
     .btn-gps-locate:hover { background: #0284c7; color: #fff; }
 
-    /* المستطيل المدمج الذكي */
     .combo-wrapper {
       position: relative;
       width: 100%;
@@ -194,7 +194,6 @@
       color: #ffffff;
     }
 
-    /* شارة نوع القطار */
     .train-type-pill {
       display: inline-block;
       background: rgba(168, 85, 247, 0.2);
@@ -207,7 +206,6 @@
       white-space: nowrap;
     }
 
-    /* زر التبديل ⇅ سهمين بالطول */
     .swap-btn-container {
       display: flex;
       justify-content: center;
@@ -233,11 +231,8 @@
       color: #ffffff;
       transform: scale(1.1);
     }
-    .btn-swap-arrows:active {
-      transform: scale(0.95);
-    }
 
-    /* قائمة كروت القطارات المتاحة الموحدة الحجم */
+    /* كروت القطارات في نتائج المسار */
     .trains-results-container {
       display: flex;
       flex-direction: column;
@@ -253,6 +248,11 @@
       flex-direction: column;
       gap: 8px;
       transition: border-color 0.2s;
+    }
+    .available-train-card.departed-card {
+      opacity: 0.72;
+      border-color: #475569;
+      background: #0c1524;
     }
     .available-train-card.first-train {
       border: 1.5px solid #0284c7;
@@ -308,6 +308,10 @@
       font-weight: bold;
       color: #4ade80;
     }
+    .card-time-departed {
+      font-weight: bold;
+      color: #f87171;
+    }
     .card-time-sched {
       color: #cbd5e1;
     }
@@ -324,24 +328,6 @@
 
     .selector-box { margin-bottom: 15px; }
     .selector-box label { display: block; font-size: 13px; margin-bottom: 6px; color: #cbd5e1; font-weight: 600; }
-
-    /* ضبط ألوان القوائم المنسدلة لمنع اللون الأبيض نهائياً */
-    select {
-      width: 100%;
-      padding: 11px 12px;
-      background: #0f172a !important;
-      border: 1px solid #334155 !important;
-      border-radius: 10px;
-      color: #f8fafc !important;
-      font-size: 13.5px;
-      outline: none;
-      cursor: pointer;
-    }
-    select option {
-      background: #0f172a !important;
-      color: #f8fafc !important;
-      padding: 8px;
-    }
 
     .role-card {
       background: #0f172a;
@@ -397,7 +383,6 @@
     .btn-depart { background: #eab308; color: #000; }
     .btn-caution { background: #b91c1c; color: #fecaca; border: 1px solid #f87171; }
 
-    /* بطاقة معلومات القطار الأصلية */
     .train-info-badge { 
       background: #0f172a; 
       padding: 12px; 
@@ -479,7 +464,6 @@
       font-size: 11px;
     }
 
-    /* شارات التأخير البارزة بالأحمر */
     .delay-badge-red {
       color: #ffffff !important;
       background: #dc2626 !important;
@@ -493,24 +477,6 @@
       gap: 3px !important;
       box-shadow: 0 0 12px rgba(239, 68, 68, 0.8) !important;
       white-space: nowrap !important;
-      animation: alertPulse 1.8s infinite;
-    }
-
-    @keyframes alertPulse {
-      0% { box-shadow: 0 0 4px rgba(239, 68, 68, 0.5); }
-      50% { box-shadow: 0 0 14px rgba(239, 68, 68, 0.95); }
-      100% { box-shadow: 0 0 4px rgba(239, 68, 68, 0.5); }
-    }
-
-    .delay-badge-ontime {
-      color: #38bdf8;
-      background: rgba(56, 189, 248, 0.15);
-      border: 1px solid #0284c7;
-      padding: 2px 7px;
-      border-radius: 6px;
-      font-weight: 700;
-      font-size: 11px;
-      white-space: nowrap;
     }
     .delay-badge-early {
       color: #4ade80;
@@ -533,13 +499,11 @@
       width: 10px; height: 10px; border-radius: 50%;
       background: #475569; position: absolute; right: -3px;
     }
-
     .small-dot.moving-here {
       background: #facc15;
       box-shadow: 0 0 14px 4px rgba(250, 204, 21, 0.9);
       animation: pulse 0.8s infinite alternate;
     }
-
     .small-dot.stopped-between-here {
       background: #ef4444;
       width: 14px; height: 14px; right: -5px;
@@ -547,33 +511,21 @@
       animation: blink 0.6s infinite alternate;
     }
 
-    @keyframes pulse {
-      0% { transform: scale(1); opacity: 0.7; }
-      100% { transform: scale(1.6); opacity: 1; }
-    }
+    @keyframes pulse { 0% { transform: scale(1); opacity: 0.7; } 100% { transform: scale(1.6); opacity: 1; } }
+    @keyframes blink { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.4); opacity: 0.3; } }
 
-    @keyframes blink {
-      0% { transform: scale(1); opacity: 1; }
-      100% { transform: scale(1.4); opacity: 0.3; }
-    }
-
-    /* نافذة المودال المخصصة */
+    /* المودال المخصص */
     .custom-modal-overlay {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
       background: rgba(5, 9, 18, 0.82);
       backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 100000;
       padding: 16px;
-      animation: modalFadeIn 0.2s ease-out;
     }
-
-    @keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
-
     .custom-modal-card {
       background: #131d2e;
       border-radius: 20px;
@@ -582,43 +534,21 @@
       padding: 24px 20px;
       text-align: center;
       box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
-      animation: modalPopUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      direction: rtl;
     }
-
-    @keyframes modalPopUp {
-      from { opacity: 0; transform: scale(0.9) translateY(12px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
-    }
-
     .modal-icon-container {
       width: 64px; height: 64px; border-radius: 50%;
       margin: 0 auto 14px; display: flex; align-items: center; justify-content: center;
     }
-
     .modal-error { border: 1px solid rgba(239, 68, 68, 0.45); }
-    .modal-error .modal-icon-container {
-      background: rgba(239, 68, 68, 0.15); border: 2px solid #ef4444;
-      box-shadow: 0 0 20px rgba(239, 68, 68, 0.45);
-    }
+    .modal-error .modal-icon-container { background: rgba(239, 68, 68, 0.15); border: 2px solid #ef4444; }
     .modal-error .modal-title { color: #f87171; font-size: 17px; font-weight: 800; margin-bottom: 10px; }
     .modal-error .modal-btn { background: #dc2626; color: #fff; }
-    .modal-error .modal-btn:hover { background: #b91c1c; }
-
     .modal-success { border: 1px solid rgba(34, 197, 94, 0.45); }
-    .modal-success .modal-icon-container {
-      background: rgba(34, 197, 94, 0.15); border: 2px solid #22c55e;
-      box-shadow: 0 0 20px rgba(34, 197, 94, 0.45);
-    }
+    .modal-success .modal-icon-container { background: rgba(34, 197, 94, 0.15); border: 2px solid #22c55e; }
     .modal-success .modal-title { color: #4ade80; font-size: 17px; font-weight: 800; margin-bottom: 10px; }
     .modal-success .modal-btn { background: #10b981; color: #fff; }
-    .modal-success .modal-btn:hover { background: #059669; }
-
-    .modal-message { font-size: 13.5px; line-height: 1.65; color: #cbd5e1; margin-bottom: 20px; white-space: pre-line; word-break: break-word; }
-    .modal-btn {
-      width: 100%; padding: 12px; border: none; border-radius: 10px;
-      font-weight: 700; font-size: 14px; cursor: pointer; transition: 0.2s; font-family: inherit;
-    }
+    .modal-message { font-size: 13.5px; line-height: 1.65; color: #cbd5e1; margin-bottom: 20px; white-space: pre-line; }
+    .modal-btn { width: 100%; padding: 12px; border: none; border-radius: 10px; font-weight: 700; font-size: 14px; cursor: pointer; }
   </style>
 </head>
 <body>
@@ -647,7 +577,7 @@
 
     <div id="connStatus" class="status-alert status-wait">⏳ جاري الاتصال بالسيرفر السحابي...</div>
 
-    <!-- أزرار التبديل بين البحث بالمسار أو برقم القطار المباشر -->
+    <!-- أزرار التبديل بين البحث بالمسار أو برقم القطار -->
     <div class="tabs-wrapper">
       <button class="tab-btn active" id="tabRouteBtn" onclick="switchSearchTab('ROUTE')">🔍 ابحث بالمسار</button>
       <button class="tab-btn" id="tabDirectBtn" onclick="switchSearchTab('DIRECT')">🚆 برقم القطار</button>
@@ -691,7 +621,7 @@
       </div>
     </div>
 
-    <!-- قائمة عرض القطارات المتاحة (موحدة الحجم ومرتبة حسب الوقت المجدول) -->
+    <!-- قائمة عرض القطارات المتاحة كاملة طوال اليوم -->
     <div id="closestResultContainer" class="trains-results-container" style="display: none;"></div>
 
     <!-- 2. صندوق اختيار أو كتابة رقم القطار المباشر -->
@@ -722,7 +652,7 @@
       <div id="crowdControls"></div>
     </div>
 
-    <!-- بطاقة معلومات القطار الأصلية مع شارة نوع القطار -->
+    <!-- بطاقة معلومات القطار المتابع حالياً -->
     <div class="train-info-badge" id="trainBadgeSection" style="display: none;">
       <div>
         <div class="train-title-row">
@@ -738,7 +668,7 @@
     <!-- خريطة وتتبع المسار المباشر -->
     <div class="route-map" id="routeMap">
       <div style="text-align: center; color: #64748b; padding: 30px 10px;">
-        👈 حدد محطتي المغادرة والوصول لمعرفة أقرب قطار قادم لك، أو اختر القطار لمتابعة مساره.
+        👈 حدد محطتي المغادرة والوصول لمعرفة مواعيد القطارات، أو اختر القطار لمتابعة مساره المباشر.
       </div>
     </div>
   </div>
@@ -756,12 +686,12 @@
     let deferredPrompt = null;
     let currentlyTrackedTrainId = null;
 
-    // تسجيل Service Worker
+    // تسجيل عامل الخدمة Service Worker
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js')
           .then(() => console.log('PWA Service Worker Registered!'))
-          .catch((err) => console.log('SW registration failed:', err));
+          .catch((err) => console.log('SW registration error:', err));
       });
     }
 
@@ -821,18 +751,12 @@
       document.getElementById('customModalOverlay').style.display = 'none';
     }
 
-    // دالة صياغة المدة المختصرة والواضحة (مثال: 25 د / 1 س و 15 د)
     function formatDuration(totalMins) {
       const mins = Math.abs(Math.round(totalMins));
       const h = Math.floor(mins / 60);
       const m = mins % 60;
-
-      if (h === 0) {
-        return `${m} د`;
-      }
-      if (m === 0) {
-        return `${h} س`;
-      }
+      if (h === 0) return `${m} د`;
+      if (m === 0) return `${h} س`;
       return `${h} س و ${m} د`;
     }
 
@@ -843,7 +767,7 @@
       } else if (delayVal < 0) {
         return `<span class="delay-badge-early">⚡ متقدم: ${formatDuration(Math.abs(delayVal))}</span>`;
       } else {
-        return `<span class="delay-badge-ontime">🟢 في الموعد</span>`;
+        return '';
       }
     }
 
@@ -868,7 +792,7 @@
     }
 
     function timeStringToMinutes(str) {
-      if (!str || str === '--' || str.includes('تجاوز')) return null;
+      if (!str || str === '--') return null;
       let clean = normalizeTimeDigits(str).trim();
       const isPM = clean.includes('م') || /pm/i.test(clean);
       const isAM = clean.includes('ص') || /am/i.test(clean);
@@ -1019,8 +943,16 @@
       return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
     }
 
+    // تنظيف وتوحيد أسماء المحطات لمنع التكرار
     function normalizeStationName(name) {
-      return name.replace(/محطة/g, '').replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/\s+/g, ' ').trim();
+      if (!name) return '';
+      return String(name)
+        .replace(/محطة/g, '')
+        .replace(/[أإآ]/g, 'ا')
+        .replace(/ة/g, 'ه')
+        .replace(/[\u200B-\u200D\uFEFF]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
     }
 
     function getStationCoordinates(name) {
@@ -1101,6 +1033,19 @@
       renderCrowdControls();
     }
 
+    // إغلاق وتصفير أي قطار مفتوح عند التبديل بين التبويبات
+    function resetTrackedTrainUI() {
+      currentlyTrackedTrainId = null;
+      document.getElementById('roleCardSection').style.display = 'none';
+      document.getElementById('trainBadgeSection').style.display = 'none';
+      document.getElementById('crowdActionPanel').style.display = 'none';
+      document.getElementById('routeMap').innerHTML = `
+        <div style="text-align: center; color: #64748b; padding: 30px 10px;">
+          👈 حدد محطتي المغادرة والوصول لمعرفة مواعيد القطارات، أو اختر القطار لمتابعة مساره المباشر.
+        </div>
+      `;
+    }
+
     function switchSearchTab(tab) {
       currentSearchTab = tab;
       const tabRouteBtn = document.getElementById('tabRouteBtn');
@@ -1108,6 +1053,9 @@
       const routeBox = document.getElementById('routeSearchSection');
       const directBox = document.getElementById('directTrainSection');
       const closestContainer = document.getElementById('closestResultContainer');
+
+      // تصفير القطار المفتوح نهائياً لمنع التداخل
+      resetTrackedTrainUI();
 
       if (tab === 'ROUTE') {
         tabRouteBtn.className = 'tab-btn active';
@@ -1124,7 +1072,6 @@
       }
     }
 
-    // تجهيز المستطيل المدمج الذكي - يفتح القائمة كاملة دائماً عند النقر دون الحاجة للمسح
     function setupCombobox(inputId, dropdownId, getItemsCallback, onSelectCallback) {
       const input = document.getElementById(inputId);
       const dropdown = document.getElementById(dropdownId);
@@ -1162,9 +1109,9 @@
 
       input.onfocus = () => {
         closeAllComboboxes();
-        renderItems('', true); // إظهار كل الاختيارات مباشرة بمجرد الضغط دون الحاجة لمسح القديم
+        renderItems('', true);
         dropdown.style.display = 'block';
-        input.select(); // تحديد النص لسهولة الكتابة فوقه إن أراد
+        input.select();
       };
 
       input.onclick = (e) => {
@@ -1198,12 +1145,19 @@
       closeAllComboboxes();
     });
 
+    // جلب قائمة محطات فريدة وموحدة بدون أي تكرار
     function getAllStationsList() {
-      const stationSet = new Set();
+      const stationMap = new Map();
       Object.keys(trainsData).forEach(id => {
-        trainsData[id].stations.forEach(st => stationSet.add(st.name));
+        trainsData[id].stations.forEach(st => {
+          const trimmed = st.name.trim();
+          const norm = normalizeStationName(trimmed);
+          if (norm && !stationMap.has(norm)) {
+            stationMap.set(norm, trimmed);
+          }
+        });
       });
-      return Array.from(stationSet).sort((a,b) => a.localeCompare(b, 'ar'));
+      return Array.from(stationMap.values()).sort((a,b) => a.localeCompare(b, 'ar'));
     }
 
     function getAllTrainsList() {
@@ -1215,11 +1169,11 @@
     }
 
     function initAllComboboxes() {
-      setupCombobox('fromStationInput', 'fromStationDropdown', getAllStationsList, (selected) => {
+      setupCombobox('fromStationInput', 'fromStationDropdown', getAllStationsList, () => {
         findClosestTrains();
       });
 
-      setupCombobox('toStationInput', 'toStationDropdown', getAllStationsList, (selected) => {
+      setupCombobox('toStationInput', 'toStationDropdown', getAllStationsList, () => {
         findClosestTrains();
       });
 
@@ -1236,7 +1190,6 @@
       });
     }
 
-    // زر التبديل السريع: سهمين بالطول
     function swapStations() {
       const fromInput = document.getElementById('fromStationInput');
       const toInput = document.getElementById('toStationInput');
@@ -1246,7 +1199,6 @@
       findClosestTrains();
     }
 
-    // دالة تحديد أقرب محطة عبر الـ GPS (تصلح لكل من البحث ولوحة منتظر بالمحطة)
     function locateNearestStation(targetInputId = 'fromStationInput') {
       if (!navigator.geolocation) {
         showCustomAlert('error', 'الـ GPS غير مدعوم', 'هاتفك أو متصفحك لا يدعم تحديد الموقع.');
@@ -1275,7 +1227,6 @@
 
           if (nearestName) {
             if (targetInputId === 'waitingStationSelect') {
-              // تحديد المحطة في قائمة منتظر بالمحطة
               const select = document.getElementById('waitingStationSelect');
               if (select) {
                 let found = false;
@@ -1295,7 +1246,6 @@
                 }
               }
             } else {
-              // تحديد محطة القيام في البحث بالمسار
               const fromInput = document.getElementById('fromStationInput');
               fromInput.value = nearestName;
 
@@ -1306,14 +1256,14 @@
             }
           }
         },
-        (err) => {
+        () => {
           showCustomAlert('error', 'إذن الموقع مطلوب', 'يرجى تفعيل إذن الـ GPS في المتصفح لتحديد محطتك تلقائياً.');
         },
         { enableHighAccuracy: true, timeout: 8000 }
       );
     }
 
-    // دالة البحث وحساب القطارات المتاحة (موحدة الحجم والتصميم ومرتبة تصاعدياً حسب الموعد المجدول)
+    // إظهار جميع قطارات اليوم على الخط وتوضيح حالة القطارات التي غادرت المحطة
     function findClosestTrains() {
       const fromSt = document.getElementById('fromStationInput').value.trim();
       const toSt = document.getElementById('toStationInput').value.trim();
@@ -1332,7 +1282,6 @@
 
       const now = new Date();
       const currentMins = now.getHours() * 60 + now.getMinutes();
-
       let availableList = [];
 
       Object.keys(trainsData).forEach(trainId => {
@@ -1340,58 +1289,51 @@
         const fromIdx = train.stations.findIndex(s => normalizeStationName(s.name) === normalizeStationName(fromSt));
         const toIdx = train.stations.findIndex(s => normalizeStationName(s.name) === normalizeStationName(toSt));
 
+        // التأكد من أن القطار يمر بالمحطتين وبالاتجاه المطلوب
         if (fromIdx !== -1 && toIdx !== -1 && fromIdx < toIdx) {
           const curTrainIdx = train.status.stationIndex;
+          
+          // تحديد ما إذا كان القطار قد غادر محطة القيام
           const hasPassed = (curTrainIdx > fromIdx) || (curTrainIdx === fromIdx && train.status.state === 'MOVING');
 
-          if (!hasPassed) {
-            const depStation = train.stations[fromIdx];
-            const arrStation = train.stations[toIdx];
-            const schedMins = timeStringToMinutes(depStation.scheduled);
+          const depStation = train.stations[fromIdx];
+          const arrStation = train.stations[toIdx];
+          const schedMins = timeStringToMinutes(depStation.scheduled);
 
-            if (schedMins !== null) {
-              // الحساب يعتمد مباشرة على التوقيت المجدول
-              let diffMins = schedMins - currentMins;
-              if (diffMins < -720) diffMins += 1440;
+          if (schedMins !== null) {
+            let diffMins = schedMins - currentMins;
+            const delay = depStation.delayMinutes || 0;
 
-              const delay = depStation.delayMinutes || 0;
-
-              let tripDuration = '';
-              const arrSched = timeStringToMinutes(arrStation.scheduled);
-              if (arrSched !== null && schedMins !== null) {
-                let durationMins = arrSched - schedMins;
-                if (durationMins < 0) durationMins += 1440;
-                tripDuration = formatDuration(durationMins);
-              }
-
-              if (diffMins >= -120) {
-                availableList.push({
-                  trainId: trainId,
-                  train: train,
-                  fromStation: depStation,
-                  schedMins: schedMins,
-                  diffMins: diffMins,
-                  delay: delay,
-                  tripDuration: tripDuration
-                });
-              }
+            let tripDuration = '';
+            const arrSched = timeStringToMinutes(arrStation.scheduled);
+            if (arrSched !== null) {
+              let durationMins = arrSched - schedMins;
+              if (durationMins < 0) durationMins += 1440;
+              tripDuration = formatDuration(durationMins);
             }
+
+            availableList.push({
+              trainId: trainId,
+              train: train,
+              fromStation: depStation,
+              schedMins: schedMins,
+              diffMins: diffMins,
+              delay: delay,
+              tripDuration: tripDuration,
+              hasPassed: hasPassed
+            });
           }
         }
       });
 
-      // ترتيب تصاعدي دقيق تحت بعض حسب الأقرب في الوقت المجدول
-      availableList.sort((a, b) => {
-        const aVal = a.diffMins >= 0 ? a.diffMins : (10000 + Math.abs(a.diffMins));
-        const bVal = b.diffMins >= 0 ? b.diffMins : (10000 + Math.abs(b.diffMins));
-        return aVal - bVal;
-      });
+      // ترتيب كل قطارات اليوم تصاعدياً حسب التوقيت المجدول
+      availableList.sort((a, b) => a.schedMins - b.schedMins);
 
       if (availableList.length === 0) {
         resultBox.style.display = 'block';
         resultBox.innerHTML = `
           <div style="background: rgba(234, 179, 8, 0.15); border: 1px dashed #eab308; color: #facc15; padding: 12px; border-radius: 10px; font-size: 12px; text-align: center;">
-            ⚠️ لا توجد قطارات متاحة حالياً متجهة من [${fromSt}] إلى [${toSt}]، تأكد من صحة أسماء المحطات أو أن رحلات اليوم انتهت.
+            ⚠️ لا توجد قطارات مسجلة بين [${fromSt}] و [${toSt}] حالياً.
           </div>`;
         return;
       }
@@ -1399,16 +1341,19 @@
       resultBox.style.display = 'flex';
       resultBox.innerHTML = '';
 
-      availableList.forEach((item, index) => {
-        const isFirst = (index === 0);
-        const card = document.createElement('div');
-        card.className = `available-train-card ${isFirst ? 'first-train' : ''}`;
+      // البحث عن أول قطار لم يغادر بعد لتمييزه
+      const firstUpcomingIndex = availableList.findIndex(t => !t.hasPassed && t.diffMins >= -15);
 
-        let countdownText = '';
-        if (item.diffMins >= 0) {
-          countdownText = `باقي ${formatDuration(item.diffMins)}`;
-        } else {
-          countdownText = `فات موعده منذ ${formatDuration(Math.abs(item.diffMins))}`;
+      availableList.forEach((item, index) => {
+        const isNextUpcoming = (index === firstUpcomingIndex);
+        const card = document.createElement('div');
+        card.className = `available-train-card ${item.hasPassed ? 'departed-card' : ''} ${isNextUpcoming ? 'first-train' : ''}`;
+
+        let countdownHtml = '';
+        if (item.hasPassed) {
+          countdownHtml = `<span class="card-time-departed">⚠️ غادر المحطة</span>`;
+        } else if (item.diffMins >= 0) {
+          countdownHtml = `<span class="card-time-remaining">باقي ${formatDuration(item.diffMins)}</span>`;
         }
 
         let delayTag = '';
@@ -1416,8 +1361,6 @@
           delayTag = `<span style="color:#ef4444; font-weight:bold;">⚠️ تأخير: +${formatDuration(item.delay)}</span>`;
         } else if (item.delay < 0) {
           delayTag = `<span style="color:#4ade80; font-weight:bold;">⚡ متقدم: ${formatDuration(Math.abs(item.delay))}</span>`;
-        } else {
-          delayTag = `<span style="color:#38bdf8;">🟢 في الموعد</span>`;
         }
 
         const currentStationName = item.train.stations[item.train.status.stationIndex]?.name || '';
@@ -1439,12 +1382,12 @@
 
           <div class="card-middle-row">
             <span class="card-time-sched">🕒 المجدول: <b>${item.fromStation.scheduled}</b></span>
-            <span class="card-time-remaining">${countdownText}</span>
+            ${countdownHtml}
           </div>
 
           <div class="card-bottom-row">
             <span>📍 ${stateText}</span>
-            <span>${delayTag}</span>
+            ${delayTag ? `<span>${delayTag}</span>` : ''}
             ${item.tripDuration ? `<span>⏱️ مدة الرحلة: ${item.tripDuration}</span>` : ''}
           </div>
         `;
@@ -1474,10 +1417,7 @@
       const routeMap = document.getElementById('routeMap');
 
       if (!trainId || !trainsData[trainId]) {
-        roleSec.style.display = 'none';
-        badgeSec.style.display = 'none';
-        crowdSec.style.display = 'none';
-        routeMap.innerHTML = '<div style="text-align: center; color: #64748b; padding: 30px 10px;">👈 يرجى اختيار قطار أو كتابة رقمه لمتابعة مساره المباشر.</div>';
+        resetTrackedTrainUI();
         return;
       }
 
@@ -1583,7 +1523,6 @@
           }
         });
 
-        // تم إضافة زر موقعي داخل لوحة الانتظار لضبط المحطة تلقائياً مع الحفاظ على التصميم الداكن
         controls.innerHTML = `
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
             <label style="font-size:12px; color:#cbd5e1; font-weight:600;">المحطة التي تنتظر على رصيفها:</label>
@@ -1604,7 +1543,6 @@
       submitVerifiedMovement(trainId, selectedIdx, 'ARRIVE');
     }
 
-    // التحقق المنطقي والجغرافي الكامل بـ (30 دقيقة للمبكر) والمسافة بـ (كم ومتر معاً)
     function submitVerifiedMovement(trainId, targetStationIndex, actionType) {
       const train = trainsData[trainId];
       const curIdx = train.status.stationIndex;
@@ -1614,7 +1552,6 @@
       const now = new Date();
       const currentMins = now.getHours() * 60 + now.getMinutes();
 
-      // 1. فحص الاتجاه: منع التحديث للخلف
       if (actionType === 'ARRIVE') {
         if (targetStationIndex < curIdx) {
           showCustomAlert('error', 'محطة سابقة', `القطار تجاوز محطة (${targetStation.name}) بالفعل، لا يمكن التحديث للخلف.`);
@@ -1626,12 +1563,11 @@
           return;
         }
 
-        // 2. التحقق من الوقت المجدول (شرط الـ 30 دقيقة للوصول المبكر)
         const toSchedMins = timeStringToMinutes(targetStation.scheduled);
         if (toSchedMins !== null) {
           let timeDiff = currentMins - toSchedMins;
           if (timeDiff < -720) timeDiff += 1440;
-          else if (timeDiff > 720) diff -= 1440;
+          else if (timeDiff > 720) timeDiff -= 1440;
 
           if (timeDiff < -30) {
             const earlyMins = Math.abs(timeDiff);
@@ -1645,7 +1581,6 @@
           }
         }
 
-        // 3. فحص واقعية سرعة القطار
         if (train.status.departedAt || (curStation.actual && curStation.actual !== '--')) {
           let elapsedMinutes = null;
 
@@ -1665,7 +1600,6 @@
           if (elapsedMinutes !== null && fromSchedMins !== null && toSchedMins !== null) {
             let scheduledTripDuration = toSchedMins - fromSchedMins;
             if (scheduledTripDuration < 0) scheduledTripDuration += 1440;
-
             const minRealisticMinutes = Math.max(2, scheduledTripDuration * 0.35);
 
             if (elapsedMinutes >= 0 && elapsedMinutes < minRealisticMinutes) {
@@ -1691,11 +1625,10 @@
 
           if (accuracy > 1500) {
             document.getElementById('gpsDistanceStatus').textContent = "❌ إشارة ضعيفة";
-            showCustomAlert('error', 'إشارة GPS ضعيفة', 'إشارة الموقع على هاتفك غير دقيقة حالياً، يرجى الاقتراب من نافذة القطار أو مكان مفتوح.');
+            showCustomAlert('error', 'إشارة GPS ضعيفة', 'إشارة الموقع على هاتفك غير دقيقة حالياً، يرجى الاقتراب من نافذة القطار.');
             return;
           }
 
-          // فحص مسافة الوصول (بالكيلو وبالمتر معاً)
           if (actionType === 'ARRIVE') {
             const stCoords = getStationCoordinates(targetStation.name);
             if (!stCoords) {
@@ -1723,7 +1656,6 @@
             }
           }
 
-          // فحص التحرك والمغادرة الذكي (على الرصيف أو على مسار السكة في الطريق)
           if (actionType === 'DEPART') {
             const fromCoords = getStationCoordinates(curStation.name);
             const toSt = train.stations[curIdx + 1];
@@ -1755,7 +1687,6 @@
             }
           }
 
-          // فحص التوقف الفجائي بين المحطات
           if (actionType === 'STOP_BETWEEN') {
             const fromSt = train.stations[train.status.stationIndex];
             const toSt = train.stations[train.status.stationIndex + 1];
@@ -1781,7 +1712,7 @@
 
           applyTrainUpdate(trainId, targetStationIndex, actionType);
         },
-        (error) => {
+        () => {
           document.getElementById('gpsDistanceStatus').textContent = "";
           showCustomAlert('error', 'إذن الموقع مطلوب', 'يرجى السماح بالوصول لموقعك الجغرافي (GPS) لتأكيد التحديث.');
         },
@@ -1835,10 +1766,8 @@
 
       train.stations.forEach((st, idx) => {
         const isStoppedHere = (train.status.state === 'AT_STATION' && train.status.stationIndex === idx);
-
         const delayVal = getStationDelay(st);
         const delayHtml = formatDelayBadge(delayVal);
-
         const scheduledText = st.scheduled ? st.scheduled : '--';
         const actualText = (st.actual && st.actual !== '--') 
           ? `<div class="time-act">✅ وصل: ${st.actual}</div>` 
