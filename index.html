@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>تتبع القطارات - تطبيق الراكب التشاركي</title>
   
-  <!-- إعدادات تطبيق الهاتف PWA -->
+  <!-- إعدادات تحويل الموقع إلى تطبيق هاتف PWA -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0b0f19">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -38,7 +38,7 @@
     header h1 { font-size: 21px; color: #38bdf8; margin-bottom: 4px; }
     header p { font-size: 13px; color: #94a3b8; }
 
-    /* شريط تثبيت التطبيق */
+    /* شريط دعوة تثبيت التطبيق على الشاشة الرئيسية */
     .install-bar {
       display: none;
       background: #132238;
@@ -60,7 +60,9 @@
       font-size: 12px;
       font-weight: bold;
       cursor: pointer;
+      transition: 0.2s;
     }
+    .btn-install:hover { background: #0369a1; }
 
     .status-alert { 
       padding: 8px 12px; 
@@ -141,6 +143,7 @@
     .btn-depart { background: #eab308; color: #000; }
     .btn-caution { background: #b91c1c; color: #fecaca; border: 1px solid #f87171; }
 
+    /* بطاقة معلومات القطار الأصلية */
     .train-info-badge { 
       background: #0f172a; 
       padding: 12px; 
@@ -216,6 +219,7 @@
       font-size: 11px;
     }
 
+    /* شارات التأخير البارزة بالأحمر */
     .delay-badge-red {
       color: #ffffff !important;
       background: #dc2626 !important;
@@ -384,7 +388,7 @@
     <div id="connStatus" class="status-alert status-wait">⏳ جاري الاتصال بالسيرفر السحابي...</div>
 
     <div class="selector-box">
-      <label>اختر رقم القطار:</label>
+      <label>اختر رقم القطار لمتابعته:</label>
       <select id="trainSelect" onchange="loadSelectedTrain()"></select>
     </div>
 
@@ -572,6 +576,7 @@
       } catch(e){}
     }
 
+    // تصفير تلقائي ذكي عند بداية رحلة جديدة للقطار
     function autoResetIfNewTrip(trainId, stationIndex) {
       const train = trainsData[trainId];
       if (!train) return;
@@ -892,6 +897,7 @@
       submitVerifiedMovement(trainId, selectedIdx, 'ARRIVE');
     }
 
+    // التحقق المنطقي والجغرافي الكامل بالمتر وبمسار السكة الحديد
     function submitVerifiedMovement(trainId, targetStationIndex, actionType) {
       const train = trainsData[trainId];
       const curIdx = train.status.stationIndex;
@@ -918,7 +924,7 @@
         if (toSchedMins !== null) {
           let timeDiff = currentMins - toSchedMins;
           if (timeDiff < -720) timeDiff += 1440;
-          else if (timeDiff > 720) diff -= 1440;
+          else if (timeDiff > 720) timeDiff -= 1440;
 
           if (timeDiff < -15) {
             showCustomAlert('error', 'محاولة تحديث مبكرة', `متبقي أكثر من 15 دقيقة على موعد وصول محطة (${targetStation.name}) المجدول [${targetStation.scheduled}]. لا يمكن تسجيل الوصول الآن.`);
@@ -975,12 +981,13 @@
           const userLng = position.coords.longitude;
           const accuracy = position.coords.accuracy || 100;
 
-          if (accuracy > 3000) {
+          if (accuracy > 1500) {
             document.getElementById('gpsDistanceStatus').textContent = "❌ إشارة ضعيفة";
-            showCustomAlert('error', 'إشارة GPS ضعيفة', 'إشارة الموقع على هاتفك غير دقيقة حالياً، يرجى تجربة مكان مفتوح.');
+            showCustomAlert('error', 'إشارة GPS ضعيفة', 'إشارة الموقع على هاتفك غير دقيقة حالياً، يرجى الاقتراب من نافذة القطار أو مكان مفتوح.');
             return;
           }
 
+          // فحص مسافة الوصول بالمتر بدقة (350م للمنتظر و450م للراكب)
           if (actionType === 'ARRIVE') {
             const stCoords = getStationCoordinates(targetStation.name);
             if (!stCoords) {
@@ -990,33 +997,47 @@
             }
 
             const distanceKm = calculateDistanceKm(userLat, userLng, stCoords.lat, stCoords.lng);
-            const MAX_ALLOWED_KM = 3.5;
+            const distanceMeters = Math.round(distanceKm * 1000);
+            const MAX_ALLOWED_METERS = (currentUserRole === 'WAITING') ? 350 : 450;
 
-            if (distanceKm > MAX_ALLOWED_KM) {
+            if (distanceMeters > MAX_ALLOWED_METERS) {
               document.getElementById('gpsDistanceStatus').textContent = "❌ تم الرفض";
-              showCustomAlert('error', 'الموقع بعيد عن المحطة', `أنت تبعد مسافة (${distanceKm.toFixed(1)} كم) عن محطة (${targetStation.name}). يجب أن تكون على رصيف المحطة.`);
+              const roleText = (currentUserRole === 'WAITING') ? 'الرصيف' : 'المحطة';
+              showCustomAlert('error', 'الموقع بعيد عن المحطة', `أنت تبعد مسافة (${distanceMeters} متراً) عن محطة (${targetStation.name}).\nيجب أن تكون على ${roleText} بالفعل لتأكيد الوصول (المسموح حتى ${MAX_ALLOWED_METERS} متر).`);
               return;
             }
           }
 
+          // فحص التحرك والمغادرة الذكي (سواء عند رصيف المحطة أو في منتصف الطريق)
           if (actionType === 'DEPART') {
             const fromCoords = getStationCoordinates(curStation.name);
-            if (!fromCoords) {
+            const toSt = train.stations[curIdx + 1];
+            const toCoords = toSt ? getStationCoordinates(toSt.name) : null;
+
+            if (!fromCoords || !toCoords) {
               document.getElementById('gpsDistanceStatus').textContent = "❌ غير مسجلة";
-              showCustomAlert('error', 'محطة غير مسجلة', `تعذر مطابقة إحداثيات محطة (${curStation.name}) في النظام.`);
+              showCustomAlert('error', 'محطة غير مسجلة', `تعذر مطابقة إحداثيات محطات المسار في النظام.`);
               return;
             }
 
-            const distanceKm = calculateDistanceKm(userLat, userLng, fromCoords.lat, fromCoords.lng);
-            const MAX_DEPART_KM = 6.0;
+            const dFrom = calculateDistanceKm(userLat, userLng, fromCoords.lat, fromCoords.lng);
+            const dTo = calculateDistanceKm(userLat, userLng, toCoords.lat, toCoords.lng);
+            const totalBetween = calculateDistanceKm(fromCoords.lat, fromCoords.lng, toCoords.lat, toCoords.lng);
 
-            if (distanceKm > MAX_DEPART_KM) {
-              document.getElementById('gpsDistanceStatus').textContent = "❌ تم الرفض";
-              showCustomAlert('error', 'الموقع بعيد عن المغادرة', `أنت تبعد (${distanceKm.toFixed(1)} كم) عن محطة المغادرة.`);
+            // الحالة الأولى: الراكب ما زال عند محطة المغادرة (أقل من 800 متر)
+            const isNearDeparture = (dFrom * 1000 <= 800);
+
+            // الحالة الثانية: القطار في منتصف الطريق على شريط السكة الحديد بين المحطتين
+            const isOnTrackBetween = (dFrom + dTo <= totalBetween + 4.0);
+
+            if (!isNearDeparture && !isOnTrackBetween) {
+              document.getElementById('gpsDistanceStatus').textContent = "❌ خارج المسار";
+              showCustomAlert('error', 'لست على مسار القطار', `أنت لا تتواجد بمحطة المغادرة (${curStation.name}) ولا على مسار السكة الحديد المتجه إلى (${toSt.name}).`);
               return;
             }
           }
 
+          // فحص التوقف الفجائي بين المحطات
           if (actionType === 'STOP_BETWEEN') {
             const fromSt = train.stations[train.status.stationIndex];
             const toSt = train.stations[train.status.stationIndex + 1];
@@ -1033,9 +1054,9 @@
             const d2 = calculateDistanceKm(userLat, userLng, c2.lat, c2.lng);
             const interDistance = calculateDistanceKm(c1.lat, c1.lng, c2.lat, c2.lng);
 
-            if (d1 + d2 > interDistance + 15) {
+            if (d1 + d2 > interDistance + 5.0) {
               document.getElementById('gpsDistanceStatus').textContent = "❌ بعيد عن المسار";
-              showCustomAlert('error', 'خارج مسار السكة الحديد', 'أنت تتواجد في مكان بعيد جداً عن خط سير القطار.');
+              showCustomAlert('error', 'خارج مسار السكة الحديد', 'أنت تتواجد في مكان بعيد عن خط سير القطار.');
               return;
             }
           }
