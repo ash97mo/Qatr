@@ -2,16 +2,20 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>تتبع القطارات - تطبيق الراكب التشاركي</title>
   
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0b0f19">
+  
+  <!-- إعدادات التوافق مع شاشات الآيفون (iOS Safari) -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="القطارات">
-  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="apple-touch-icon" href="icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="icon.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="icon.png">
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script>
 
@@ -21,6 +25,7 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
       background: #0b0f19; color: #f8fafc; padding: 16px; 
       display: flex; justify-content: center; min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
     .app-container { 
       width: 100%; max-width: 480px; background: #1e293b; 
@@ -38,6 +43,7 @@
     .btn-install {
       background: #0284c7; color: #fff; border: none; padding: 6px 12px;
       border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 4px;
     }
 
     .status-alert { 
@@ -229,7 +235,11 @@
     .modal-success .modal-icon-container { background: rgba(34, 197, 94, 0.15); border: 2px solid #22c55e; }
     .modal-success .modal-title { color: #4ade80; font-size: 17px; font-weight: 800; margin-bottom: 10px; }
     .modal-success .modal-btn { background: #10b981; color: #fff; }
-    .modal-message { font-size: 13.5px; line-height: 1.65; color: #cbd5e1; margin-bottom: 20px; white-space: pre-line; }
+    .modal-info { border: 1px solid rgba(56, 189, 248, 0.45); }
+    .modal-info .modal-icon-container { background: rgba(56, 189, 248, 0.15); border: 2px solid #38bdf8; }
+    .modal-info .modal-title { color: #38bdf8; font-size: 17px; font-weight: 800; margin-bottom: 10px; }
+    .modal-info .modal-btn { background: #0284c7; color: #fff; }
+    .modal-message { font-size: 13.5px; line-height: 1.65; color: #cbd5e1; margin-bottom: 20px; white-space: pre-line; text-align: right; }
     .modal-btn { width: 100%; padding: 12px; border: none; border-radius: 10px; font-weight: 700; font-size: 14px; cursor: pointer; }
   </style>
 </head>
@@ -249,9 +259,10 @@
       <h1>🚆 تتبع القطارات التشاركي</h1>
     </header>
 
+    <!-- شريط تثبيت متوافق مع أندرويد وآيفون -->
     <div id="installAppPrompt" class="install-bar">
-      <span>📲 ثبّت تطبيق القطارات على هاتفك</span>
-      <button class="btn-install" onclick="installPWA()">تثبيت الآن</button>
+      <span id="installBarText">📲 ثبّت تطبيق القطارات على هاتفك</span>
+      <button class="btn-install" id="installBarBtn" onclick="installPWA()">تثبيت الآن</button>
     </div>
 
     <div id="connStatus" class="status-alert status-wait">⏳ جاري الاتصال بالسيرفر السحابي...</div>
@@ -364,22 +375,46 @@
       });
     }
 
+    const isAppInstalled = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+    const installBar = document.getElementById('installAppPrompt');
+    const installBarBtn = document.getElementById('installBarBtn');
+    const installBarText = document.getElementById('installBarText');
+
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
-      const bar = document.getElementById('installAppPrompt');
-      if (bar) bar.style.display = 'flex';
+      if (installBar && !isAppInstalled) {
+        installBar.style.display = 'flex';
+      }
     });
+
+    if (isIOS && !isAppInstalled && installBar) {
+      installBar.style.display = 'flex';
+      installBarText.textContent = "📲 أضف التطبيق لشاشة الآيفون";
+      installBarBtn.textContent = "طريقة الإضافة ℹ️";
+    }
 
     function installPWA() {
       if (deferredPrompt) {
         deferredPrompt.prompt();
         deferredPrompt.userChoice.then((choiceResult) => {
           if (choiceResult.outcome === 'accepted') {
-            document.getElementById('installAppPrompt').style.display = 'none';
+            installBar.style.display = 'none';
           }
           deferredPrompt = null;
         });
+      } else if (isIOS) {
+        showCustomAlert(
+          'info',
+          'إضافة التطبيق للآيفون 📲',
+          'خطوات التثبيت السريعة:\n\n' +
+          '1️⃣ اضغط على زر المشاركة (Share) الموجود أسفل شاشة Safari.\n' +
+          '2️⃣ مرر القائمة للأسفل واختر "إضافة إلى الشاشة الرئيسية" (Add to Home Screen ➕).\n' +
+          '3️⃣ اضغط على كلمة "إضافة" (Add) في أعلى اليمين.\n\n' +
+          '✨ سيعمل التطبيق بملء الشاشة بدون شريط المتصفح وبشكل احترافي!'
+        );
       }
     }
 
@@ -391,7 +426,11 @@
       const msgEl = document.getElementById('modalMessage');
       const btnEl = document.getElementById('modalBtn');
 
-      card.className = 'custom-modal-card ' + (type === 'success' ? 'modal-success' : 'modal-error');
+      let modalTypeClass = 'modal-error';
+      if (type === 'success') modalTypeClass = 'modal-success';
+      if (type === 'info') modalTypeClass = 'modal-info';
+
+      card.className = 'custom-modal-card ' + modalTypeClass;
 
       if (type === 'success') {
         iconBox.innerHTML = `
@@ -401,6 +440,16 @@
         `;
         titleEl.textContent = title || "تم بنجاح";
         btnEl.textContent = "حسناً";
+      } else if (type === 'info') {
+        iconBox.innerHTML = `
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+        `;
+        titleEl.textContent = title || "معلومات";
+        btnEl.textContent = "فهمت الخطوات 👍";
       } else {
         iconBox.innerHTML = `
           <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
@@ -1041,12 +1090,9 @@
               }
             }
 
-            // حساب الترتيب بناءً على الوقت المجدول لمحطة القيام المختارة مقارنة بالوقت الحالي
             let diffFromNow = schedMins - currentMins;
             let sortKey = diffFromNow;
 
-            // إذا كان القطار قد مر موعده المجدول بأكثر من 10 دقائق أو سجل مغادرة حية
-            // يتم ترحيله لنهاية القائمة حتى تظهر القطارات القادمة في البداية أولاً
             if ((isLive && hasPassed) || sortKey < -10) {
               sortKey += 1440;
             }
@@ -1075,7 +1121,6 @@
         }
       });
 
-      // الترتيب: من الأقرب موعداً للمحطة المختارة بالنسبة للوقت الحالي
       availableList.sort((a, b) => a.sortKey - b.sortKey);
 
       if (availableList.length === 0) {
@@ -1091,7 +1136,6 @@
       resultBox.innerHTML = '';
 
       availableList.forEach((item, index) => {
-        // تمييز أول قطار قادم في الترتيب
         const isNextUpcoming = (index === 0 && !item.hasPassed);
         const card = document.createElement('div');
         card.className = `available-train-card ${item.hasPassed ? 'departed-card' : ''} ${isNextUpcoming ? 'first-train' : ''}`;
@@ -1113,7 +1157,9 @@
           }
         }
 
-        const timeSchedHtml = `🕒 المجدول: <b>${item.fromStation.scheduled}</b>`;
+        // هنا التعديل: كتابة اسم المحطة المختارة بدلاً من كلمة "المجدول"
+        const cleanFromStation = item.fromStation.name.replace(/محطة/g, '').trim();
+        const timeSchedHtml = `🕒 <b>${cleanFromStation}:</b> ${item.fromStation.scheduled}`;
 
         let delayTag = '';
         if (item.isLive) {
@@ -1605,7 +1651,7 @@
             <span class="station-name">${cleanName}</span>
             <div class="times-box">
               <div class="time-sched-line">
-                <span class="time-sched">مجدول: <b>${scheduledText}</b></span>
+                <span class="time-sched">الموعد: <b>${scheduledText}</b></span>
                 ${delayHtml}
               </div>
               ${actualText}
