@@ -8,7 +8,7 @@
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0b0f19">
   
-  <!-- إعدادات التوافق مع شاشات الآيفون (iOS Safari) -->
+  <!-- إعدادات التوافق مع شاشات الآيفون والأندرويد -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -129,9 +129,18 @@
       display: flex; justify-content: space-between; align-items: center;
       font-size: 12px; background: #0f172a; padding: 6px 10px; border-radius: 6px; gap: 6px;
     }
+    
+    /* اسم المحطة والوقت بلون أزرق مخفف هادئ وبدون أي مستطيلات */
+    .card-time-sched-soft {
+      display: flex; align-items: center; gap: 5px;
+      color: #7dd3fc; font-weight: 600; font-size: 12.5px;
+    }
+    .card-time-sched-soft b {
+      color: #7dd3fc; font-weight: 700;
+    }
+
     .card-time-remaining { font-weight: bold; color: #4ade80; }
     .card-time-departed { font-weight: bold; color: #f87171; }
-    .card-time-sched { color: #cbd5e1; }
     .card-bottom-row { display: flex; justify-content: space-between; align-items: center; font-size: 11.5px; color: #94a3b8; flex-wrap: wrap; gap: 4px; }
 
     .selector-box { margin-bottom: 15px; }
@@ -239,7 +248,7 @@
     .modal-info .modal-icon-container { background: rgba(56, 189, 248, 0.15); border: 2px solid #38bdf8; }
     .modal-info .modal-title { color: #38bdf8; font-size: 17px; font-weight: 800; margin-bottom: 10px; }
     .modal-info .modal-btn { background: #0284c7; color: #fff; }
-    .modal-message { font-size: 13.5px; line-height: 1.65; color: #cbd5e1; margin-bottom: 20px; white-space: pre-line; text-align: right; }
+    .modal-message { font-size: 13.5px; line-height: 1.65; color: #cbd5e1; margin-bottom: 20px; white-space: pre-line; text-align: center; }
     .modal-btn { width: 100%; padding: 12px; border: none; border-radius: 10px; font-weight: 700; font-size: 14px; cursor: pointer; }
   </style>
 </head>
@@ -975,71 +984,86 @@
       findClosestTrains();
     }
 
+    // تحديد الموقع وعرض أقرب محطة مباشرة دون أي رسالة خطأ أو X
     function locateNearestStation(targetInputId = 'fromStationInput') {
       if (!navigator.geolocation) {
-        showCustomAlert('error', 'الـ GPS غير مدعوم', 'هاتفك أو متصفحك لا يدعم تحديد الموقع.');
+        showCustomAlert('info', 'تنبيه', 'يرجى تشغيل الـ GPS لتحديد موقعك بدقة.');
         return;
       }
 
-      showCustomAlert('wait', 'جاري تحديد موقعك', '📡 نقوم بقياس موقعك وتحديد أقرب محطة إليك الآن...');
-
       navigator.geolocation.getCurrentPosition(
         (pos) => {
-          closeCustomModal();
           const userLat = pos.coords.latitude;
           const userLng = pos.coords.longitude;
 
           let nearestName = null;
           let minDistance = Infinity;
 
-          Object.keys(EGYPT_STATIONS_COORDS).forEach(stName => {
-            const coords = EGYPT_STATIONS_COORDS[stName];
-            const dist = calculateDistanceKm(userLat, userLng, coords.lat, coords.lng);
-            if (dist < minDistance) {
-              minDistance = dist;
-              nearestName = stName;
+          // في حالة صفحة منتظر بمحطة: نحدد أقرب محطة من محطات هذا القطار تحديداً
+          if (targetInputId === 'waitingStationSelect') {
+            const select = document.getElementById('waitingStationSelect');
+            const train = trainsData[currentlyTrackedTrainId];
+            if (select && train && train.stations) {
+              train.stations.forEach((st, idx) => {
+                const coords = getStationCoordinates(st.name);
+                if (coords) {
+                  const dist = calculateDistanceKm(userLat, userLng, coords.lat, coords.lng);
+                  if (dist < minDistance) {
+                    minDistance = dist;
+                    nearestName = st.name.replace(/محطة/g, '').trim();
+                    select.value = idx;
+                  }
+                }
+              });
             }
-          });
+          }
 
-          if (nearestName) {
+          // في حالة البحث بالمسار أو كخيار عام: البحث بين جميع محطات الجمهورية
+          if (!nearestName) {
+            Object.keys(EGYPT_STATIONS_COORDS).forEach(stName => {
+              const coords = EGYPT_STATIONS_COORDS[stName];
+              const dist = calculateDistanceKm(userLat, userLng, coords.lat, coords.lng);
+              if (dist < minDistance) {
+                minDistance = dist;
+                nearestName = stName;
+              }
+            });
+
             if (targetInputId === 'waitingStationSelect') {
               const select = document.getElementById('waitingStationSelect');
               if (select) {
-                let found = false;
                 for (let i = 0; i < select.options.length; i++) {
                   if (normalizeStationName(select.options[i].text).includes(normalizeStationName(nearestName))) {
                     select.selectedIndex = i;
-                    found = true;
                     break;
                   }
-                }
-                const distKm = (minDistance).toFixed(2);
-                const distMeters = Math.round(minDistance * 1000);
-                if (found) {
-                  showCustomAlert('success', 'تم تحديد موقعك', `تم اختيار (${nearestName}) على بُعد ${distKm} كم (${distMeters.toLocaleString('ar-EG')} متراً).`);
-                } else {
-                  showCustomAlert('error', 'خارج مسار القطار', `أنت بالقرب من (${nearestName}) ولكن هذا القطار لا يمر بها.`);
                 }
               }
             } else {
               const fromInput = document.getElementById('fromStationInput');
               fromInput.value = nearestName;
-
-              const distKm = (minDistance).toFixed(2);
-              const distMeters = Math.round(minDistance * 1000);
-              showCustomAlert('success', 'تم تحديد موقعك', `تم اختيار أقرب نقطة لك: (${nearestName}) على بُعد ${distKm} كم (${distMeters.toLocaleString('ar-EG')} متراً).`);
               findClosestTrains();
             }
           }
+
+          if (nearestName) {
+            const distKm = (minDistance).toFixed(1);
+            const distMeters = Math.round(minDistance * 1000);
+            showCustomAlert(
+              'success',
+              'تم تحديد موقعك بنجاح',
+              `أقرب محطة إليك هي (${nearestName})\nوتبعد عنك حوالي ${distKm} كم (${distMeters.toLocaleString('ar-EG')} متراً).`
+            );
+          }
         },
         () => {
-          showCustomAlert('error', 'إذن الموقع مطلوب', 'يرجى تفعيل إذن الـ GPS في المتصفح لتحديد موقعك تلقائياً.');
+          showCustomAlert('info', 'إذن الموقع', 'يرجى السماح بالوصول لموقعك بالـ GPS لتحديد المحطة تلقائياً.');
         },
-        { enableHighAccuracy: true, timeout: 8000 }
+        { enableHighAccuracy: true, timeout: 7000 }
       );
     }
 
-    // البحث بالمسار: الترتيب من الأقرب موعداً للمحطة المختارة بناءً على الوقت المجدول
+    // البحث بالمسار: الترتيب من الأقرب موعداً للمحطة المختارة بناءً على الوقت
     function findClosestTrains() {
       const fromSt = document.getElementById('fromStationInput').value.trim();
       const toSt = document.getElementById('toStationInput').value.trim();
@@ -1067,7 +1091,7 @@
 
         if (fromIdx !== -1 && toIdx !== -1 && fromIdx < toIdx) {
           const isLive = hasLiveUpdate(train);
-          const depStation = train.stations[fromIdx]; // المحطة المختارة (محطة القيام)
+          const depStation = train.stations[fromIdx];
           const arrStation = train.stations[toIdx];
           const schedMins = timeStringToMinutes(depStation.scheduled);
 
@@ -1157,9 +1181,15 @@
           }
         }
 
-        // هنا التعديل: كتابة اسم المحطة المختارة بدلاً من كلمة "المجدول"
+        // اسم المحطة والوقت بلون أزرق مخفف وبدون أي برواز أو مستطيل
         const cleanFromStation = item.fromStation.name.replace(/محطة/g, '').trim();
-        const timeSchedHtml = `🕒 <b>${cleanFromStation}:</b> ${item.fromStation.scheduled}`;
+        const timeSchedHtml = `
+          <div class="card-time-sched-soft">
+            <span>🕒</span>
+            <span>${cleanFromStation}:</span>
+            <b>${item.fromStation.scheduled}</b>
+          </div>
+        `;
 
         let delayTag = '';
         if (item.isLive) {
@@ -1203,7 +1233,7 @@
           </div>
 
           <div class="card-middle-row">
-            <span class="card-time-sched">${timeSchedHtml}</span>
+            ${timeSchedHtml}
             ${countdownHtml}
           </div>
 
