@@ -4168,5 +4168,52 @@ window.DEFAULT_TRAINS_DATA = {
         "actual": "--"
       }
     ]
+  },
+  "1131": {
+    "number": "1131",
+    "type": "روسي مكيف",
+    "name": "القاهرة - الإسكندرية",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "القاهرة",
+        "scheduled": "7:00 ص",
+        "actual": "--"
+      },
+      {
+        "name": "بنها",
+        "scheduled": "7:38 ص",
+        "actual": "--"
+      },
+      {
+        "name": "طنطا",
+        "scheduled": "8:10 ص",
+        "actual": "--"
+      },
+      {
+        "name": "إيتاي البارود",
+        "scheduled": "8:41 ص",
+        "actual": "--"
+      },
+      {
+        "name": "دمنهور",
+        "scheduled": "9:03 ص",
+        "actual": "--"
+      },
+      {
+        "name": "سيدي جابر",
+        "scheduled": "9:48 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الإسكندرية",
+        "scheduled": "9:55 ص",
+        "actual": "--"
+      }
+    ]
   }
 };
