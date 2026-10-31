@@ -2835,6 +2835,108 @@ window.DEFAULT_TRAINS_DATA = {
       }
     ]
   },
+  "1006": {
+    "number": "1006",
+    "type": "روسي",
+    "name": "القاهرة - نجع حمادي",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "القاهرة",
+        "scheduled": "6:00 ص",
+        "actual": "--"
+      },
+      {
+        "name": "صعيد مصر",
+        "scheduled": "6:14 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الجيزة",
+        "scheduled": "6:25 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الواسطى",
+        "scheduled": "7:23 ص",
+        "actual": "--"
+      },
+      {
+        "name": "بني سويف",
+        "scheduled": "7:48 ص",
+        "actual": "--"
+      },
+      {
+        "name": "بني مزار",
+        "scheduled": "8:40 ص",
+        "actual": "--"
+      },
+      {
+        "name": "المنيا",
+        "scheduled": "9:25 ص",
+        "actual": "--"
+      },
+      {
+        "name": "ديروط",
+        "scheduled": "10:18 ص",
+        "actual": "--"
+      },
+      {
+        "name": "القوصية",
+        "scheduled": "10:32 ص",
+        "actual": "--"
+      },
+      {
+        "name": "منفلوط",
+        "scheduled": "10:48 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أسيوط",
+        "scheduled": "11:35 ص",
+        "actual": "--"
+      },
+      {
+        "name": "طما",
+        "scheduled": "12:09 م",
+        "actual": "--"
+      },
+      {
+        "name": "طهطا",
+        "scheduled": "12:29 م",
+        "actual": "--"
+      },
+      {
+        "name": "المراغة",
+        "scheduled": "12:45 م",
+        "actual": "--"
+      },
+      {
+        "name": "سوهاج",
+        "scheduled": "1:15 م",
+        "actual": "--"
+      },
+      {
+        "name": "جرجا",
+        "scheduled": "1:39 م",
+        "actual": "--"
+      },
+      {
+        "name": "أبو تشت",
+        "scheduled": "2:12 م",
+        "actual": "--"
+      },
+      {
+        "name": "نجع حمادي",
+        "scheduled": "2:30 م",
+        "actual": "--"
+      }
+    ]
+  },
   "1010": {
     "number": "1010",
     "type": "روسي مكيف",
