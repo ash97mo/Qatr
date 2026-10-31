@@ -292,7 +292,7 @@
     </div>
   </div>
 
-  <!-- نافذة إعدادات المشرفين (Admins Settings) بالكامل باللغة الإنجليزية -->
+  <!-- نافذة إعدادات المشرفين (Admins Settings) -->
   <div id="adminMgmtModal" class="custom-modal-overlay" style="display: none;" onclick="if(event.target===this) closeAdminMgmtModal()">
     <div class="custom-modal-card" style="text-align: left; direction: ltr;">
       <h3 style="color: #38bdf8; margin-bottom: 14px; text-align: center; font-size: 17px;">👤 Admins Settings</h3>
@@ -321,7 +321,7 @@
     </div>
   </div>
 
-  <!-- نافذة إعدادات GitHub API للحفظ التلقائي مع زر فحص الاتصال -->
+  <!-- نافذة إعدادات GitHub API للحفظ التلقائي -->
   <div id="githubSettingsModal" class="custom-modal-overlay" style="display: none;" onclick="if(event.target===this) closeGithubModal()">
     <div class="custom-modal-card" style="text-align: left; direction: ltr;">
       <h3 style="color: #38bdf8; margin-bottom: 12px; text-align: center; font-size: 17px;">🐙 GitHub Settings</h3>
@@ -375,7 +375,6 @@
         <div id="currentAdminBadge" style="font-size: 12px; color: #94a3b8; margin-top: 3px;"></div>
       </div>
       <div class="header-actions">
-        <!-- زر الترس لفتح الإعدادات -->
         <button class="btn-gear-settings" onclick="openMainSettingsModal()" title="Settings">⚙️</button>
       </div>
     </div>
@@ -392,7 +391,6 @@
         <div class="combo-dropdown" id="directTrainDropdown"></div>
       </div>
 
-      <!-- أزرار الإجراءات للقطار المختار: تصفير - حذف - تعديل (كلمات فردية صغيرة) -->
       <div class="train-actions-bar" id="trainActionsRow" style="display: none;">
         <button id="btnResetTrain" class="btn btn-warning" onclick="resetCurrentTrain()" title="تصفير أوقات وتأخيرات القطار">🔄 تصفير</button>
         <button id="btnDeleteTrain" class="btn btn-danger" onclick="deleteCurrentTrain()" title="حذف القطار من قاعدة البيانات">🗑️ حذف</button>
@@ -678,43 +676,50 @@
       showCustomAlert('success', 'تم الحفظ', 'تم حفظ إعدادات جيت هب بنجاح.');
     }
 
-    // زر فحص الاتصال والتأكد من صحة الـ Token واسم المستودع والفرع
     async function testGitHubConnection() {
-      const repo = document.getElementById('ghRepoInput').value.trim();
-      const branch = document.getElementById('ghBranchInput').value.trim() || 'main';
-      const token = document.getElementById('ghTokenInput').value.trim();
+      let repo = (document.getElementById('ghRepoInput').value || '').trim().replace(/^https?:\/\/github\.com\//, '').replace(/\/$/, '');
+      let branch = (document.getElementById('ghBranchInput').value || '').trim() || 'main';
+      let token = (document.getElementById('ghTokenInput').value || '').trim();
 
       if (!repo || !token) {
-        alert("يرجى إدخال اسم المستودع والـ Token أولاً.");
+        alert("يرجى إدخال اسم المستودع والـ Token أولاً وبدون مسافات.");
         return;
       }
 
       try {
-        const res = await fetch(`https://api.github.com/repos/${repo}/branches/${branch}`, {
+        const authHeader = token.startsWith('ghp_') ? `token ${token}` : `Bearer ${token}`;
+        const res = await fetch(`https://api.github.com/repos/${repo}?_t=${Date.now()}`, {
+          method: 'GET',
+          cache: 'no-store',
           headers: {
-            "Authorization": `Bearer ${token}`,
+            "Authorization": authHeader,
             "Accept": "application/vnd.github.v3+json"
           }
         });
 
         if (res.ok) {
-          alert(`✅ الاتصال ناجح 100%!\nتم التعرف على المستودع (${repo}) والفرع (${branch})، ومفتاح الـ Token يعمل بشكل ممتاز.`);
+          alert(`✅ الاتصال ناجح 100%!\nتم التعرف على المستودع (${repo}) بنجاح والـ Token يعمل بشكل سليم.`);
         } else if (res.status === 401) {
-          alert(`❌ خطأ (401): الـ Token غير صحيح أو منتهي الصلاحية! يرجى إعادة نسخه والتأكد منه.`);
+          alert(`❌ خطأ (401): الـ Token غير صحيح أو منتهي الصلاحية!\nتأكد من نسخه بالكامل.`);
         } else if (res.status === 404) {
-          alert(`⚠️ خطأ (404): تعذر العثور على الفرع (${branch}) أو المستودع (${repo}).\nجرّب تغيير الفرع من main إلى master أو العكس.`);
+          alert(`⚠️ خطأ (404): تعذر الوصول للمستودع (${repo}). تأكد من كتابته بهذا الشكل: ash97mo/Qatr`);
         } else {
-          alert(`❌ استجابة جيت هب (${res.status}): ${await res.text()}`);
+          alert(`استجابة جيت هب (${res.status}): ${await res.text()}`);
         }
       } catch (err) {
-        alert(`❌ فشل الاتصال بالإنترنت أو بسيرفر جيت هب: ${err.message}`);
+        alert(`❌ فشل الاتصال (Failed to fetch):\nالمتصفح منع الاتصال. تأكد من إيقاف الـ AdBlock/VPN وافتح من Google Chrome.`);
       }
     }
 
-    // تحديث ملف trains_data.js مباشرة على GitHub عبر REST API المجاني مع معالجة كاملة للأخطاء
-    async function syncDatabaseToGitHub() {
+    // تحديث ملف trains_data.js على GitHub مع منع كاش الـ SHA وإعادة المحاولة التلقائية عند الخطأ 409
+    async function syncDatabaseToGitHub(retryCount = 0) {
       const config = getGithubConfig();
-      if (!config.repo || !config.token) {
+      const token = (config.token || '').trim();
+      const cleanRepo = (config.repo || '').trim().replace(/^https?:\/\/github\.com\//, '').replace(/\/$/, '');
+      const cleanPath = (config.path || 'trains_data.js').trim().replace(/^\//, '');
+      const cleanBranch = (config.branch || 'main').trim();
+
+      if (!cleanRepo || !token) {
         return { success: false, reason: "لم تقم بضبط الـ Token في إعدادات جيت هب (⚙️)." };
       }
 
@@ -727,17 +732,17 @@
         }
         const base64Content = btoa(binaryStr);
 
-        const cleanRepo = config.repo.trim().replace(/^https?:\/\/github\.com\//, '').replace(/\/$/, '');
-        const cleanPath = (config.path || 'trains_data.js').trim().replace(/^\//, '');
-        const cleanBranch = (config.branch || 'main').trim();
+        const authHeader = token.startsWith('ghp_') ? `token ${token}` : `Bearer ${token}`;
 
-        // 1. قراءة الـ SHA الحالية للملف
-        const getUrl = `https://api.github.com/repos/${cleanRepo}/contents/${cleanPath}?ref=${cleanBranch}`;
+        // 1. جلب SHA الأحدث كلياً مع كسر كاش المتصفح بإضافة التوقيت بالمللي ثانية
+        const getUrl = `https://api.github.com/repos/${cleanRepo}/contents/${cleanPath}?ref=${cleanBranch}&_nocache=${Date.now()}`;
         let sha = null;
 
         const getRes = await fetch(getUrl, {
+          method: 'GET',
+          cache: 'no-store',
           headers: {
-            "Authorization": `Bearer ${config.token}`,
+            "Authorization": authHeader,
             "Accept": "application/vnd.github.v3+json"
           }
         });
@@ -749,10 +754,10 @@
           sha = fileData.sha;
         }
 
-        // 2. إرسال المحتوى الجديد وحفظه على جيت هب
+        // 2. رفع التحديث إلى جيت هب
         const putUrl = `https://api.github.com/repos/${cleanRepo}/contents/${cleanPath}`;
         const putPayload = {
-          message: `تحديث جدول القطارات تلقائياً بواسطة الأدمن (${new Date().toLocaleTimeString('ar-EG')})`,
+          message: `Update trains database (${new Date().toLocaleTimeString('ar-EG')})`,
           content: base64Content,
           branch: cleanBranch
         };
@@ -763,7 +768,7 @@
         const putRes = await fetch(putUrl, {
           method: "PUT",
           headers: {
-            "Authorization": `Bearer ${config.token}`,
+            "Authorization": authHeader,
             "Accept": "application/vnd.github.v3+json",
             "Content-Type": "application/json"
           },
@@ -772,13 +777,17 @@
 
         if (putRes.ok) {
           return { success: true };
+        } else if (putRes.status === 409 && retryCount < 2) {
+          // إذا حدث تعارض 409 بسبب كاش قديم، نعيد المحاولة تلقائياً بعد نصف ثانية لجلب الـ SHA الجديد
+          await new Promise(r => setTimeout(r, 600));
+          return await syncDatabaseToGitHub(retryCount + 1);
         } else {
           const errData = await putRes.json().catch(() => ({}));
           const errMsg = errData.message || (await putRes.text());
-          return { success: false, reason: `كود جيت هب (${putRes.status}): ${errMsg}` };
+          return { success: false, reason: `جيت هب (${putRes.status}): ${errMsg}` };
         }
       } catch (err) {
-        return { success: false, reason: err.message };
+        return { success: false, reason: `تعذر الاتصال بـ GitHub API (${err.message})` };
       }
     }
 
