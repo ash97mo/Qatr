@@ -3972,5 +3972,47 @@ window.DEFAULT_TRAINS_DATA = {
         "actual": "--"
       }
     ]
+  },
+  "1111": {
+    "number": "1111",
+    "type": "روسي",
+    "name": "الفيوم - القاهرة",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "الفيوم",
+        "scheduled": "12:50 م",
+        "actual": "--"
+      },
+      {
+        "name": "الواسطى",
+        "scheduled": "1:28 م",
+        "actual": "--"
+      },
+      {
+        "name": "العياط",
+        "scheduled": "2:06 م",
+        "actual": "--"
+      },
+      {
+        "name": "الجيزة",
+        "scheduled": "2:50 م",
+        "actual": "--"
+      },
+      {
+        "name": "صعيد مصر",
+        "scheduled": "3:02 م",
+        "actual": "--"
+      },
+      {
+        "name": "القاهرة",
+        "scheduled": "3:15 م",
+        "actual": "--"
+      }
+    ]
   }
 };
