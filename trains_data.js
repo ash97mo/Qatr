@@ -3094,5 +3094,122 @@ window.DEFAULT_TRAINS_DATA = {
         "actual": "--"
       }
     ]
+  },
+  "1009": {
+    "number": "1009",
+    "type": "روسي مكيف",
+    "name": "أسوان - القاهرة",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "أسوان",
+        "scheduled": "7:20 م",
+        "actual": "--"
+      },
+      {
+        "name": "كوم أمبو",
+        "scheduled": "7:58 م",
+        "actual": "--"
+      },
+      {
+        "name": "كلابشة",
+        "scheduled": "8:16 م",
+        "actual": "--"
+      },
+      {
+        "name": "إدفو",
+        "scheduled": "8:52 م",
+        "actual": "--"
+      },
+      {
+        "name": "إسنا",
+        "scheduled": "9:36 م",
+        "actual": "--"
+      },
+      {
+        "name": "الأقصر",
+        "scheduled": "10:20 م",
+        "actual": "--"
+      },
+      {
+        "name": "قنا",
+        "scheduled": "11:15 م",
+        "actual": "--"
+      },
+      {
+        "name": "نجع حمادي",
+        "scheduled": "12:04 ص",
+        "actual": "--"
+      },
+      {
+        "name": "جرجا",
+        "scheduled": "12:52 ص",
+        "actual": "--"
+      },
+      {
+        "name": "سوهاج",
+        "scheduled": "1:20 ص",
+        "actual": "--"
+      },
+      {
+        "name": "طهطا",
+        "scheduled": "1:51 ص",
+        "actual": "--"
+      },
+      {
+        "name": "طما",
+        "scheduled": "2:08 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أسيوط",
+        "scheduled": "2:45 ص",
+        "actual": "--"
+      },
+      {
+        "name": "ديروط",
+        "scheduled": "3:47 ص",
+        "actual": "--"
+      },
+      {
+        "name": "ملوي",
+        "scheduled": "4:07 ص",
+        "actual": "--"
+      },
+      {
+        "name": "المنيا",
+        "scheduled": "4:50 ص",
+        "actual": "--"
+      },
+      {
+        "name": "مغاغة",
+        "scheduled": "5:39 ص",
+        "actual": "--"
+      },
+      {
+        "name": "بني سويف",
+        "scheduled": "6:21 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الجيزة",
+        "scheduled": "7:40 ص",
+        "actual": "--"
+      },
+      {
+        "name": "صعيد مصر",
+        "scheduled": "7:54 ص",
+        "actual": "--"
+      },
+      {
+        "name": "القاهرة",
+        "scheduled": "8:10 ص",
+        "actual": "--"
+      }
+    ]
   }
 };
