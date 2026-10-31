@@ -140,6 +140,48 @@ window.DEFAULT_TRAINS_DATA = {
       }
     ]
   },
+  "17": {
+    "number": "17",
+    "type": "روسي مكيف",
+    "name": "القاهرة - الاسكندرية",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "القاهرة",
+        "scheduled": "9:20 م",
+        "actual": "--"
+      },
+      {
+        "name": "بنها",
+        "scheduled": "9:56 م",
+        "actual": "--"
+      },
+      {
+        "name": "طنطا",
+        "scheduled": "10:31 م",
+        "actual": "--"
+      },
+      {
+        "name": "دمنهور",
+        "scheduled": "11:23 م",
+        "actual": "--"
+      },
+      {
+        "name": "سيدي جابر",
+        "scheduled": "12:09 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الإسكندرية",
+        "scheduled": "12:25 ص",
+        "actual": "--"
+      }
+    ]
+  },
   "80": {
     "number": "80",
     "type": "روسي",
