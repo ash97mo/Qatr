@@ -1782,6 +1782,203 @@ window.DEFAULT_TRAINS_DATA = {
       }
     ]
   },
+  "160": {
+    "number": "160",
+    "type": "روسي مكيف",
+    "name": "القاهرة - الاقصر",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "القاهرة",
+        "scheduled": "12:15 م",
+        "actual": "--"
+      },
+      {
+        "name": "صعيد مصر",
+        "scheduled": "12:28 م",
+        "actual": "--"
+      },
+      {
+        "name": "الجيزة",
+        "scheduled": "12:41 م",
+        "actual": "--"
+      },
+      {
+        "name": "الواسطى",
+        "scheduled": "1:44 م",
+        "actual": "--"
+      },
+      {
+        "name": "بني سويف",
+        "scheduled": "2:10 م",
+        "actual": "--"
+      },
+      {
+        "name": "ببا",
+        "scheduled": "2:32 م",
+        "actual": "--"
+      },
+      {
+        "name": "الفشن",
+        "scheduled": "2:48 م",
+        "actual": "--"
+      },
+      {
+        "name": "مغاغة",
+        "scheduled": "3:05 م",
+        "actual": "--"
+      },
+      {
+        "name": "بني مزار",
+        "scheduled": "3:20 م",
+        "actual": "--"
+      },
+      {
+        "name": "مطاي",
+        "scheduled": "3:32 م",
+        "actual": "--"
+      },
+      {
+        "name": "سمالوط",
+        "scheduled": "3:47 م",
+        "actual": "--"
+      },
+      {
+        "name": "المنيا",
+        "scheduled": "4:15 م",
+        "actual": "--"
+      },
+      {
+        "name": "أبو قرقاص",
+        "scheduled": "4:38 م",
+        "actual": "--"
+      },
+      {
+        "name": "ملوي",
+        "scheduled": "5:03 م",
+        "actual": "--"
+      },
+      {
+        "name": "دير مواس",
+        "scheduled": "5:17 م",
+        "actual": "--"
+      },
+      {
+        "name": "ديروط",
+        "scheduled": "5:30 م",
+        "actual": "--"
+      },
+      {
+        "name": "القوصية",
+        "scheduled": "5:44 م",
+        "actual": "--"
+      },
+      {
+        "name": "منفلوط",
+        "scheduled": "6:16 م",
+        "actual": "--"
+      },
+      {
+        "name": "أسيوط",
+        "scheduled": "6:50 م",
+        "actual": "--"
+      },
+      {
+        "name": "أبو تيج",
+        "scheduled": "7:15 م",
+        "actual": "--"
+      },
+      {
+        "name": "صدفا",
+        "scheduled": "7:27 م",
+        "actual": "--"
+      },
+      {
+        "name": "طما",
+        "scheduled": "7:37 م",
+        "actual": "--"
+      },
+      {
+        "name": "طهطا",
+        "scheduled": "7:56 م",
+        "actual": "--"
+      },
+      {
+        "name": "المراغة",
+        "scheduled": "8:12 م",
+        "actual": "--"
+      },
+      {
+        "name": "سوهاج",
+        "scheduled": "8:35 م",
+        "actual": "--"
+      },
+      {
+        "name": "المنشأة",
+        "scheduled": "8:53 م",
+        "actual": "--"
+      },
+      {
+        "name": "العسيرات",
+        "scheduled": "9:02 م",
+        "actual": "--"
+      },
+      {
+        "name": "جرجا",
+        "scheduled": "9:12 م",
+        "actual": "--"
+      },
+      {
+        "name": "البلينا",
+        "scheduled": "9:31 م",
+        "actual": "--"
+      },
+      {
+        "name": "أبو تشت",
+        "scheduled": "9:50 م",
+        "actual": "--"
+      },
+      {
+        "name": "فرشوط",
+        "scheduled": "10:02 م",
+        "actual": "--"
+      },
+      {
+        "name": "نجع حمادي",
+        "scheduled": "10:16 م",
+        "actual": "--"
+      },
+      {
+        "name": "دشنا",
+        "scheduled": "10:40 م",
+        "actual": "--"
+      },
+      {
+        "name": "قنا",
+        "scheduled": "11:07 م",
+        "actual": "--"
+      },
+      {
+        "name": "قفط",
+        "scheduled": "11:31 م",
+        "actual": "--"
+      },
+      {
+        "name": "قوص",
+        "scheduled": "11:45 م",
+        "actual": "--"
+      },
+      {
+        "name": "الأقصر",
+        "scheduled": "12:10 ص",
+        "actual": "--"
+      }
+    ]
+  },
   "163": {
     "number": "163",
     "type": "روسي",
