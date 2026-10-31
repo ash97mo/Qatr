@@ -1,32 +1,4 @@
 window.DEFAULT_TRAINS_DATA = {
-  "905": {
-    "number": "905",
-    "type": "VIP",
-    "name": "القاهرة - الإسكندرية مباشر",
-    "status": {
-      "state": "NOT_STARTED",
-      "stationIndex": null,
-      "updatedBy": "جدول الرحلة الأساسي",
-      "departedAt": null
-    },
-    "stations": [
-      {
-        "name": "القاهرة",
-        "scheduled": "08:00 ص",
-        "actual": "--"
-      },
-      {
-        "name": "سيدي جابر",
-        "scheduled": "10:15 ص",
-        "actual": "--"
-      },
-      {
-        "name": "الإسكندرية",
-        "scheduled": "10:30 ص",
-        "actual": "--"
-      }
-    ]
-  },
   "928": {
     "number": "928",
     "type": "VIP",
