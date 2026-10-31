@@ -873,6 +873,138 @@ window.DEFAULT_TRAINS_DATA = {
       }
     ]
   },
+  "141": {
+    "number": "141",
+    "type": "روسي",
+    "name": "الفيوم - القاهرة",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "الفيوم",
+        "scheduled": "4:30 ص",
+        "actual": "--"
+      },
+      {
+        "name": "عامرية الفيوم",
+        "scheduled": "4:35 ص",
+        "actual": "--"
+      },
+      {
+        "name": "العدوة",
+        "scheduled": "4:40 ص",
+        "actual": "--"
+      },
+      {
+        "name": "سيلا",
+        "scheduled": "4:48 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الناصرية",
+        "scheduled": "4:54 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الروس",
+        "scheduled": "5:01 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الورش",
+        "scheduled": "5:06 ص",
+        "actual": "--"
+      },
+      {
+        "name": "كوم أبو راضي",
+        "scheduled": "5:11 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الواسطى",
+        "scheduled": "5:20 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أطواب",
+        "scheduled": "5:50 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الرقة",
+        "scheduled": "5:54 ص",
+        "actual": "--"
+      },
+      {
+        "name": "القطوري",
+        "scheduled": "6:00 ص",
+        "actual": "--"
+      },
+      {
+        "name": "كفر عمار",
+        "scheduled": "6:06 ص",
+        "actual": "--"
+      },
+      {
+        "name": "ميت القايد",
+        "scheduled": "6:11 ص",
+        "actual": "--"
+      },
+      {
+        "name": "المتانية",
+        "scheduled": "6:16 ص",
+        "actual": "--"
+      },
+      {
+        "name": "العياط",
+        "scheduled": "6:23 ص",
+        "actual": "--"
+      },
+      {
+        "name": "البليدة",
+        "scheduled": "6:32 ص",
+        "actual": "--"
+      },
+      {
+        "name": "المزغونة",
+        "scheduled": "6:40 ص",
+        "actual": "--"
+      },
+      {
+        "name": "المرازيق",
+        "scheduled": "6:49 ص",
+        "actual": "--"
+      },
+      {
+        "name": "البدرشين",
+        "scheduled": "6:55 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الحوامدية",
+        "scheduled": "7:01 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الجيزة",
+        "scheduled": "7:20 ص",
+        "actual": "--"
+      },
+      {
+        "name": "صعيد مصر",
+        "scheduled": "7:34 ص",
+        "actual": "--"
+      },
+      {
+        "name": "القاهرة",
+        "scheduled": "7:50 ص",
+        "actual": "--"
+      }
+    ]
+  },
   "157": {
     "number": "157",
     "type": "روسي",
