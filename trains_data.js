@@ -3564,6 +3564,153 @@ window.DEFAULT_TRAINS_DATA = {
       }
     ]
   },
+  "973": {
+    "number": "973",
+    "type": "روسي",
+    "name": "اسيوط - القاهرة",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "أسيوط",
+        "scheduled": "2:30 ص",
+        "actual": "--"
+      },
+      {
+        "name": "منفلوط",
+        "scheduled": "2:59 ص",
+        "actual": "--"
+      },
+      {
+        "name": "القوصية",
+        "scheduled": "3:18 ص",
+        "actual": "--"
+      },
+      {
+        "name": "ديروط",
+        "scheduled": "3:33 ص",
+        "actual": "--"
+      },
+      {
+        "name": "دير مواس",
+        "scheduled": "3:44 ص",
+        "actual": "--"
+      },
+      {
+        "name": "المنيا",
+        "scheduled": "4:35 ص",
+        "actual": "--"
+      },
+      {
+        "name": "سمالوط",
+        "scheduled": "4:59 ص",
+        "actual": "--"
+      },
+      {
+        "name": "مطاي",
+        "scheduled": "5:13 ص",
+        "actual": "--"
+      },
+      {
+        "name": "بني مزار",
+        "scheduled": "5:23 ص",
+        "actual": "--"
+      },
+      {
+        "name": "مغاغة",
+        "scheduled": "5:51 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الفشن",
+        "scheduled": "6:08 ص",
+        "actual": "--"
+      },
+      {
+        "name": "سدس",
+        "scheduled": "6:19 ص",
+        "actual": "--"
+      },
+      {
+        "name": "ببا",
+        "scheduled": "6:27 ص",
+        "actual": "--"
+      },
+      {
+        "name": "طحا البيشة",
+        "scheduled": "6:33 ص",
+        "actual": "--"
+      },
+      {
+        "name": "طنسا",
+        "scheduled": "6:39 ص",
+        "actual": "--"
+      },
+      {
+        "name": "بني سويف",
+        "scheduled": "6:51 ص",
+        "actual": "--"
+      },
+      {
+        "name": "ناصر",
+        "scheduled": "7:01 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الزيتون قبلي",
+        "scheduled": "7:07 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أشمنت",
+        "scheduled": "7:13 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الميمون",
+        "scheduled": "7:18 ص",
+        "actual": "--"
+      },
+      {
+        "name": "بني حدير",
+        "scheduled": "7:23 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الواسطى",
+        "scheduled": "7:34 ص",
+        "actual": "--"
+      },
+      {
+        "name": "القطوري",
+        "scheduled": "7:48 ص",
+        "actual": "--"
+      },
+      {
+        "name": "العياط",
+        "scheduled": "8:05 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الجيزة",
+        "scheduled": "8:45 ص",
+        "actual": "--"
+      },
+      {
+        "name": "صعيد مصر",
+        "scheduled": "8:59 ص",
+        "actual": "--"
+      },
+      {
+        "name": "القاهرة",
+        "scheduled": "9:15 ص",
+        "actual": "--"
+      }
+    ]
+  },
   "974": {
     "number": "974",
     "type": "روسي",
