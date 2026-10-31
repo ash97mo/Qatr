@@ -43,7 +43,6 @@
 
     .header-actions { display: flex; gap: 8px; align-items: center; }
 
-    /* زرار الترس الصغير بالأعلى */
     .btn-gear-settings {
       width: 40px; height: 40px; border-radius: 50%;
       background: #1e293b; border: 1.5px solid #38bdf8;
@@ -110,7 +109,6 @@
     }
     .combo-item:hover { background: #0284c7; color: #ffffff; }
 
-    /* أزرار الإجراءات للقطار (تصفير - حذف - تعديل) */
     .train-actions-bar {
       display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 15px;
     }
@@ -302,7 +300,6 @@
       <label style="font-size: 12px; color: #94a3b8;">Registered Admins:</label>
       <div id="adminsListContainer" style="max-height: 140px; overflow-y: auto; margin-bottom: 14px; border: 1px solid #334155; border-radius: 8px; background: #0f172a;"></div>
       
-      <!-- إضافة مشرف جديد -->
       <div style="border-top: 1px solid #334155; padding-top: 10px; margin-bottom: 12px;">
         <label style="font-size: 12.5px; color: #38bdf8; font-weight: bold; margin-bottom: 6px;">➕ Add New Admin:</label>
         <input type="text" id="newAdminUser" placeholder="New username..." style="margin-bottom: 6px;">
@@ -310,7 +307,6 @@
         <button class="btn btn-add" style="width: 100%;" onclick="addNewAdminAccount()">+ Add Admin</button>
       </div>
 
-      <!-- تغيير كلمة المرور للمشرف الحالي -->
       <div style="border-top: 1px solid #334155; padding-top: 10px; margin-bottom: 12px;">
         <label style="font-size: 12.5px; color: #facc15; font-weight: bold; margin-bottom: 6px;">🔑 Change My Password:</label>
         <input type="password" id="oldPassInput" placeholder="Current password..." style="margin-bottom: 6px;">
@@ -325,18 +321,18 @@
     </div>
   </div>
 
-  <!-- نافذة إعدادات GitHub API للحفظ التلقائي -->
+  <!-- نافذة إعدادات GitHub API للحفظ التلقائي مع زر فحص الاتصال -->
   <div id="githubSettingsModal" class="custom-modal-overlay" style="display: none;" onclick="if(event.target===this) closeGithubModal()">
     <div class="custom-modal-card" style="text-align: left; direction: ltr;">
       <h3 style="color: #38bdf8; margin-bottom: 12px; text-align: center; font-size: 17px;">🐙 GitHub Settings</h3>
       <p style="font-size: 12px; color: #94a3b8; margin-bottom: 12px; line-height: 1.6;">
-        Enter your repository details and personal access token (PAT) to automatically commit changes to <code>trains_data.js</code>:
+        Enter your repository details and personal access token (PAT):
       </p>
 
       <label>Repository (e.g. username/repo):</label>
-      <input type="text" id="ghRepoInput" placeholder="ash97mo/trains-app">
+      <input type="text" id="ghRepoInput" placeholder="ash97mo/Qatr">
 
-      <label>Branch:</label>
+      <label>Branch (usually main or master):</label>
       <input type="text" id="ghBranchInput" value="main" placeholder="main">
 
       <label>File Path:</label>
@@ -345,7 +341,11 @@
       <label>Personal Access Token (ghp_...):</label>
       <input type="password" id="ghTokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
 
-      <div style="display: flex; gap: 8px; margin-top: 10px;">
+      <button class="btn btn-secondary" style="width: 100%; margin-bottom: 8px; border: 1px dashed #38bdf8;" onclick="testGitHubConnection()">
+        🔍 Test Connection (فحص الاتصال بجيت هب)
+      </button>
+
+      <div style="display: flex; gap: 8px; margin-top: 4px;">
         <button class="btn btn-add" style="flex: 1;" onclick="saveGithubSettings()">Save Settings</button>
         <button class="btn btn-secondary" style="flex: 1;" onclick="closeGithubModal()">Close</button>
       </div>
@@ -463,7 +463,6 @@
         <table class="preview-table"><tbody id="previewBody"></tbody></table>
       </div>
 
-      <!-- الزر السفلي بالاسم المطلوب تماماً -->
       <button class="btn btn-primary" onclick="addNewTrain()">حفظ الي قاعده البيانات</button>
     </div>
   </div>
@@ -528,7 +527,6 @@
       }
     }
 
-    // نوافذ الإعدادات المنبثقة من زر الترس
     function openMainSettingsModal() {
       document.getElementById('mainSettingsModal').style.display = 'flex';
     }
@@ -550,7 +548,7 @@
     function openGithubSettings() {
       closeMainSettingsModal();
       const config = getGithubConfig();
-      document.getElementById('ghRepoInput').value = config.repo || '';
+      document.getElementById('ghRepoInput').value = config.repo || 'ash97mo/Qatr';
       document.getElementById('ghBranchInput').value = config.branch || 'main';
       document.getElementById('ghPathInput').value = config.path || 'trains_data.js';
       document.getElementById('ghTokenInput').value = config.token || '';
@@ -664,12 +662,12 @@
       if (saved) {
         try { return JSON.parse(saved); } catch(e){}
       }
-      return { repo: '', branch: 'main', path: 'trains_data.js', token: '' };
+      return { repo: 'ash97mo/Qatr', branch: 'main', path: 'trains_data.js', token: '' };
     }
 
     function saveGithubSettings() {
       const config = {
-        repo: document.getElementById('ghRepoInput').value.trim(),
+        repo: document.getElementById('ghRepoInput').value.trim() || 'ash97mo/Qatr',
         branch: document.getElementById('ghBranchInput').value.trim() || 'main',
         path: document.getElementById('ghPathInput').value.trim() || 'trains_data.js',
         token: document.getElementById('ghTokenInput').value.trim()
@@ -677,61 +675,110 @@
 
       localStorage.setItem('github_sync_config', JSON.stringify(config));
       closeGithubModal();
-      showCustomAlert('success', 'GitHub Settings Saved', 'Changes will now be committed to GitHub automatically.');
+      showCustomAlert('success', 'تم الحفظ', 'تم حفظ إعدادات جيت هب بنجاح.');
     }
 
+    // زر فحص الاتصال والتأكد من صحة الـ Token واسم المستودع والفرع
+    async function testGitHubConnection() {
+      const repo = document.getElementById('ghRepoInput').value.trim();
+      const branch = document.getElementById('ghBranchInput').value.trim() || 'main';
+      const token = document.getElementById('ghTokenInput').value.trim();
+
+      if (!repo || !token) {
+        alert("يرجى إدخال اسم المستودع والـ Token أولاً.");
+        return;
+      }
+
+      try {
+        const res = await fetch(`https://api.github.com/repos/${repo}/branches/${branch}`, {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Accept": "application/vnd.github.v3+json"
+          }
+        });
+
+        if (res.ok) {
+          alert(`✅ الاتصال ناجح 100%!\nتم التعرف على المستودع (${repo}) والفرع (${branch})، ومفتاح الـ Token يعمل بشكل ممتاز.`);
+        } else if (res.status === 401) {
+          alert(`❌ خطأ (401): الـ Token غير صحيح أو منتهي الصلاحية! يرجى إعادة نسخه والتأكد منه.`);
+        } else if (res.status === 404) {
+          alert(`⚠️ خطأ (404): تعذر العثور على الفرع (${branch}) أو المستودع (${repo}).\nجرّب تغيير الفرع من main إلى master أو العكس.`);
+        } else {
+          alert(`❌ استجابة جيت هب (${res.status}): ${await res.text()}`);
+        }
+      } catch (err) {
+        alert(`❌ فشل الاتصال بالإنترنت أو بسيرفر جيت هب: ${err.message}`);
+      }
+    }
+
+    // تحديث ملف trains_data.js مباشرة على GitHub عبر REST API المجاني مع معالجة كاملة للأخطاء
     async function syncDatabaseToGitHub() {
       const config = getGithubConfig();
       if (!config.repo || !config.token) {
-        console.log("GitHub sync not configured.");
-        return;
+        return { success: false, reason: "لم تقم بضبط الـ Token في إعدادات جيت هب (⚙️)." };
       }
 
       try {
         const fileContent = "window.DEFAULT_TRAINS_DATA = " + JSON.stringify(trainsData, null, 2) + ";\n";
         const utf8Bytes = new TextEncoder().encode(fileContent);
         let binaryStr = '';
-        utf8Bytes.forEach(b => binaryStr += String.fromCharCode(b));
+        for (let i = 0; i < utf8Bytes.length; i++) {
+          binaryStr += String.fromCharCode(utf8Bytes[i]);
+        }
         const base64Content = btoa(binaryStr);
 
-        const url = `https://api.github.com/repos/${config.repo}/contents/${config.path}?ref=${config.branch}`;
+        const cleanRepo = config.repo.trim().replace(/^https?:\/\/github\.com\//, '').replace(/\/$/, '');
+        const cleanPath = (config.path || 'trains_data.js').trim().replace(/^\//, '');
+        const cleanBranch = (config.branch || 'main').trim();
+
+        // 1. قراءة الـ SHA الحالية للملف
+        const getUrl = `https://api.github.com/repos/${cleanRepo}/contents/${cleanPath}?ref=${cleanBranch}`;
         let sha = null;
 
-        const getRes = await fetch(url, {
+        const getRes = await fetch(getUrl, {
           headers: {
-            "Authorization": `token ${config.token}`,
+            "Authorization": `Bearer ${config.token}`,
             "Accept": "application/vnd.github.v3+json"
           }
         });
 
-        if (getRes.ok) {
+        if (getRes.status === 401) {
+          return { success: false, reason: "الـ Token غير صالح (Bad credentials)." };
+        } else if (getRes.ok) {
           const fileData = await getRes.json();
           sha = fileData.sha;
         }
 
-        const putUrl = `https://api.github.com/repos/${config.repo}/contents/${config.path}`;
+        // 2. إرسال المحتوى الجديد وحفظه على جيت هب
+        const putUrl = `https://api.github.com/repos/${cleanRepo}/contents/${cleanPath}`;
+        const putPayload = {
+          message: `تحديث جدول القطارات تلقائياً بواسطة الأدمن (${new Date().toLocaleTimeString('ar-EG')})`,
+          content: base64Content,
+          branch: cleanBranch
+        };
+        if (sha) {
+          putPayload.sha = sha;
+        }
+
         const putRes = await fetch(putUrl, {
           method: "PUT",
           headers: {
-            "Authorization": `token ${config.token}`,
+            "Authorization": `Bearer ${config.token}`,
             "Accept": "application/vnd.github.v3+json",
             "Content-Type": "application/json"
           },
-          body: JSON.stringify({
-            message: `Update trains database from admin panel (${new Date().toLocaleTimeString()})`,
-            content: base64Content,
-            branch: config.branch,
-            sha: sha || undefined
-          })
+          body: JSON.stringify(putPayload)
         });
 
         if (putRes.ok) {
-          console.log("GitHub file updated successfully!");
+          return { success: true };
         } else {
-          console.warn("GitHub API error:", await putRes.text());
+          const errData = await putRes.json().catch(() => ({}));
+          const errMsg = errData.message || (await putRes.text());
+          return { success: false, reason: `كود جيت هب (${putRes.status}): ${errMsg}` };
         }
       } catch (err) {
-        console.error("Failed to commit to GitHub:", err);
+        return { success: false, reason: err.message };
       }
     }
 
@@ -810,8 +857,8 @@
             <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
         `;
-        titleEl.textContent = title || "Success";
-        btnEl.textContent = "OK";
+        titleEl.textContent = title || "تم بنجاح";
+        btnEl.textContent = "حسناً";
       } else {
         iconBox.innerHTML = `
           <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
@@ -819,8 +866,8 @@
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         `;
-        titleEl.textContent = title || "Notice";
-        btnEl.textContent = "Close";
+        titleEl.textContent = title || "تنبيه";
+        btnEl.textContent = "إغلاق";
       }
 
       msgEl.textContent = message;
@@ -1293,8 +1340,12 @@
       renderControlBoard();
       initTrainSelector();
 
-      await syncDatabaseToGitHub();
-      showCustomAlert('success', 'تم الحفظ', `تم حفظ تعديلات قطار (${newNum}) وتحديث جيت هب بنجاح.`);
+      const syncRes = await syncDatabaseToGitHub();
+      if (syncRes.success) {
+        showCustomAlert('success', 'تم الحفظ وتحديث جيت هب', `تم حفظ تعديلات قطار (${newNum}) في ملف trains_data.js بنجاح! 🎉`);
+      } else {
+        showCustomAlert('error', 'تنبيه جيت هب', `تم الحفظ في المتصفح، ولكن فشل التحديث في جيت هب:\n⚠️ السبب: ${syncRes.reason}`);
+      }
     }
 
     function resetCurrentTrain() {
@@ -1332,8 +1383,12 @@
         renderControlBoard();
         initTrainSelector();
 
-        await syncDatabaseToGitHub();
-        showCustomAlert('success', 'تم الحذف', `تم حذف القطار (${deletedId}) نهائياً وتحديث جيت هب.`);
+        const syncRes = await syncDatabaseToGitHub();
+        if (syncRes.success) {
+          showCustomAlert('success', 'تم الحذف', `تم حذف القطار (${deletedId}) نهائياً وتحديث ملف جيت هب.`);
+        } else {
+          showCustomAlert('error', 'تنبيه جيت هب', `تم الحذف محلياً ولكن فشل تحديث جيت هب:\n⚠️ السبب: ${syncRes.reason}`);
+        }
       }
     }
 
@@ -1476,8 +1531,12 @@
       nameInput.value = '';
       timeInput.value = '';
 
-      await syncDatabaseToGitHub();
-      showCustomAlert('success', 'تمت الإضافة', `تمت إضافة (${name}) للمسار وتحديث جيت هب.`);
+      const syncRes = await syncDatabaseToGitHub();
+      if (syncRes.success) {
+        showCustomAlert('success', 'تمت الإضافة', `تمت إضافة (${name}) للمسار وتحديث جيت هب.`);
+      } else {
+        showCustomAlert('error', 'تنبيه جيت هب', `تمت الإضافة محلياً ولكن فشل تحديث جيت هب:\n⚠️ السبب: ${syncRes.reason}`);
+      }
     }
 
     async function removeStation(trainId, index) {
@@ -1493,8 +1552,12 @@
         }
         renderControlBoard();
 
-        await syncDatabaseToGitHub();
-        showCustomAlert('success', 'تم الحذف', 'تم حذف المحطة وتحديث جيت هب.');
+        const syncRes = await syncDatabaseToGitHub();
+        if (syncRes.success) {
+          showCustomAlert('success', 'تم الحذف', 'تم حذف المحطة وتحديث جيت هب.');
+        } else {
+          showCustomAlert('error', 'تنبيه جيت هب', `تم الحذف محلياً ولكن فشل تحديث جيت هب:\n⚠️ السبب: ${syncRes.reason}`);
+        }
       }
     }
 
@@ -1570,9 +1633,15 @@
       initTrainSelector();
       selectTrain(num);
 
-      await syncDatabaseToGitHub();
+      // حفظ وتحديث جيت هب أوتوماتيكياً
+      const syncRes = await syncDatabaseToGitHub();
 
-      showCustomAlert('success', 'تم الحفظ', `تم حفظ قطار (${num}) في قاعدة البيانات وتحديث جيت هب بنجاح!`);
+      if (syncRes.success) {
+        showCustomAlert('success', 'تم الحفظ وتحديث جيت هب', `تم حفظ قطار (${num}) في قاعدة البيانات وتحديث ملف trains_data.js على جيت هب بنجاح! 🎉`);
+      } else {
+        showCustomAlert('error', 'تنبيه جيت هب', `تم حفظ القطار في المتصفح، ولكن فشل التحديث في جيت هب:\n\n⚠️ السبب: ${syncRes.reason}\n\nيرجى فحص اسم المستودع، اسم الفرع، وصلاحية الـ Token في إعدادات (⚙️).`);
+      }
+
       document.getElementById('newTrainNumber').value = '';
       document.getElementById('newTrainType').value = '';
       document.getElementById('newTrainName').value = '';
