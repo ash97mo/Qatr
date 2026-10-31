@@ -1,47 +1,4 @@
 window.DEFAULT_TRAINS_DATA = {
-  "901": {
-    "number": "901",
-    "type": "إسباني مكيف",
-    "name": "القاهرة - الإسكندرية",
-    "status": {
-      "state": "NOT_STARTED",
-      "stationIndex": null,
-      "updatedBy": "جدول الرحلة الأساسي",
-      "departedAt": null
-    },
-    "stations": [
-      {
-        "name": "القاهرة",
-        "scheduled": "08:10 ص",
-        "actual": "--"
-      },
-      {
-        "name": "بنها",
-        "scheduled": "08:50 ص",
-        "actual": "--"
-      },
-      {
-        "name": "طنطا",
-        "scheduled": "09:30 ص",
-        "actual": "--"
-      },
-      {
-        "name": "دمنهور",
-        "scheduled": "10:25 ص",
-        "actual": "--"
-      },
-      {
-        "name": "سيدي جابر",
-        "scheduled": "11:00 ص",
-        "actual": "--"
-      },
-      {
-        "name": "الإسكندرية",
-        "scheduled": "11:15 ص",
-        "actual": "--"
-      }
-    ]
-  },
   "905": {
     "number": "905",
     "type": "VIP",
@@ -66,6 +23,34 @@ window.DEFAULT_TRAINS_DATA = {
       {
         "name": "الإسكندرية",
         "scheduled": "10:30 ص",
+        "actual": "--"
+      }
+    ]
+  },
+  "917": {
+    "number": "917",
+    "type": "VIP",
+    "name": "القاهرة - الإسكندرية مباشر",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي",
+      "departedAt": null
+    },
+    "stations": [
+      {
+        "name": "القاهرة",
+        "scheduled": "02:00 م",
+        "actual": "--"
+      },
+      {
+        "name": "سيدي جابر",
+        "scheduled": "04:15 م",
+        "actual": "--"
+      },
+      {
+        "name": "الإسكندرية",
+        "scheduled": "04:30 م",
         "actual": "--"
       }
     ]
