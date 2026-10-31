@@ -3091,15 +3091,17 @@ window.DEFAULT_TRAINS_DATA = {
     "type": "روسي مكيف",
     "name": "سوهاج - القاهرة",
     "status": {
-      "state": "NOT_STARTED",
-      "stationIndex": null,
-      "updatedBy": "جدول الرحلة الأساسي"
+      "state": "AT_STATION",
+      "stationIndex": 0,
+      "updatedBy": "المشرف admin (12:53 ص)",
+      "departedAt": null
     },
     "stations": [
       {
         "name": "سوهاج",
         "scheduled": "12:05 ص",
-        "actual": "--"
+        "actual": "12:53 ص",
+        "delayMinutes": 48
       },
       {
         "name": "المراغة",
