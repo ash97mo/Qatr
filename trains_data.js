@@ -438,6 +438,103 @@ window.DEFAULT_TRAINS_DATA = {
       }
     ]
   },
+  "976": {
+    "number": "976",
+    "type": "VIP",
+    "name": "القاهرة - الاقصر",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "القاهرة",
+        "scheduled": "8:00 م",
+        "actual": "--"
+      },
+      {
+        "name": "صعيد مصر",
+        "scheduled": "8:16 م",
+        "actual": "--"
+      },
+      {
+        "name": "الجيزة",
+        "scheduled": "8:30 م",
+        "actual": "--"
+      },
+      {
+        "name": "بني سويف",
+        "scheduled": "9:48 م",
+        "actual": "--"
+      },
+      {
+        "name": "المنيا",
+        "scheduled": "11:30 م",
+        "actual": "--"
+      },
+      {
+        "name": "أسيوط",
+        "scheduled": "1:25 ص",
+        "actual": "--"
+      },
+      {
+        "name": "طما",
+        "scheduled": "1:59 ص",
+        "actual": "--"
+      },
+      {
+        "name": "طهطا",
+        "scheduled": "2:19 ص",
+        "actual": "--"
+      },
+      {
+        "name": "المراغة",
+        "scheduled": "2:35 ص",
+        "actual": "--"
+      },
+      {
+        "name": "سوهاج",
+        "scheduled": "3:05 ص",
+        "actual": "--"
+      },
+      {
+        "name": "جرجا",
+        "scheduled": "3:29 ص",
+        "actual": "--"
+      },
+      {
+        "name": "البلينا",
+        "scheduled": "3:46 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أبو تشت",
+        "scheduled": "4:04 ص",
+        "actual": "--"
+      },
+      {
+        "name": "نجع حمادي",
+        "scheduled": "4:35 ص",
+        "actual": "--"
+      },
+      {
+        "name": "قنا",
+        "scheduled": "5:25 ص",
+        "actual": "--"
+      },
+      {
+        "name": "قوص",
+        "scheduled": "5:52 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الأقصر",
+        "scheduled": "6:15 ص",
+        "actual": "--"
+      }
+    ]
+  },
   "980": {
     "number": "980",
     "type": "VIP",
