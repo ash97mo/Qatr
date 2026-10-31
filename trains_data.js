@@ -4215,5 +4215,102 @@ window.DEFAULT_TRAINS_DATA = {
         "actual": "--"
       }
     ]
+  },
+  "1211": {
+    "number": "1211",
+    "type": "روسي",
+    "name": "القاهرة - الإسكندرية",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "القاهرة",
+        "scheduled": "10:10 ص",
+        "actual": "--"
+      },
+      {
+        "name": "شبرا الخيمة",
+        "scheduled": "10:24 ص",
+        "actual": "--"
+      },
+      {
+        "name": "قليوب",
+        "scheduled": "10:33 ص",
+        "actual": "--"
+      },
+      {
+        "name": "قها",
+        "scheduled": "10:46 ص",
+        "actual": "--"
+      },
+      {
+        "name": "طوخ",
+        "scheduled": "10:55 ص",
+        "actual": "--"
+      },
+      {
+        "name": "بنها",
+        "scheduled": "11:08 ص",
+        "actual": "--"
+      },
+      {
+        "name": "قويسنا",
+        "scheduled": "11:23 ص",
+        "actual": "--"
+      },
+      {
+        "name": "بركة السبع",
+        "scheduled": "11:35 ص",
+        "actual": "--"
+      },
+      {
+        "name": "طنطا",
+        "scheduled": "11:55 ص",
+        "actual": "--"
+      },
+      {
+        "name": "كفر الزيات",
+        "scheduled": "12:15 م",
+        "actual": "--"
+      },
+      {
+        "name": "التوفيقية",
+        "scheduled": "12:29 م",
+        "actual": "--"
+      },
+      {
+        "name": "إيتاي البارود",
+        "scheduled": "12:42 م",
+        "actual": "--"
+      },
+      {
+        "name": "دمنهور",
+        "scheduled": "1:19 م",
+        "actual": "--"
+      },
+      {
+        "name": "أبو حمص",
+        "scheduled": "1:37 م",
+        "actual": "--"
+      },
+      {
+        "name": "كفر الدوار",
+        "scheduled": "1:53 م",
+        "actual": "--"
+      },
+      {
+        "name": "سيدي جابر",
+        "scheduled": "2:13 م",
+        "actual": "--"
+      },
+      {
+        "name": "الإسكندرية",
+        "scheduled": "2:25 م",
+        "actual": "--"
+      }
+    ]
   }
 };
