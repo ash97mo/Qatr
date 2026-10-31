@@ -773,7 +773,8 @@ window.DEFAULT_TRAINS_DATA = {
     "status": {
       "state": "NOT_STARTED",
       "stationIndex": null,
-      "updatedBy": "جدول الرحلة الأساسي"
+      "updatedBy": "جدول الرحلة الأساسي",
+      "departedAt": null
     },
     "stations": [
       {
@@ -2014,7 +2015,8 @@ window.DEFAULT_TRAINS_DATA = {
     "status": {
       "state": "NOT_STARTED",
       "stationIndex": null,
-      "updatedBy": "جدول الرحلة الأساسي"
+      "updatedBy": "جدول الرحلة الأساسي",
+      "departedAt": null
     },
     "stations": [
       {
@@ -2455,7 +2457,7 @@ window.DEFAULT_TRAINS_DATA = {
   "164": {
     "number": "164",
     "type": "روسي",
-    "name": "الإسكندرية - الاقصر",
+    "name": "الإسكندرية - أسوان",
     "status": {
       "state": "NOT_STARTED",
       "stationIndex": null,
@@ -3568,7 +3570,8 @@ window.DEFAULT_TRAINS_DATA = {
     "status": {
       "state": "NOT_STARTED",
       "stationIndex": null,
-      "updatedBy": "جدول الرحلة الأساسي"
+      "updatedBy": "جدول الرحلة الأساسي",
+      "departedAt": null
     },
     "stations": [
       {
