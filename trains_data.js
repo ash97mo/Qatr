@@ -3088,7 +3088,7 @@ window.DEFAULT_TRAINS_DATA = {
   },
   "185": {
     "number": "185",
-    "type": "روسي مك",
+    "type": "روسي مكيف",
     "name": "سوهاج - بورسعيد",
     "status": {
       "state": "NOT_STARTED",
