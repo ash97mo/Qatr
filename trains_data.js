@@ -1,4 +1,101 @@
 window.DEFAULT_TRAINS_DATA = {
+  "7": {
+    "number": "7",
+    "type": "روسي",
+    "name": "القاهرة - الإسكندرية",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "القاهرة",
+        "scheduled": "6:20 ص",
+        "actual": "--"
+      },
+      {
+        "name": "شبرا الخيمة",
+        "scheduled": "6:34 ص",
+        "actual": "--"
+      },
+      {
+        "name": "قليوب",
+        "scheduled": "6:43 ص",
+        "actual": "--"
+      },
+      {
+        "name": "قها",
+        "scheduled": "6:56 ص",
+        "actual": "--"
+      },
+      {
+        "name": "طوخ",
+        "scheduled": "7:05 ص",
+        "actual": "--"
+      },
+      {
+        "name": "بنها",
+        "scheduled": "7:18 ص",
+        "actual": "--"
+      },
+      {
+        "name": "قويسنا",
+        "scheduled": "7:32 ص",
+        "actual": "--"
+      },
+      {
+        "name": "بركة السبع",
+        "scheduled": "7:44 ص",
+        "actual": "--"
+      },
+      {
+        "name": "طنطا",
+        "scheduled": "8:03 ص",
+        "actual": "--"
+      },
+      {
+        "name": "كفر الزيات",
+        "scheduled": "8:22 ص",
+        "actual": "--"
+      },
+      {
+        "name": "التوفيقية",
+        "scheduled": "8:38 ص",
+        "actual": "--"
+      },
+      {
+        "name": "إيتاي البارود",
+        "scheduled": "8:51 ص",
+        "actual": "--"
+      },
+      {
+        "name": "دمنهور",
+        "scheduled": "9:13 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أبو حمص",
+        "scheduled": "9:29 ص",
+        "actual": "--"
+      },
+      {
+        "name": "كفر الدوار",
+        "scheduled": "9:46 ص",
+        "actual": "--"
+      },
+      {
+        "name": "سيدي جابر",
+        "scheduled": "10:06 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الإسكندرية",
+        "scheduled": "10:15 ص",
+        "actual": "--"
+      }
+    ]
+  },
   "14": {
     "number": "14",
     "type": "روسي مكيف",
