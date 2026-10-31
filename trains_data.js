@@ -1182,7 +1182,7 @@ window.DEFAULT_TRAINS_DATA = {
     "status": {
       "state": "NOT_STARTED",
       "stationIndex": null,
-      "updatedBy": "إعادة ضبط من المشرف",
+      "updatedBy": "جدول الرحلة الأساسي",
       "departedAt": null
     },
     "stations": [
@@ -3088,20 +3088,19 @@ window.DEFAULT_TRAINS_DATA = {
   },
   "185": {
     "number": "185",
-    "type": "روسي مكيف",
-    "name": "سوهاج - القاهرة",
+    "type": "روسي مك",
+    "name": "سوهاج - بورسعيد",
     "status": {
-      "state": "AT_STATION",
-      "stationIndex": 0,
-      "updatedBy": "المشرف admin (12:53 ص)",
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي",
       "departedAt": null
     },
     "stations": [
       {
         "name": "سوهاج",
         "scheduled": "12:05 ص",
-        "actual": "12:53 ص",
-        "delayMinutes": 48
+        "actual": "--"
       },
       {
         "name": "المراغة",
@@ -3272,7 +3271,8 @@ window.DEFAULT_TRAINS_DATA = {
     "status": {
       "state": "NOT_STARTED",
       "stationIndex": null,
-      "updatedBy": "جدول الرحلة الأساسي"
+      "updatedBy": "جدول الرحلة الأساسي",
+      "departedAt": null
     },
     "stations": [
       {
@@ -6602,7 +6602,8 @@ window.DEFAULT_TRAINS_DATA = {
     "status": {
       "state": "NOT_STARTED",
       "stationIndex": null,
-      "updatedBy": "جدول الرحلة الأساسي"
+      "updatedBy": "جدول الرحلة الأساسي",
+      "departedAt": null
     },
     "stations": [
       {
