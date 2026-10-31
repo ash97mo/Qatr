@@ -438,6 +438,228 @@ window.DEFAULT_TRAINS_DATA = {
       }
     ]
   },
+  "975": {
+    "number": "975",
+    "type": "روسي",
+    "name": "الاقصر - القاهرة",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "الأقصر",
+        "scheduled": "8:00 ص",
+        "actual": "--"
+      },
+      {
+        "name": "قوص",
+        "scheduled": "8:26 ص",
+        "actual": "--"
+      },
+      {
+        "name": "قنا",
+        "scheduled": "8:55 ص",
+        "actual": "--"
+      },
+      {
+        "name": "دشنا",
+        "scheduled": "9:25 ص",
+        "actual": "--"
+      },
+      {
+        "name": "نجع حمادي",
+        "scheduled": "9:51 ص",
+        "actual": "--"
+      },
+      {
+        "name": "فرشوط",
+        "scheduled": "10:07 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أبو تشت",
+        "scheduled": "10:17 ص",
+        "actual": "--"
+      },
+      {
+        "name": "البلينا",
+        "scheduled": "10:36 ص",
+        "actual": "--"
+      },
+      {
+        "name": "جرجا",
+        "scheduled": "10:53 ص",
+        "actual": "--"
+      },
+      {
+        "name": "المنشأة",
+        "scheduled": "11:28 ص",
+        "actual": "--"
+      },
+      {
+        "name": "سوهاج",
+        "scheduled": "11:45 ص",
+        "actual": "--"
+      },
+      {
+        "name": "المراغة",
+        "scheduled": "12:17 م",
+        "actual": "--"
+      },
+      {
+        "name": "طهطا",
+        "scheduled": "12:33 م",
+        "actual": "--"
+      },
+      {
+        "name": "طما",
+        "scheduled": "12:51 م",
+        "actual": "--"
+      },
+      {
+        "name": "صدفا",
+        "scheduled": "1:02 م",
+        "actual": "--"
+      },
+      {
+        "name": "أبو تيج",
+        "scheduled": "1:15 م",
+        "actual": "--"
+      },
+      {
+        "name": "أسيوط",
+        "scheduled": "1:40 م",
+        "actual": "--"
+      },
+      {
+        "name": "جامعة الأزهر",
+        "scheduled": "1:58 م",
+        "actual": "--"
+      },
+      {
+        "name": "منقباد",
+        "scheduled": "2:08 م",
+        "actual": "--"
+      },
+      {
+        "name": "منفلوط",
+        "scheduled": "2:28 م",
+        "actual": "--"
+      },
+      {
+        "name": "القوصية",
+        "scheduled": "2:48 م",
+        "actual": "--"
+      },
+      {
+        "name": "ديروط",
+        "scheduled": "3:04 م",
+        "actual": "--"
+      },
+      {
+        "name": "دير مواس",
+        "scheduled": "3:16 م",
+        "actual": "--"
+      },
+      {
+        "name": "ملوي",
+        "scheduled": "3:30 م",
+        "actual": "--"
+      },
+      {
+        "name": "الروضة",
+        "scheduled": "4:01 م",
+        "actual": "--"
+      },
+      {
+        "name": "أبو قرقاص",
+        "scheduled": "4:16 م",
+        "actual": "--"
+      },
+      {
+        "name": "المنيا",
+        "scheduled": "4:40 م",
+        "actual": "--"
+      },
+      {
+        "name": "دماريس",
+        "scheduled": "4:54 م",
+        "actual": "--"
+      },
+      {
+        "name": "سمالوط",
+        "scheduled": "5:11 م",
+        "actual": "--"
+      },
+      {
+        "name": "مطاي",
+        "scheduled": "5:25 م",
+        "actual": "--"
+      },
+      {
+        "name": "بني مزار",
+        "scheduled": "5:35 م",
+        "actual": "--"
+      },
+      {
+        "name": "مغاغة",
+        "scheduled": "5:50 م",
+        "actual": "--"
+      },
+      {
+        "name": "الفشن",
+        "scheduled": "6:08 م",
+        "actual": "--"
+      },
+      {
+        "name": "ببا",
+        "scheduled": "6:24 م",
+        "actual": "--"
+      },
+      {
+        "name": "بني سويف",
+        "scheduled": "6:43 م",
+        "actual": "--"
+      },
+      {
+        "name": "ناصر",
+        "scheduled": "6:55 م",
+        "actual": "--"
+      },
+      {
+        "name": "أشمنت",
+        "scheduled": "7:05 م",
+        "actual": "--"
+      },
+      {
+        "name": "الواسطي",
+        "scheduled": "7:20 م",
+        "actual": "--"
+      },
+      {
+        "name": "العياط",
+        "scheduled": "7:55 م",
+        "actual": "--"
+      },
+      {
+        "name": "الجيزة",
+        "scheduled": "8:35 م",
+        "actual": "--"
+      },
+      {
+        "name": "صعيد مصر",
+        "scheduled": "8:49 م",
+        "actual": "--"
+      },
+      {
+        "name": "القاهرة",
+        "scheduled": "9:05 م",
+        "actual": "--"
+      }
+    ]
+  },
   "976": {
     "number": "976",
     "type": "VIP",
