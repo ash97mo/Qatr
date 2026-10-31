@@ -41,7 +41,19 @@
     }
     h1 { color: #38bdf8; font-size: 21px; margin: 0; font-weight: 800; }
 
-    .header-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .header-actions { display: flex; gap: 8px; align-items: center; }
+
+    /* زرار الترس الصغير بالأعلى */
+    .btn-gear-settings {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: #1e293b; border: 1.5px solid #38bdf8;
+      color: #38bdf8; font-size: 18px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s ease;
+    }
+    .btn-gear-settings:hover {
+      background: #0284c7; color: #fff; transform: rotate(45deg);
+    }
 
     .box { background: #1a263d; border-radius: 10px; padding: 16px; margin-bottom: 18px; }
     label { display: block; font-size: 13px; color: #94a3b8; margin-bottom: 6px; }
@@ -77,7 +89,7 @@
     .btn-caution { background: #b91c1c; color: #fecaca; border: 1px dashed #ef4444; }
     .btn-add { background: #10b981; color: white; }
     .btn-secondary { background: #334155; color: #e2e8f0; }
-    .btn-github { background: #238636; color: white; border: 1px solid #2ea043; }
+    .btn-github { background: #238636; color: white; }
     .btn-edit-active { background: #8b5cf6; color: white; }
     .btn:hover { opacity: 0.88; }
 
@@ -98,6 +110,7 @@
     }
     .combo-item:hover { background: #0284c7; color: #ffffff; }
 
+    /* أزرار الإجراءات للقطار (تصفير - حذف - تعديل) */
     .train-actions-bar {
       display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 15px;
     }
@@ -223,7 +236,6 @@
     .custom-modal-card {
       background: #131d2e; border-radius: 20px; width: 100%; max-width: 440px;
       padding: 24px 20px; text-align: center; box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
-      direction: rtl;
     }
     .modal-icon-container {
       width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 14px;
@@ -261,53 +273,86 @@
     </div>
   </div>
 
-  <!-- نافذة إعدادات GitHub API المجانية للحفظ التلقائي -->
+  <!-- قائمة الإعدادات الرئيسية المنبثقة من زر الترس -->
+  <div id="mainSettingsModal" class="custom-modal-overlay" style="display: none;" onclick="if(event.target===this) closeMainSettingsModal()">
+    <div class="custom-modal-card" style="max-width: 360px;">
+      <h3 style="color: #38bdf8; margin-bottom: 16px; font-size: 18px;">⚙️ Settings</h3>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <button class="btn btn-secondary" style="padding: 12px; font-size: 13.5px; justify-content: flex-start;" onclick="openAdminsSettings()">
+          👤 Admins Settings
+        </button>
+        <button class="btn btn-github" style="padding: 12px; font-size: 13.5px; justify-content: flex-start;" onclick="openGithubSettings()">
+          🐙 GitHub Settings
+        </button>
+        <button class="btn btn-danger" style="padding: 12px; font-size: 13.5px; justify-content: flex-start;" onclick="logoutAdmin()">
+          🚪 Logout
+        </button>
+        <button class="btn btn-secondary" style="padding: 10px; margin-top: 5px;" onclick="closeMainSettingsModal()">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة إعدادات المشرفين (Admins Settings) بالكامل باللغة الإنجليزية -->
+  <div id="adminMgmtModal" class="custom-modal-overlay" style="display: none;" onclick="if(event.target===this) closeAdminMgmtModal()">
+    <div class="custom-modal-card" style="text-align: left; direction: ltr;">
+      <h3 style="color: #38bdf8; margin-bottom: 14px; text-align: center; font-size: 17px;">👤 Admins Settings</h3>
+      
+      <label style="font-size: 12px; color: #94a3b8;">Registered Admins:</label>
+      <div id="adminsListContainer" style="max-height: 140px; overflow-y: auto; margin-bottom: 14px; border: 1px solid #334155; border-radius: 8px; background: #0f172a;"></div>
+      
+      <!-- إضافة مشرف جديد -->
+      <div style="border-top: 1px solid #334155; padding-top: 10px; margin-bottom: 12px;">
+        <label style="font-size: 12.5px; color: #38bdf8; font-weight: bold; margin-bottom: 6px;">➕ Add New Admin:</label>
+        <input type="text" id="newAdminUser" placeholder="New username..." style="margin-bottom: 6px;">
+        <input type="password" id="newAdminPass" placeholder="New password..." style="margin-bottom: 8px;">
+        <button class="btn btn-add" style="width: 100%;" onclick="addNewAdminAccount()">+ Add Admin</button>
+      </div>
+
+      <!-- تغيير كلمة المرور للمشرف الحالي -->
+      <div style="border-top: 1px solid #334155; padding-top: 10px; margin-bottom: 12px;">
+        <label style="font-size: 12.5px; color: #facc15; font-weight: bold; margin-bottom: 6px;">🔑 Change My Password:</label>
+        <input type="password" id="oldPassInput" placeholder="Current password..." style="margin-bottom: 6px;">
+        <input type="password" id="changePassInput" placeholder="New password..." style="margin-bottom: 8px;">
+        <button class="btn btn-warning" style="width: 100%;" onclick="submitChangePassword()">Change Password</button>
+      </div>
+      
+      <div style="display: flex; gap: 8px;">
+        <button class="btn btn-danger" style="flex: 1;" onclick="logoutAdmin()">Logout</button>
+        <button class="btn btn-secondary" style="flex: 1;" onclick="closeAdminMgmtModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة إعدادات GitHub API للحفظ التلقائي -->
   <div id="githubSettingsModal" class="custom-modal-overlay" style="display: none;" onclick="if(event.target===this) closeGithubModal()">
-    <div class="custom-modal-card" style="text-align: right;">
-      <h3 style="color: #38bdf8; margin-bottom: 12px; text-align: center; font-size: 17px;">⚙️ إعدادات الحفظ التلقائي في جيت هب</h3>
+    <div class="custom-modal-card" style="text-align: left; direction: ltr;">
+      <h3 style="color: #38bdf8; margin-bottom: 12px; text-align: center; font-size: 17px;">🐙 GitHub Settings</h3>
       <p style="font-size: 12px; color: #94a3b8; margin-bottom: 12px; line-height: 1.6;">
-        ضع بيانات مستودعك والـ Token الخاص بك لكي يتم تعديل وحفظ ملف <code>trains_data.js</code> في جيت هب أوتوماتيكياً عند إضافة أو تعديل أو حذف أي قطار:
+        Enter your repository details and personal access token (PAT) to automatically commit changes to <code>trains_data.js</code>:
       </p>
 
-      <label>اسم المستخدم والمستودع (مثال: myuser/my-repo):</label>
-      <input type="text" id="ghRepoInput" placeholder="username/repository">
+      <label>Repository (e.g. username/repo):</label>
+      <input type="text" id="ghRepoInput" placeholder="ash97mo/trains-app">
 
-      <label>الفرع (Branch):</label>
-      <input type="text" id="ghBranchInput" value="main" placeholder="main أو master">
+      <label>Branch:</label>
+      <input type="text" id="ghBranchInput" value="main" placeholder="main">
 
-      <label>مسار الملف داخل المستودع:</label>
+      <label>File Path:</label>
       <input type="text" id="ghPathInput" value="trains_data.js" placeholder="trains_data.js">
 
-      <label>مفتاح الوصول الشخصي (GitHub Personal Access Token):</label>
+      <label>Personal Access Token (ghp_...):</label>
       <input type="password" id="ghTokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
 
       <div style="display: flex; gap: 8px; margin-top: 10px;">
-        <button class="btn btn-add" style="flex: 1;" onclick="saveGithubSettings()">💾 حفظ الإعدادات</button>
-        <button class="btn btn-secondary" style="flex: 1;" onclick="closeGithubModal()">إلغاء</button>
+        <button class="btn btn-add" style="flex: 1;" onclick="saveGithubSettings()">Save Settings</button>
+        <button class="btn btn-secondary" style="flex: 1;" onclick="closeGithubModal()">Close</button>
       </div>
     </div>
   </div>
 
-  <!-- نافذة إدارة المشرفين -->
-  <div id="adminMgmtModal" class="custom-modal-overlay" style="display: none;" onclick="if(event.target===this) closeAdminMgmtModal()">
-    <div class="custom-modal-card" style="text-align: right;">
-      <h3 style="color: #38bdf8; margin-bottom: 12px; text-align: center; font-size: 17px;">👥 إدارة حسابات المشرفين</h3>
-      
-      <label style="font-size: 12px; color: #94a3b8;">قائمة المشرفين المسجلين:</label>
-      <div id="adminsListContainer" style="max-height: 160px; overflow-y: auto; margin-bottom: 15px; border: 1px solid #334155; border-radius: 8px; background: #0f172a;"></div>
-      
-      <div style="border-top: 1px solid #334155; padding-top: 12px;">
-        <label style="font-size: 12.5px; color: #38bdf8; font-weight: bold; margin-bottom: 6px;">➕ إضافة مشرف جديد:</label>
-        <input type="text" id="newAdminUser" placeholder="اسم المستخدم الجديد..." style="margin-bottom: 8px;">
-        <input type="password" id="newAdminPass" placeholder="كلمة المرور..." style="margin-bottom: 10px;">
-        <button class="btn btn-add" style="width: 100%; margin-bottom: 8px;" onclick="addNewAdminAccount()">+ حفظ المشرف الجديد</button>
-      </div>
-      
-      <button class="btn btn-secondary" style="width: 100%; margin-top: 4px;" onclick="closeAdminMgmtModal()">إغلاق</button>
-    </div>
-  </div>
-
-  <!-- نافذة تسجيل دخول المشرف -->
+  <!-- نافذة تسجيل الدخول للمشرف -->
   <div id="loginOverlay" class="login-overlay">
     <div class="login-card">
       <div style="font-size: 40px; margin-bottom: 10px;">🔐</div>
@@ -330,10 +375,8 @@
         <div id="currentAdminBadge" style="font-size: 12px; color: #94a3b8; margin-top: 3px;"></div>
       </div>
       <div class="header-actions">
-        <button class="btn btn-github" onclick="openGithubModal()">⚙️ إعدادات جيت هب</button>
-        <button class="btn btn-secondary" onclick="openAdminMgmtModal()">👥 إدارة المشرفين</button>
-        <button class="btn btn-secondary" onclick="changeAdminPassword()">🔑 تغيير كلمة السر</button>
-        <button class="btn btn-danger" onclick="logoutAdmin()">🚪 خروج</button>
+        <!-- زر الترس لفتح الإعدادات -->
+        <button class="btn-gear-settings" onclick="openMainSettingsModal()" title="Settings">⚙️</button>
       </div>
     </div>
 
@@ -349,11 +392,12 @@
         <div class="combo-dropdown" id="directTrainDropdown"></div>
       </div>
 
+      <!-- أزرار الإجراءات للقطار المختار: تصفير - حذف - تعديل (كلمات فردية صغيرة) -->
       <div class="train-actions-bar" id="trainActionsRow" style="display: none;">
-        <button id="btnResetTrain" class="btn btn-warning" onclick="resetCurrentTrain()" title="تصفير أوقات وتأخيرات القطار">🔄 تصفير الحالة</button>
-        <button id="btnDeleteTrain" class="btn btn-danger" onclick="deleteCurrentTrain()" title="حذف القطار من قاعدة البيانات">🗑️ حذف من القاعدة</button>
-        <button id="btnToggleEdit" class="btn btn-secondary" onclick="toggleEditMode()" title="تعديل بيانات ومحطات القطار">✏️ تعديل الجدول</button>
-        <button id="btnSaveAll" class="btn btn-add" style="display: none;" onclick="saveAllTrainEdits()" title="حفظ جميع التعديلات">💾 حفظ وتحديث جيت هب</button>
+        <button id="btnResetTrain" class="btn btn-warning" onclick="resetCurrentTrain()" title="تصفير أوقات وتأخيرات القطار">🔄 تصفير</button>
+        <button id="btnDeleteTrain" class="btn btn-danger" onclick="deleteCurrentTrain()" title="حذف القطار من قاعدة البيانات">🗑️ حذف</button>
+        <button id="btnToggleEdit" class="btn btn-secondary" onclick="toggleEditMode()" title="تعديل بيانات ومحطات القطار">✏️ تعديل</button>
+        <button id="btnSaveAll" class="btn btn-add" style="display: none;" onclick="saveAllTrainEdits()" title="حفظ التعديلات">💾 حفظ</button>
       </div>
 
       <div id="trainInfoDisplayBar" class="train-info-display-bar" style="display: none;"></div>
@@ -392,7 +436,7 @@
 
     <!-- 2. إضافة قطار جديد لقاعدة البيانات -->
     <div class="box">
-      <h2>2. إضافة رحلة قطار جديدة إلى قاعدة البيانات (لصق ذكي مباشر 📋)</h2>
+      <h2>2. إضافة رحلة قطار جديدة (لصق ذكي مباشر 📋)</h2>
       <div style="display: grid; grid-template-columns: 1fr 1fr 2fr; gap: 10px;">
         <div>
           <label>رقم القطار:</label>
@@ -419,13 +463,14 @@
         <table class="preview-table"><tbody id="previewBody"></tbody></table>
       </div>
 
-      <button class="btn btn-primary" onclick="addNewTrain()">+ حفظ وإضافة القطار لقاعدة البيانات (وجيت هب أوتوماتيكياً)</button>
+      <!-- الزر السفلي بالاسم المطلوب تماماً -->
+      <button class="btn btn-primary" onclick="addNewTrain()">حفظ الي قاعده البيانات</button>
     </div>
   </div>
 
   <script>
     const DEFAULT_ADMINS = {
-      "admin": { "password": "admin2026", "name": "المشرف الرئيسي" }
+      "admin": { "password": "admin2026", "name": "Admin" }
     };
 
     function getAdmins() {
@@ -446,7 +491,7 @@
       if (isAuth === 'true' && currentUser) {
         document.getElementById('loginOverlay').style.display = 'none';
         document.getElementById('adminMainContainer').style.display = 'block';
-        document.getElementById('currentAdminBadge').innerHTML = `👤 المشرف الحالي: <b style="color:#38bdf8;">${currentUser}</b>`;
+        document.getElementById('currentAdminBadge').innerHTML = `👤 Logged in as: <b style="color:#38bdf8;">${currentUser}</b>`;
         initMQTT();
       } else {
         document.getElementById('loginOverlay').style.display = 'flex';
@@ -474,44 +519,46 @@
     }
 
     function logoutAdmin() {
-      if (confirm("هل تريد تسجيل الخروج من لوحة التحكم؟")) {
+      if (confirm("Are you sure you want to log out?")) {
         sessionStorage.removeItem('admin_authenticated');
         sessionStorage.removeItem('current_admin_user');
+        closeMainSettingsModal();
+        closeAdminMgmtModal();
         checkLoginStatus();
       }
     }
 
-    function changeAdminPassword() {
-      const currentUser = sessionStorage.getItem('current_admin_user');
-      if (!currentUser) return;
-      const admins = getAdmins();
-      if (!admins[currentUser]) return;
-
-      const oldPass = prompt(`أدخل كلمة المرور الحالية للمشرف (${currentUser}):`);
-      if (!oldPass) return;
-      if (oldPass !== admins[currentUser].password) {
-        showCustomAlert('error', 'خطأ في التحقق', 'كلمة المرور الحالية غير صحيحة!');
-        return;
-      }
-
-      const newPass = prompt("أدخل كلمة المرور الجديدة (يجب ألا تقل عن 4 خانات):");
-      if (!newPass || newPass.trim().length < 4) {
-        showCustomAlert('error', 'كلمة سر قصيرة', 'كلمة المرور قصيرة جداً، لم يتم التغيير.');
-        return;
-      }
-
-      admins[currentUser].password = newPass.trim();
-      saveAdmins(admins);
-      showCustomAlert('success', 'تم التغيير', `تم تغيير كلمة المرور للمشرف (${currentUser}) بنجاح!`);
+    // نوافذ الإعدادات المنبثقة من زر الترس
+    function openMainSettingsModal() {
+      document.getElementById('mainSettingsModal').style.display = 'flex';
     }
 
-    function openAdminMgmtModal() {
+    function closeMainSettingsModal() {
+      document.getElementById('mainSettingsModal').style.display = 'none';
+    }
+
+    function openAdminsSettings() {
+      closeMainSettingsModal();
       renderAdminsList();
       document.getElementById('adminMgmtModal').style.display = 'flex';
     }
 
     function closeAdminMgmtModal() {
       document.getElementById('adminMgmtModal').style.display = 'none';
+    }
+
+    function openGithubSettings() {
+      closeMainSettingsModal();
+      const config = getGithubConfig();
+      document.getElementById('ghRepoInput').value = config.repo || '';
+      document.getElementById('ghBranchInput').value = config.branch || 'main';
+      document.getElementById('ghPathInput').value = config.path || 'trains_data.js';
+      document.getElementById('ghTokenInput').value = config.token || '';
+      document.getElementById('githubSettingsModal').style.display = 'flex';
+    }
+
+    function closeGithubModal() {
+      document.getElementById('githubSettingsModal').style.display = 'none';
     }
 
     function renderAdminsList() {
@@ -527,10 +574,10 @@
         row.innerHTML = `
           <div>
             <b style="color:${isSelf ? '#38bdf8' : '#f1f5f9'};">👤 ${u}</b>
-            ${isSelf ? '<span style="font-size:11px; color:#4ade80; margin-right:4px;">(أنت)</span>' : ''}
+            ${isSelf ? '<span style="font-size:11px; color:#4ade80; margin-left:4px;">(You)</span>' : ''}
           </div>
           <div>
-            ${!isSelf ? `<button class="btn btn-danger" style="padding:3px 8px; font-size:11px;" onclick="removeAdminAccount('${u}')">🗑️ حذف</button>` : ''}
+            ${!isSelf ? `<button class="btn btn-danger" style="padding:2px 7px; font-size:10.5px;" onclick="removeAdminAccount('${u}')">Delete</button>` : ''}
           </div>
         `;
         container.appendChild(row);
@@ -542,17 +589,17 @@
       const pass = document.getElementById('newAdminPass').value.trim();
 
       if (!user || user.length < 3) {
-        showCustomAlert('error', 'بيانات ناقصة', 'اسم المستخدم يجب أن يتكون من 3 حروف على الأقل.');
+        showCustomAlert('error', 'Invalid Input', 'Username must be at least 3 characters.');
         return;
       }
       if (!pass || pass.length < 4) {
-        showCustomAlert('error', 'بيانات ناقصة', 'كلمة المرور يجب ألا تقل عن 4 خانات.');
+        showCustomAlert('error', 'Invalid Input', 'Password must be at least 4 characters.');
         return;
       }
 
       const admins = getAdmins();
       if (admins[user]) {
-        showCustomAlert('error', 'مشرف موجود', 'اسم المستخدم هذا مسجل مسبقاً لمشرف آخر!');
+        showCustomAlert('error', 'Exists', 'This username already exists.');
         return;
       }
 
@@ -562,42 +609,54 @@
       document.getElementById('newAdminUser').value = '';
       document.getElementById('newAdminPass').value = '';
       renderAdminsList();
-      showCustomAlert('success', 'تمت الإضافة', `تمت إضافة المشرف (${user}) بنجاح.`);
+      showCustomAlert('success', 'Admin Added', `Admin (${user}) has been added successfully.`);
+    }
+
+    function submitChangePassword() {
+      const currentUser = sessionStorage.getItem('current_admin_user');
+      if (!currentUser) return;
+      const admins = getAdmins();
+      if (!admins[currentUser]) return;
+
+      const oldPass = document.getElementById('oldPassInput').value.trim();
+      const newPass = document.getElementById('changePassInput').value.trim();
+
+      if (!oldPass || oldPass !== admins[currentUser].password) {
+        showCustomAlert('error', 'Verification Failed', 'Current password is not correct.');
+        return;
+      }
+
+      if (!newPass || newPass.length < 4) {
+        showCustomAlert('error', 'Invalid Password', 'New password must be at least 4 characters.');
+        return;
+      }
+
+      admins[currentUser].password = newPass;
+      saveAdmins(admins);
+      document.getElementById('oldPassInput').value = '';
+      document.getElementById('changePassInput').value = '';
+      showCustomAlert('success', 'Password Changed', 'Password has been updated successfully.');
     }
 
     function removeAdminAccount(username) {
       const currentUser = sessionStorage.getItem('current_admin_user');
       if (username === currentUser) {
-        showCustomAlert('error', 'إجراء غير مسموح', 'لا يمكنك حذف حسابك الحالي أثناء تسجيل الدخول به!');
+        showCustomAlert('error', 'Action Not Allowed', 'You cannot delete your own account while logged in.');
         return;
       }
 
       const admins = getAdmins();
       if (Object.keys(admins).length <= 1) {
-        showCustomAlert('error', 'إجراء غير مسموح', 'يجب أن يتبقى مشرف واحد على الأقل بالنظام!');
+        showCustomAlert('error', 'Action Not Allowed', 'At least one admin must remain in the system.');
         return;
       }
 
-      if (confirm(`هل أنت متأكد من حذف حساب المشرف (${username}) نهائياً؟`)) {
+      if (confirm(`Are you sure you want to delete admin (${username})?`)) {
         delete admins[username];
         saveAdmins(admins);
         renderAdminsList();
-        showCustomAlert('success', 'تم الحذف', `تم حذف حساب المشرف (${username}).`);
+        showCustomAlert('success', 'Admin Deleted', `Admin (${username}) has been removed.`);
       }
-    }
-
-    // إعدادات GitHub API المجاني
-    function openGithubModal() {
-      const config = getGithubConfig();
-      document.getElementById('ghRepoInput').value = config.repo || '';
-      document.getElementById('ghBranchInput').value = config.branch || 'main';
-      document.getElementById('ghPathInput').value = config.path || 'trains_data.js';
-      document.getElementById('ghTokenInput').value = config.token || '';
-      document.getElementById('githubSettingsModal').style.display = 'flex';
-    }
-
-    function closeGithubModal() {
-      document.getElementById('githubSettingsModal').style.display = 'none';
     }
 
     function getGithubConfig() {
@@ -618,10 +677,9 @@
 
       localStorage.setItem('github_sync_config', JSON.stringify(config));
       closeGithubModal();
-      showCustomAlert('success', 'تم حفظ إعدادات GitHub', 'سيتم الآن تحديث ملف trains_data.js في جيت هب أوتوماتيكياً عند كل تعديل.');
+      showCustomAlert('success', 'GitHub Settings Saved', 'Changes will now be committed to GitHub automatically.');
     }
 
-    // تحديث ملف trains_data.js مباشرة على GitHub عبر REST API المجاني
     async function syncDatabaseToGitHub() {
       const config = getGithubConfig();
       if (!config.repo || !config.token) {
@@ -631,7 +689,6 @@
 
       try {
         const fileContent = "window.DEFAULT_TRAINS_DATA = " + JSON.stringify(trainsData, null, 2) + ";\n";
-        // تحويل المحتوى إلى Base64 مع دعم الحروف العربية بشكل سليم
         const utf8Bytes = new TextEncoder().encode(fileContent);
         let binaryStr = '';
         utf8Bytes.forEach(b => binaryStr += String.fromCharCode(b));
@@ -640,7 +697,6 @@
         const url = `https://api.github.com/repos/${config.repo}/contents/${config.path}?ref=${config.branch}`;
         let sha = null;
 
-        // قراءة الـ SHA الحالية للملف
         const getRes = await fetch(url, {
           headers: {
             "Authorization": `token ${config.token}`,
@@ -653,7 +709,6 @@
           sha = fileData.sha;
         }
 
-        // إرسال التحديث وحفظ الملف بجيت هب
         const putUrl = `https://api.github.com/repos/${config.repo}/contents/${config.path}`;
         const putRes = await fetch(putUrl, {
           method: "PUT",
@@ -663,7 +718,7 @@
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            message: `تحديث جدول القطارات تلقائياً بواسطة الأدمن (${new Date().toLocaleTimeString('ar-EG')})`,
+            message: `Update trains database from admin panel (${new Date().toLocaleTimeString()})`,
             content: base64Content,
             branch: config.branch,
             sha: sha || undefined
@@ -673,7 +728,7 @@
         if (putRes.ok) {
           console.log("GitHub file updated successfully!");
         } else {
-          console.warn("GitHub API responded with error:", await putRes.text());
+          console.warn("GitHub API error:", await putRes.text());
         }
       } catch (err) {
         console.error("Failed to commit to GitHub:", err);
@@ -692,7 +747,6 @@
     let selectedTrainId = null;
     let isEditMode = false;
 
-    // استخراج جدول القطارات الثابتة من trains_data.js
     function buildCleanTrainsDatabase() {
       const base = window.DEFAULT_TRAINS_DATA || {};
       const result = {};
@@ -756,8 +810,8 @@
             <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
         `;
-        titleEl.textContent = title || "تم بنجاح";
-        btnEl.textContent = "حسناً";
+        titleEl.textContent = title || "Success";
+        btnEl.textContent = "OK";
       } else {
         iconBox.innerHTML = `
           <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
@@ -765,8 +819,8 @@
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         `;
-        titleEl.textContent = title || "خطأ أو تنبيه";
-        btnEl.textContent = "إغلاق";
+        titleEl.textContent = title || "Notice";
+        btnEl.textContent = "Close";
       }
 
       msgEl.textContent = message;
@@ -885,7 +939,7 @@
         useSSL: true, timeout: 5, cleanSession: true,
         onSuccess: () => {
           box.className = 'status-alert status-ok';
-          box.textContent = "✅ متصل بالسيرفر اللحظي (أي تحديث للحركة يصل للركاب فوراً)";
+          box.textContent = "✅ متصل بالسيرفر اللحظي";
           client.subscribe(LIVE_STATUS_TOPIC, { qos: 1 });
         },
         onFailure: () => {
@@ -1042,8 +1096,9 @@
 
       if (isEditMode) {
         btnToggleEdit.className = 'btn btn-edit-active';
-        btnToggleEdit.innerHTML = '✖️ إلغاء التعديل';
+        btnToggleEdit.innerHTML = '✖️ إلغاء';
         btnSaveAll.style.display = 'inline-flex';
+        btnSaveAll.innerHTML = '💾 حفظ';
         editBar.style.display = 'block';
         displayBar.style.display = 'none';
         addSection.style.display = 'block';
@@ -1053,7 +1108,7 @@
         document.getElementById('editTrainName').value = train.name;
       } else {
         btnToggleEdit.className = 'btn btn-secondary';
-        btnToggleEdit.innerHTML = '✏️ تعديل الجدول';
+        btnToggleEdit.innerHTML = '✏️ تعديل';
         btnSaveAll.style.display = 'none';
         editBar.style.display = 'none';
         addSection.style.display = 'none';
@@ -1238,16 +1293,14 @@
       renderControlBoard();
       initTrainSelector();
 
-      // تحديث GitHub تلقائياً بضغطة زر واحدة
       await syncDatabaseToGitHub();
-
-      showCustomAlert('success', 'تم الحفظ وتحديث جيت هب', `تم حفظ تعديلات قطار (${newNum}) وتحديث ملف trains_data.js في جيت هب بنجاح!`);
+      showCustomAlert('success', 'تم الحفظ', `تم حفظ تعديلات قطار (${newNum}) وتحديث جيت هب بنجاح.`);
     }
 
     function resetCurrentTrain() {
       if (!selectedTrainId || !trainsData[selectedTrainId]) return;
       const train = trainsData[selectedTrainId];
-      if (confirm(`هل أنت متأكد من تصفير وإعادة ضبط رحلة قطار (${train.number})؟\n\nسيعود القطار لحالة بانتظار بدء الرحلة ومسح جميع أوقات الوصول والتأخيرات.`)) {
+      if (confirm(`هل أنت متأكد من تصفير وإعادة ضبط رحلة قطار (${train.number})؟`)) {
         train.status = {
           state: 'NOT_STARTED',
           stationIndex: null,
@@ -1262,13 +1315,13 @@
         delete liveStatusMap[selectedTrainId];
         broadcastLiveStatus();
         renderControlBoard();
-        showCustomAlert('success', 'تم التصفير', `تم تصفير رحلة قطار (${train.number}) وإعادته لحالة بانتظار بدء الرحلة.`);
+        showCustomAlert('success', 'تم التصفير', `تم تصفير رحلة قطار (${train.number}) بنجاح.`);
       }
     }
 
     async function deleteCurrentTrain() {
       if (!selectedTrainId || !trainsData[selectedTrainId]) return;
-      if (confirm(`هل أنت متأكد من حذف قطار ${selectedTrainId} نهائياً من قاعدة البيانات؟`)) {
+      if (confirm(`هل أنت متأكد من حذف قطار ${selectedTrainId} نهائياً؟`)) {
         const deletedId = selectedTrainId;
         delete trainsData[deletedId];
         delete liveStatusMap[deletedId];
@@ -1279,10 +1332,8 @@
         renderControlBoard();
         initTrainSelector();
 
-        // تحديث GitHub تلقائياً
         await syncDatabaseToGitHub();
-
-        showCustomAlert('success', 'تم الحذف', `تم حذف القطار (${deletedId}) نهائياً من قاعدة البيانات وجيت هب.`);
+        showCustomAlert('success', 'تم الحذف', `تم حذف القطار (${deletedId}) نهائياً وتحديث جيت هب.`);
       }
     }
 
@@ -1305,7 +1356,7 @@
     function setTrainAtStation(trainId, stationIndex) {
       autoResetIfNewTrip(trainId, stationIndex);
       const timeString = formatCurrentTime();
-      const currentAdmin = sessionStorage.getItem('current_admin_user') || 'المشرف';
+      const currentAdmin = sessionStorage.getItem('current_admin_user') || 'Admin';
 
       trainsData[trainId].status = { 
         state: 'AT_STATION', 
@@ -1330,13 +1381,13 @@
 
       broadcastLiveStatus();
       renderControlBoard();
-      showCustomAlert('success', 'تم اعتماد الوصول', `تم تسجيل وصول القطار إلى (${trainsData[trainId].stations[stationIndex].name}) ونشر ذلك للركاب فوراً.`);
+      showCustomAlert('success', 'تم تسجيل الوصول', `تم تسجيل وصول القطار إلى (${trainsData[trainId].stations[stationIndex].name}).`);
     }
 
     function setTrainMoving(trainId, fromStationIndex) {
       autoResetIfNewTrip(trainId, fromStationIndex);
       const timeString = formatCurrentTime();
-      const currentAdmin = sessionStorage.getItem('current_admin_user') || 'المشرف';
+      const currentAdmin = sessionStorage.getItem('current_admin_user') || 'Admin';
 
       trainsData[trainId].status = { 
         state: 'MOVING', 
@@ -1355,12 +1406,12 @@
 
       broadcastLiveStatus();
       renderControlBoard();
-      showCustomAlert('success', 'القطار في الطريق', `تم تسجيل مغادرة القطار للمحطة بنجاح.`);
+      showCustomAlert('success', 'القطار تحرك', `تم تسجيل تحرك القطار من المحطة.`);
     }
 
     function setTrainStoppedBetween(trainId, fromStationIndex) {
       const timeString = formatCurrentTime();
-      const currentAdmin = sessionStorage.getItem('current_admin_user') || 'المشرف';
+      const currentAdmin = sessionStorage.getItem('current_admin_user') || 'Admin';
 
       trainsData[trainId].status = { 
         state: 'STOPPED_BETWEEN', 
@@ -1378,7 +1429,7 @@
 
       broadcastLiveStatus();
       renderControlBoard();
-      showCustomAlert('error', 'تنبيه توقف بالسكة', `تم تسجيل حالة التوقف الفجائي بين المحطتين وإبلاغ المسافرين.`);
+      showCustomAlert('error', 'توقف بالسكة', `تم تسجيل توقف القطار بين المحطتين.`);
     }
 
     function updateActualTimeManual(trainId, stationIndex, newTime) {
@@ -1425,9 +1476,8 @@
       nameInput.value = '';
       timeInput.value = '';
 
-      // حفظ في جيت هب أوتوماتيكياً
       await syncDatabaseToGitHub();
-      showCustomAlert('success', 'تمت الإضافة', `تمت إضافة (${name}) إلى مسار القطار وتحديث جيت هب.`);
+      showCustomAlert('success', 'تمت الإضافة', `تمت إضافة (${name}) للمسار وتحديث جيت هب.`);
     }
 
     async function removeStation(trainId, index) {
@@ -1443,9 +1493,8 @@
         }
         renderControlBoard();
 
-        // حفظ في جيت هب أوتوماتيكياً
         await syncDatabaseToGitHub();
-        showCustomAlert('success', 'تم الحذف', 'تم حذف المحطة بنجاح من مسار الرحلة وتحديث جيت هب.');
+        showCustomAlert('success', 'تم الحذف', 'تم حذف المحطة وتحديث جيت هب.');
       }
     }
 
@@ -1505,7 +1554,7 @@
       if (parsedStationsList.length === 0) {
         parsePastedStations();
         if (parsedStationsList.length === 0) {
-          showCustomAlert('error', 'محطات غير موجودة', 'لم يتم التعرف على أي محطات! الصق المحطات ومواعيدها في المربع المخصص.');
+          showCustomAlert('error', 'محطات غير موجودة', 'لم يتم التعرف على أي محطات! الصق المحطات ومواعيدها في المربع.');
           return;
         }
       }
@@ -1521,10 +1570,9 @@
       initTrainSelector();
       selectTrain(num);
 
-      // تحديث ملف trains_data.js في جيت هب أوتوماتيكياً
       await syncDatabaseToGitHub();
 
-      showCustomAlert('success', 'تم حفظ ونشر القطار', `تمت إضافة قطار (${num}) وتحديث ملف trains_data.js في جيت هب بنجاح!`);
+      showCustomAlert('success', 'تم الحفظ', `تم حفظ قطار (${num}) في قاعدة البيانات وتحديث جيت هب بنجاح!`);
       document.getElementById('newTrainNumber').value = '';
       document.getElementById('newTrainType').value = '';
       document.getElementById('newTrainName').value = '';
@@ -1538,4 +1586,3 @@
   </script>
 </body>
 </html>
-<!-- --- END OF FILE admin.html --- -->
