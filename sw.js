@@ -1,14 +1,15 @@
---- START OF FILE sw.js ---
-const CACHE_NAME = 'egy-trains-v3';
+// --- START OF FILE sw.js ---
+const CACHE_NAME = 'egy-trains-v6';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
+  './admin.html',
   './manifest.json',
+  './trains_data.js',
   './icon.svg',
   'https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js'
 ];
 
-// تثبيت ملف الخدمة وتخزين الملفات الأساسية
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -17,7 +18,6 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// تفعيل ملف الخدمة وحذف الكاش القديم
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -32,22 +32,19 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// التعامل مع طلبات الشبكة
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   const url = new URL(req.url);
 
-  // 1. استبعاد اتصالات MQTT السحابية ومنفذ WebSockets
-  if (url.hostname.includes('broker.emqx.io') || url.pathname.includes('/mqtt') || url.port === '8084') {
+  // استبعاد اتصالات السيرفر اللحظي و GitHub API من الكاش
+  if (url.hostname.includes('broker.emqx.io') || url.hostname.includes('api.github.com') || url.pathname.includes('/mqtt') || url.port === '8084') {
     return;
   }
 
-  // 2. معالجة طلبات GET فقط وتجاهل الإضافات (Chrome Extensions)
   if (req.method !== 'GET' || !url.protocol.startsWith('http')) {
     return;
   }
 
-  // 3. استراتيجية الكاش مع التحديث بالخلفية
   event.respondWith(
     caches.match(req).then((cachedResponse) => {
       const fetchPromise = fetch(req)
@@ -61,7 +58,6 @@ self.addEventListener('fetch', (event) => {
           return networkResponse;
         })
         .catch(() => {
-          // في حال انقطاع الإنترنت التام وطلب صفحة تنقل
           if (req.mode === 'navigate') {
             return caches.match('./index.html');
           }
@@ -71,4 +67,4 @@ self.addEventListener('fetch', (event) => {
     })
   );
 });
---- END OF FILE sw.js ---
+// --- END OF FILE sw.js ---

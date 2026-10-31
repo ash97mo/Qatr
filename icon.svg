@@ -1,13 +1,37 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-  <rect width="512" height="512" rx="110" fill="#0b0f19"/>
-  <rect x="24" y="24" width="464" height="464" rx="90" fill="#131d2e" stroke="#38bdf8" stroke-width="8"/>
-  <path d="M140 100 C140 60, 372 60, 372 100 L372 320 C372 360, 140 360, 140 320 Z" fill="#0284c7" stroke="#38bdf8" stroke-width="8"/>
-  <rect x="170" y="120" width="172" height="90" rx="16" fill="#0b0f19" stroke="#38bdf8" stroke-width="5"/>
-  <circle cx="190" cy="280" r="22" fill="#facc15"/>
-  <circle cx="322" cy="280" r="22" fill="#facc15"/>
-  <rect x="236" y="260" width="40" height="40" rx="8" fill="#38bdf8"/>
-  <line x1="100" y1="410" x2="412" y2="410" stroke="#64748b" stroke-width="14" stroke-linecap="round"/>
-  <line x1="130" y1="440" x2="382" y2="440" stroke="#38bdf8" stroke-width="10" stroke-linecap="round"/>
-  <line x1="160" y1="360" x2="120" y2="440" stroke="#f87171" stroke-width="12" stroke-linecap="round"/>
-  <line x1="352" y1="360" x2="392" y2="440" stroke="#f87171" stroke-width="12" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1120"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <linearGradient id="trainGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- الخلفية -->
+  <rect width="512" height="512" rx="110" fill="url(#bgGrad)"/>
+  
+  <!-- خطوط السكة الحديد في الخلفية -->
+  <line x1="160" y1="460" x2="352" y2="460" stroke="#475569" stroke-width="14" stroke-linecap="round"/>
+  <line x1="180" y1="420" x2="332" y2="420" stroke="#475569" stroke-width="12" stroke-linecap="round"/>
+  <line x1="200" y1="380" x2="312" y2="380" stroke="#475569" stroke-width="10" stroke-linecap="round"/>
+
+  <!-- كابينة القطار -->
+  <rect x="146" y="110" width="220" height="260" rx="40" fill="url(#trainGrad)" stroke="#e0f2fe" stroke-width="8"/>
+  
+  <!-- الزجاج الأمامي -->
+  <rect x="176" y="145" width="160" height="95" rx="18" fill="#0b1120" stroke="#38bdf8" stroke-width="5"/>
+  <line x1="256" y1="145" x2="256" y2="240" stroke="#1e293b" stroke-width="4"/>
+
+  <!-- المصابيح الأمامية -->
+  <circle cx="190" cy="300" r="18" fill="#facc15" stroke="#fef08a" stroke-width="4"/>
+  <circle cx="322" cy="300" r="18" fill="#facc15" stroke="#fef08a" stroke-width="4"/>
+
+  <!-- الشبكة السفلية للقطار -->
+  <rect x="226" y="285" width="60" height="30" rx="8" fill="#0f172a"/>
+  
+  <!-- الصدام السفلي -->
+  <path d="M126 395 L386 395 L356 425 L156 425 Z" fill="#334155"/>
 </svg>

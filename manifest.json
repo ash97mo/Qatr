@@ -1,4 +1,4 @@
---- START OF FILE manifest.json ---
+// --- START OF FILE manifest.json ---
 {
   "name": "تتبع حركة القطارات - الراكب التشاركي",
   "short_name": "القطارات",
@@ -28,4 +28,4 @@
     }
   ]
 }
---- END OF FILE manifest.json ---
+// --- END OF FILE manifest.json ---

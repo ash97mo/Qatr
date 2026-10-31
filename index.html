@@ -1,3 +1,4 @@
+<!-- --- START OF FILE index.html --- -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -7,8 +8,6 @@
   
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0b0f19">
-  
-  <!-- إعدادات التوافق مع شاشات الآيفون والأندرويد -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -18,6 +17,8 @@
   <link rel="apple-touch-icon" sizes="192x192" href="icon.png">
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script>
+  <!-- استدعاء قاعدة البيانات الثابتة للقطارات -->
+  <script src="trains_data.js"></script>
 
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -130,14 +131,11 @@
       font-size: 12px; background: #0f172a; padding: 6px 10px; border-radius: 6px; gap: 6px;
     }
     
-    /* اسم المحطة والوقت بلون أزرق مخفف هادئ وبدون أي مستطيلات */
     .card-time-sched-soft {
       display: flex; align-items: center; gap: 5px;
       color: #7dd3fc; font-weight: 600; font-size: 12.5px;
     }
-    .card-time-sched-soft b {
-      color: #7dd3fc; font-weight: 700;
-    }
+    .card-time-sched-soft b { color: #7dd3fc; font-weight: 700; }
 
     .card-time-remaining { font-weight: bold; color: #4ade80; }
     .card-time-departed { font-weight: bold; color: #f87171; }
@@ -268,13 +266,12 @@
       <h1>🚆 تتبع القطارات التشاركي</h1>
     </header>
 
-    <!-- شريط تثبيت متوافق مع أندرويد وآيفون -->
     <div id="installAppPrompt" class="install-bar">
       <span id="installBarText">📲 ثبّت تطبيق القطارات على هاتفك</span>
       <button class="btn-install" id="installBarBtn" onclick="installPWA()">تثبيت الآن</button>
     </div>
 
-    <div id="connStatus" class="status-alert status-wait">⏳ جاري الاتصال بالسيرفر السحابي...</div>
+    <div id="connStatus" class="status-alert status-wait">⏳ جاري الاتصال بالسيرفر اللحظي...</div>
 
     <div class="tabs-wrapper">
       <button class="tab-btn active" id="tabRouteBtn" onclick="switchSearchTab('ROUTE')">🔍 ابحث بالمسار</button>
@@ -364,17 +361,65 @@
   </div>
 
   <script>
-    const SYNC_TOPIC = "egy_train_master_sync_2026";
+    const LIVE_STATUS_TOPIC = "egy_train_live_status_2026";
     const BROKER_HOST = "broker.emqx.io";
     const BROKER_PORT = 8084;
     const BROKER_PATH = "/mqtt";
 
     let trainsData = {};
+    let liveStatusMap = {};
     let currentUserRole = 'VIEWER';
     let currentSearchTab = 'ROUTE';
     let client = null;
     let deferredPrompt = null;
     let currentlyTrackedTrainId = null;
+
+    function buildCleanTrainsDatabase() {
+      const base = window.DEFAULT_TRAINS_DATA || {};
+      const result = {};
+      Object.keys(base).forEach(k => {
+        const t = base[k];
+        result[k] = {
+          number: t.number,
+          type: t.type || '',
+          name: t.name || '',
+          status: { state: 'NOT_STARTED', stationIndex: null, updatedBy: 'جدول الرحلة الأساسي', departedAt: null },
+          stations: t.stations.map(st => ({
+            name: st.name,
+            scheduled: st.scheduled,
+            actual: '--'
+          }))
+        };
+      });
+      return result;
+    }
+
+    trainsData = buildCleanTrainsDatabase();
+
+    const cachedLive = localStorage.getItem('local_live_status_cache');
+    if (cachedLive) {
+      try {
+        liveStatusMap = JSON.parse(cachedLive);
+        applyAllLiveUpdates();
+      } catch(e){}
+    }
+
+    function applyAllLiveUpdates() {
+      Object.keys(liveStatusMap).forEach(trainId => {
+        if (trainsData[trainId]) {
+          const live = liveStatusMap[trainId];
+          if (live.status) trainsData[trainId].status = live.status;
+          if (live.stationsActuals && Array.isArray(live.stationsActuals)) {
+            live.stationsActuals.forEach((item, idx) => {
+              if (trainsData[trainId].stations[idx]) {
+                if (item.actual) trainsData[trainId].stations[idx].actual = item.actual;
+                if (item.delayMinutes !== undefined) trainsData[trainId].stations[idx].delayMinutes = item.delayMinutes;
+              }
+            });
+          }
+        }
+      });
+    }
 
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
@@ -422,7 +467,7 @@
           '1️⃣ اضغط على زر المشاركة (Share) الموجود أسفل شاشة Safari.\n' +
           '2️⃣ مرر القائمة للأسفل واختر "إضافة إلى الشاشة الرئيسية" (Add to Home Screen ➕).\n' +
           '3️⃣ اضغط على كلمة "إضافة" (Add) في أعلى اليمين.\n\n' +
-          '✨ سيعمل التطبيق بملء الشاشة بدون شريط المتصفح وبشكل احترافي!'
+          '✨ سيعمل التطبيق بملء الشاشة وبشكل احترافي!'
         );
       }
     }
@@ -562,14 +607,11 @@
 
     function getTrainPropagatedDelay(train, targetStationIndex) {
       if (!train || !train.stations) return 0;
-      
       if (targetStationIndex !== undefined && targetStationIndex !== null) {
         const targetSt = train.stations[targetStationIndex];
         if (targetSt) {
           const directDelay = getStationDelay(targetSt);
-          if (directDelay !== null && directDelay !== undefined) {
-            return directDelay;
-          }
+          if (directDelay !== null && directDelay !== undefined) return directDelay;
         }
       }
 
@@ -582,9 +624,7 @@
         const st = train.stations[i];
         if (st) {
           const d = getStationDelay(st);
-          if (d !== null && d !== undefined) {
-            return d;
-          }
+          if (d !== null && d !== undefined) return d;
         }
       }
       return 0;
@@ -597,14 +637,6 @@
       const isLiveState = (train.status.state === 'MOVING' || train.status.state === 'STOPPED_BETWEEN' || train.status.departedAt);
       const isUpdatedByHuman = train.status.updatedBy && !train.status.updatedBy.includes('جدول') && !train.status.updatedBy.includes('الأساسي');
       return Boolean(hasAnyActual || isLiveState || isUpdatedByHuman);
-    }
-
-    const cached = localStorage.getItem('local_trains_cache');
-    if (cached) {
-      try { 
-        trainsData = JSON.parse(cached);
-        initAllComboboxes();
-      } catch(e){}
     }
 
     function autoResetIfNewTrip(trainId, stationIndex) {
@@ -767,7 +799,7 @@
     function initMQTT() {
       const box = document.getElementById('connStatus');
       box.className = 'status-alert status-wait';
-      box.textContent = "⏳ جاري الاتصال بالسيرفر السحابي...";
+      box.textContent = "⏳ جاري الاتصال بالسيرفر اللحظي...";
 
       const clientId = "pass_" + Math.random().toString(16).substr(2, 8);
       client = new Paho.MQTT.Client(BROKER_HOST, Number(BROKER_PORT), BROKER_PATH, clientId);
@@ -780,10 +812,11 @@
 
       client.onMessageArrived = (message) => {
         try {
-          const data = JSON.parse(message.payloadString);
-          if (data && typeof data === 'object') {
-            trainsData = data;
-            localStorage.setItem('local_trains_cache', JSON.stringify(trainsData));
+          const liveData = JSON.parse(message.payloadString);
+          if (liveData && typeof liveData === 'object') {
+            liveStatusMap = liveData;
+            localStorage.setItem('local_live_status_cache', JSON.stringify(liveStatusMap));
+            applyAllLiveUpdates();
             initAllComboboxes();
             if (currentSearchTab === 'ROUTE') {
               findClosestTrains();
@@ -799,8 +832,8 @@
         useSSL: true, timeout: 5, cleanSession: true,
         onSuccess: () => {
           box.className = 'status-alert status-ok';
-          box.textContent = "✅ متصل بالسيرفر السحابي مباشرة";
-          client.subscribe(SYNC_TOPIC, { qos: 1 });
+          box.textContent = "✅ متصل بالسيرفر اللحظي مباشرة";
+          client.subscribe(LIVE_STATUS_TOPIC, { qos: 1 });
         },
         onFailure: () => {
           box.className = 'status-alert status-wait';
@@ -810,11 +843,11 @@
       });
     }
 
-    function broadcastData() {
-      localStorage.setItem('local_trains_cache', JSON.stringify(trainsData));
+    function broadcastLiveStatus() {
+      localStorage.setItem('local_live_status_cache', JSON.stringify(liveStatusMap));
       if (client && client.isConnected()) {
-        const message = new Paho.MQTT.Message(JSON.stringify(trainsData));
-        message.destinationName = SYNC_TOPIC;
+        const message = new Paho.MQTT.Message(JSON.stringify(liveStatusMap));
+        message.destinationName = LIVE_STATUS_TOPIC;
         message.retained = true;
         message.qos = 1;
         client.send(message);
@@ -984,7 +1017,6 @@
       findClosestTrains();
     }
 
-    // تحديد الموقع وعرض أقرب محطة مباشرة دون أي رسالة خطأ أو X
     function locateNearestStation(targetInputId = 'fromStationInput') {
       if (!navigator.geolocation) {
         showCustomAlert('info', 'تنبيه', 'يرجى تشغيل الـ GPS لتحديد موقعك بدقة.');
@@ -999,12 +1031,13 @@
           let nearestName = null;
           let minDistance = Infinity;
 
-          // في حالة صفحة منتظر بمحطة: نحدد أقرب محطة من محطات هذا القطار تحديداً
-          if (targetInputId === 'waitingStationSelect') {
-            const select = document.getElementById('waitingStationSelect');
+          if (targetInputId === 'waitingStationSelect' || targetInputId === 'passengerStationSelect') {
+            const select = document.getElementById(targetInputId);
             const train = trainsData[currentlyTrackedTrainId];
             if (select && train && train.stations) {
+              const availableIndices = Array.from(select.options).map(opt => parseInt(opt.value));
               train.stations.forEach((st, idx) => {
+                if (!availableIndices.includes(idx)) return;
                 const coords = getStationCoordinates(st.name);
                 if (coords) {
                   const dist = calculateDistanceKm(userLat, userLng, coords.lat, coords.lng);
@@ -1018,7 +1051,6 @@
             }
           }
 
-          // في حالة البحث بالمسار أو كخيار عام: البحث بين جميع محطات الجمهورية
           if (!nearestName) {
             Object.keys(EGYPT_STATIONS_COORDS).forEach(stName => {
               const coords = EGYPT_STATIONS_COORDS[stName];
@@ -1029,17 +1061,7 @@
               }
             });
 
-            if (targetInputId === 'waitingStationSelect') {
-              const select = document.getElementById('waitingStationSelect');
-              if (select) {
-                for (let i = 0; i < select.options.length; i++) {
-                  if (normalizeStationName(select.options[i].text).includes(normalizeStationName(nearestName))) {
-                    select.selectedIndex = i;
-                    break;
-                  }
-                }
-              }
-            } else {
+            if (targetInputId === 'fromStationInput') {
               const fromInput = document.getElementById('fromStationInput');
               fromInput.value = nearestName;
               findClosestTrains();
@@ -1063,7 +1085,6 @@
       );
     }
 
-    // البحث بالمسار: الترتيب من الأقرب موعداً للمحطة المختارة بناءً على الوقت
     function findClosestTrains() {
       const fromSt = document.getElementById('fromStationInput').value.trim();
       const toSt = document.getElementById('toStationInput').value.trim();
@@ -1181,7 +1202,6 @@
           }
         }
 
-        // اسم المحطة والوقت بلون أزرق مخفف وبدون أي برواز أو مستطيل
         const cleanFromStation = item.fromStation.name.replace(/محطة/g, '').trim();
         const timeSchedHtml = `
           <div class="card-time-sched-soft">
@@ -1265,7 +1285,6 @@
 
       const roleSec = document.getElementById('roleCardSection');
       const badgeSec = document.getElementById('trainBadgeSection');
-      const crowdSec = document.getElementById('crowdActionPanel');
 
       if (!trainId || !trainsData[trainId]) {
         resetTrackedTrainUI();
@@ -1337,22 +1356,29 @@
       controls.innerHTML = '';
 
       const isLive = hasLiveUpdate(train);
-      const firstSt = train.stations[0];
-      const secondSt = train.stations[1];
-      const cleanFirst = firstSt ? firstSt.name.replace(/محطة/g, '').trim() : '';
-      const cleanSecond = secondSt ? secondSt.name.replace(/محطة/g, '').trim() : '';
 
       if (currentUserRole === 'PASSENGER') {
         if (!isLive) {
+          let stationOptions = '';
+          train.stations.forEach((st, idx) => {
+            const cleanName = st.name.replace(/محطة/g, '').trim();
+            stationOptions += `<option value="${idx}">📍 ${cleanName}</option>`;
+          });
+
           controls.innerHTML = `
-            <p style="font-size:12px; margin-bottom:8px; color:#cbd5e1;">الرحلة لم تبدأ بعد. إذا كنت في <b>${cleanFirst}</b> الآن:</p>
-            <button class="btn-update btn-arrive" onclick="submitVerifiedMovement('${trainId}', 0, 'ARRIVE')">
-              🛑 القطار وصل رصيف ${cleanFirst} الآن
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <label style="font-size:12px; color:#cbd5e1; font-weight:600;">المحطة التي تتواجد بها حالياً:</label>
+              <button type="button" class="btn-gps-locate" onclick="locateNearestStation('passengerStationSelect')">📍 موقعي</button>
+            </div>
+            <select id="passengerStationSelect" style="width:100%; padding:10px; background:#0f172a; border:1px solid #334155; border-radius:10px; color:#f8fafc; font-size:13px; margin-bottom:10px; outline:none;">
+              ${stationOptions}
+            </select>
+            <button class="btn-update btn-arrive" onclick="submitPassengerInitialArrival('${trainId}')">
+              🛑 القطار متوقف / وصل عندي بالمحطة الآن
             </button>
-            ${secondSt ? `
-            <button class="btn-update btn-depart" onclick="submitVerifiedMovement('${trainId}', 0, 'DEPART')">
-              🚀 تحركنا الآن باتجاه ${cleanSecond}
-            </button>` : ''}
+            <button class="btn-update btn-depart" onclick="submitPassengerInitialDeparture('${trainId}')">
+              🚀 تحركنا الآن من هذه المحطة
+            </button>
           `;
           return;
         }
@@ -1361,7 +1387,7 @@
         const currentStation = train.stations[currentIndex];
         const nextStation = train.stations[currentIndex + 1];
 
-        const cleanCurrentName = (currentStation.name || '').replace(/محطة/g, '').trim();
+        const cleanCurrentName = (currentStation?.name || '').replace(/محطة/g, '').trim();
         const cleanNextName = nextStation ? (nextStation.name || '').replace(/محطة/g, '').trim() : '';
 
         if (train.status.state === 'AT_STATION') {
@@ -1388,7 +1414,7 @@
           `;
         } else if (train.status.state === 'STOPPED_BETWEEN') {
           controls.innerHTML = `
-            <p style="font-size:12px; margin-bottom:8px; color:#fca5a5;">القطار متوقف بين <b>${cleanCurrentName}</b> و <b>${cleanNextName}</b>:</p>
+            <p style="font-size:12px; margin-bottom:8px; color:#fca5a5;">القطار متوقف بالسكة بين <b>${cleanCurrentName}</b> و <b>${cleanNextName}</b>:</p>
             <button class="btn-update btn-depart" onclick="submitVerifiedMovement('${trainId}', ${currentIndex}, 'DEPART')">
               🚀 استأنف القطار المسير باتجاه ${cleanNextName}
             </button>
@@ -1404,7 +1430,8 @@
         const startIndex = isLive ? train.status.stationIndex : 0;
         train.stations.forEach((st, idx) => {
           if (idx >= startIndex) {
-            optionsHtml += `<option value="${idx}">${st.name.replace(/محطة/g, '').trim()}</option>`;
+            const cleanName = st.name.replace(/محطة/g, '').trim();
+            optionsHtml += `<option value="${idx}">${cleanName}</option>`;
           }
         });
 
@@ -1423,6 +1450,16 @@
       }
     }
 
+    function submitPassengerInitialArrival(trainId) {
+      const selectedIdx = parseInt(document.getElementById('passengerStationSelect').value);
+      submitVerifiedMovement(trainId, selectedIdx, 'ARRIVE');
+    }
+
+    function submitPassengerInitialDeparture(trainId) {
+      const selectedIdx = parseInt(document.getElementById('passengerStationSelect').value);
+      submitVerifiedMovement(trainId, selectedIdx, 'DEPART');
+    }
+
     function submitWaitingStationArrival(trainId) {
       const selectedIdx = parseInt(document.getElementById('waitingStationSelect').value);
       submitVerifiedMovement(trainId, selectedIdx, 'ARRIVE');
@@ -1430,23 +1467,24 @@
 
     function submitVerifiedMovement(trainId, targetStationIndex, actionType) {
       const train = trainsData[trainId];
-      const curIdx = hasLiveUpdate(train) ? train.status.stationIndex : 0;
+      const isLive = hasLiveUpdate(train);
+      const curIdx = isLive ? train.status.stationIndex : targetStationIndex;
       const curStation = train.stations[curIdx];
       const targetStation = train.stations[targetStationIndex];
 
-      const cleanTarget = targetStation.name.replace(/محطة/g, '').trim();
-      const cleanCur = curStation.name.replace(/محطة/g, '').trim();
+      const cleanTarget = targetStation ? targetStation.name.replace(/محطة/g, '').trim() : '';
+      const cleanCur = curStation ? curStation.name.replace(/محطة/g, '').trim() : '';
 
       const now = new Date();
       const currentMins = now.getHours() * 60 + now.getMinutes();
 
       if (actionType === 'ARRIVE') {
-        if (hasLiveUpdate(train) && targetStationIndex < curIdx) {
+        if (isLive && targetStationIndex < curIdx) {
           showCustomAlert('error', 'محطة سابقة', `القطار تجاوز (${cleanTarget}) بالفعل.`);
           return;
         }
 
-        if (hasLiveUpdate(train) && targetStationIndex === curIdx && train.status.state === 'AT_STATION') {
+        if (isLive && targetStationIndex === curIdx && train.status.state === 'AT_STATION') {
           showCustomAlert('error', 'مسجل بالفعل', `القطار مسجل حالياً أنه متوقف برصيف (${cleanTarget}).`);
           return;
         }
@@ -1480,7 +1518,7 @@
           const userSpeed = position.coords.speed;
           const userHeading = position.coords.heading;
 
-          if (accuracy > 350) {
+          if (accuracy > 400) {
             document.getElementById('gpsDistanceStatus').textContent = "❌ إشارة ضعيفة";
             showCustomAlert('error', 'إشارة موقع غير دقيقة', `دقة الـ GPS بهاتفك ضعيفة حالياً (${Math.round(accuracy)} متر)، يرجى الاقتراب من نافذة القطار.`);
             return;
@@ -1504,15 +1542,15 @@
               showCustomAlert(
                 'error',
                 'أنت بعيد عن رصيف المحطة',
-                `موقعك الحالي يبعد ${distKmFormatted} كم (${distanceMeters.toLocaleString('ar-EG')} متراً) عن (${cleanTarget}).\nيشترط التواجد الفعلي داخل رصيف المحطة (أقل من 400 متر) لمنع التحديث من المنازل المحيطة.`
+                `موقعك الحالي يبعد ${distKmFormatted} كم (${distanceMeters.toLocaleString('ar-EG')} متراً) عن (${cleanTarget}).\nيشترط التواجد الفعلي داخل رصيف المحطة (أقل من 400 متر).`
               );
               return;
             }
           }
 
           if (actionType === 'DEPART' || actionType === 'STOP_BETWEEN') {
-            const fromSt = train.stations[curIdx];
-            const toSt = train.stations[curIdx + 1];
+            const fromSt = train.stations[targetStationIndex];
+            const toSt = train.stations[targetStationIndex + 1];
 
             if (!toSt) {
               showCustomAlert('error', 'نهاية الخط', 'القطار في المحطة النهائية، لا توجد محطة تالية للمسير نحوها.');
@@ -1531,47 +1569,27 @@
             const cleanNextName = toSt.name.replace(/محطة/g, '').trim();
             const metrics = getTrackMetrics(userLat, userLng, c1.lat, c1.lng, c2.lat, c2.lng);
 
-            const MAX_PERP_METERS = 350;
+            const segmentDistKm = calculateDistanceKm(c1.lat, c1.lng, c2.lat, c2.lng);
+            const MAX_PERP_METERS = Math.max(3000, segmentDistKm * 80);
+
             if (metrics.perpDistMeters > MAX_PERP_METERS) {
-              document.getElementById('gpsDistanceStatus').textContent = "❌ في المنازل";
+              document.getElementById('gpsDistanceStatus').textContent = "❌ خارج المسار";
               const distMetersRounded = Math.round(metrics.perpDistMeters);
               showCustomAlert(
                 'error',
                 'أنت بعيد عن شريط السكة الحديد',
-                `موقعك الحالي يبعد مسافة ${distMetersRounded.toLocaleString('ar-EG')} متراً عن شريط قضبان السكة الحديد (داخل منطقة سكنية/منازل).\nيشترط التواجد الفعلي على مسار القطار مباشرة (أقل من 350 متراً).`
+                `موقعك الحالي يبعد مسافة ${distMetersRounded.toLocaleString('ar-EG')} متراً عن خط سير القطار المتجه إلى (${cleanNextName}).\nيشترط التواجد الفعلي على مسار القطار.`
               );
               return;
             }
 
             if (actionType === 'DEPART') {
-              const distFromDepartureStation = calculateDistanceKm(userLat, userLng, c1.lat, c1.lng) * 1000;
-              
-              if (distFromDepartureStation > 1500) {
-                document.getElementById('gpsDistanceStatus').textContent = "❌ بعيد عن القيام";
-                showCustomAlert(
-                  'error',
-                  'أنت بعيد عن محطة القيام',
-                  `أنت تبعد مسافة ${(distFromDepartureStation / 1000).toFixed(2)} كم عن محطة (${cleanCur}).\nلا يمكن تسجيل تحرك القطار إلا عند مغادرته الفعلية من حرم المحطة (أقل من 1.5 كم).`
-                );
-                return;
-              }
-
-              if (metrics.t < -0.01) {
-                document.getElementById('gpsDistanceStatus').textContent = "❌ خلف المحطة";
-                showCustomAlert(
-                  'error',
-                  'الاتجاه معاكس للرحلة',
-                  `موقعك الحالي يقع خلف محطة (${cleanCur}) في الاتجاه المعاكس للمسار المتوجه إلى (${cleanNextName}).`
-                );
-                return;
-              }
-
-              if (userHeading !== null && !isNaN(userHeading) && userHeading >= 0 && userSpeed !== null && userSpeed > 1.4) {
+              if (userHeading !== null && !isNaN(userHeading) && userHeading >= 0 && userSpeed !== null && userSpeed > 1.8) {
                 const expectedBearing = calculateBearing(c1.lat, c1.lng, c2.lat, c2.lng);
                 let angleDiff = Math.abs(userHeading - expectedBearing);
                 if (angleDiff > 180) angleDiff = 360 - angleDiff;
 
-                if (angleDiff > 85) {
+                if (angleDiff > 95) {
                   document.getElementById('gpsDistanceStatus').textContent = "❌ اتجاه خاطئ";
                   showCustomAlert(
                     'error',
@@ -1580,25 +1598,6 @@
                   );
                   return;
                 }
-              }
-            }
-
-            if (actionType === 'STOP_BETWEEN') {
-              if (hasLiveUpdate(train) && train.status.state === 'AT_STATION') {
-                showCustomAlert('error', 'القطار بالمحطة', 'القطار مسجل حالياً برصيف المحطة، يجب تسجيل المغادرة أولاً قبل تسجيل أي توقف بالسكة.');
-                return;
-              }
-
-              if (metrics.t < 0.05) {
-                document.getElementById('gpsDistanceStatus').textContent = "❌ داخل المحطة";
-                showCustomAlert('error', 'ما زلت بالمحطة', `أنت ما زلت داخل نطاق محطة (${cleanCur}) ولم يخرج القطار للسكة بين المحطتين بعد.`);
-                return;
-              }
-
-              if (metrics.t > 0.95) {
-                document.getElementById('gpsDistanceStatus').textContent = "❌ على مشارف الوصول";
-                showCustomAlert('error', 'وصلت المحطة', `أنت بالفعل على مشارف محطة (${cleanNextName})، يرجى الضغط على زر (وصلنا رصيف المحطة) بدلاً من التوقف بالسكة.`);
-                return;
               }
             }
           }
@@ -1650,7 +1649,15 @@
         };
       }
 
-      broadcastData();
+      liveStatusMap[trainId] = {
+        status: train.status,
+        stationsActuals: train.stations.map(st => ({
+          actual: st.actual,
+          delayMinutes: st.delayMinutes
+        }))
+      };
+
+      broadcastLiveStatus();
       document.getElementById('gpsDistanceStatus').textContent = "✅ تم الاعتماد!";
       showCustomAlert('success', 'تم اعتماد موقعك بنجاح', `تم التحقق عبر الـ GPS وتحديث حالة قطار (${train.number}) سحابياً.`);
       loadSelectedTrain(trainId);
@@ -1706,7 +1713,9 @@
       });
     }
 
+    initAllComboboxes();
     initMQTT();
   </script>
 </body>
 </html>
+<!-- --- END OF FILE index.html --- -->
