@@ -3564,6 +3564,78 @@ window.DEFAULT_TRAINS_DATA = {
       }
     ]
   },
+  "960": {
+    "number": "960",
+    "type": "روسي",
+    "name": "بورسعيد - القاهرة",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "بورسعيد",
+        "scheduled": "6:35 م",
+        "actual": "--"
+      },
+      {
+        "name": "رأس العش",
+        "scheduled": "6:49 م",
+        "actual": "--"
+      },
+      {
+        "name": "القنطرة غرب",
+        "scheduled": "7:20 م",
+        "actual": "--"
+      },
+      {
+        "name": "الإسماعيلية",
+        "scheduled": "7:55 م",
+        "actual": "--"
+      },
+      {
+        "name": "أبو صوير",
+        "scheduled": "8:16 م",
+        "actual": "--"
+      },
+      {
+        "name": "القصاصين",
+        "scheduled": "8:35 م",
+        "actual": "--"
+      },
+      {
+        "name": "التل الكبير",
+        "scheduled": "8:52 م",
+        "actual": "--"
+      },
+      {
+        "name": "أبو حماد",
+        "scheduled": "9:07 م",
+        "actual": "--"
+      },
+      {
+        "name": "الزقازيق",
+        "scheduled": "9:30 م",
+        "actual": "--"
+      },
+      {
+        "name": "منية القمح",
+        "scheduled": "10:00 م",
+        "actual": "--"
+      },
+      {
+        "name": "بنها",
+        "scheduled": "10:21 م",
+        "actual": "--"
+      },
+      {
+        "name": "القاهرة",
+        "scheduled": "11:05 م",
+        "actual": "--"
+      }
+    ]
+  },
   "972": {
     "number": "972",
     "type": "روسي",
