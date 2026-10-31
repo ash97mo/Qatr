@@ -1,42 +1,4 @@
 window.DEFAULT_TRAINS_DATA = {
-  "928": {
-    "number": "928",
-    "type": "VIP",
-    "name": "الإسكندرية - القاهرة",
-    "status": {
-      "state": "NOT_STARTED",
-      "stationIndex": null,
-      "updatedBy": "جدول الرحلة الأساسي",
-      "departedAt": null
-    },
-    "stations": [
-      {
-        "name": "الإسكندرية",
-        "scheduled": "07:00 م",
-        "actual": "--"
-      },
-      {
-        "name": "سيدي جابر",
-        "scheduled": "07:15 م",
-        "actual": "--"
-      },
-      {
-        "name": "طنطا",
-        "scheduled": "08:35 م",
-        "actual": "--"
-      },
-      {
-        "name": "بنها",
-        "scheduled": "09:15 م",
-        "actual": "--"
-      },
-      {
-        "name": "القاهرة",
-        "scheduled": "09:50 م",
-        "actual": "--"
-      }
-    ]
-  },
   "980": {
     "number": "980",
     "type": "VIP",
