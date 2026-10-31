@@ -4121,5 +4121,52 @@ window.DEFAULT_TRAINS_DATA = {
         "actual": "--"
       }
     ]
+  },
+  "1130": {
+    "number": "1130",
+    "type": "روسي مكيف",
+    "name": "الإسكندرية - القاهرة",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "الإسكندرية",
+        "scheduled": "7:30 م",
+        "actual": "--"
+      },
+      {
+        "name": "سيدي جابر",
+        "scheduled": "7:42 م",
+        "actual": "--"
+      },
+      {
+        "name": "دمنهور",
+        "scheduled": "8:23 م",
+        "actual": "--"
+      },
+      {
+        "name": "إيتاي البارود",
+        "scheduled": "8:39 م",
+        "actual": "--"
+      },
+      {
+        "name": "طنطا",
+        "scheduled": "9:09 م",
+        "actual": "--"
+      },
+      {
+        "name": "بنها",
+        "scheduled": "9:40 م",
+        "actual": "--"
+      },
+      {
+        "name": "القاهرة",
+        "scheduled": "10:15 م",
+        "actual": "--"
+      }
+    ]
   }
 };
