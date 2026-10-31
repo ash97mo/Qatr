@@ -5932,5 +5932,67 @@ window.DEFAULT_TRAINS_DATA = {
         "actual": "--"
       }
     ]
+  },
+  "1904": {
+    "number": "1904",
+    "type": "VIP",
+    "name": "الإسكندرية - القاهرة",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "الإسكندرية",
+        "scheduled": "5:00 ص",
+        "actual": "--"
+      },
+      {
+        "name": "سيدي جابر",
+        "scheduled": "5:13 ص",
+        "actual": "--"
+      },
+      {
+        "name": "دمنهور",
+        "scheduled": "5:55 ص",
+        "actual": "--"
+      },
+      {
+        "name": "إيتاي البارود",
+        "scheduled": "6:12 ص",
+        "actual": "--"
+      },
+      {
+        "name": "كفر الزيات",
+        "scheduled": "6:29 ص",
+        "actual": "--"
+      },
+      {
+        "name": "طنطا",
+        "scheduled": "6:54 ص",
+        "actual": "--"
+      },
+      {
+        "name": "بركة السبع",
+        "scheduled": "7:12 ص",
+        "actual": "--"
+      },
+      {
+        "name": "قويسنا",
+        "scheduled": "7:25 ص",
+        "actual": "--"
+      },
+      {
+        "name": "بنها",
+        "scheduled": "7:45 ص",
+        "actual": "--"
+      },
+      {
+        "name": "القاهرة",
+        "scheduled": "8:20 ص",
+        "actual": "--"
+      }
+    ]
   }
 };
