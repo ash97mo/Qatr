@@ -3564,6 +3564,68 @@ window.DEFAULT_TRAINS_DATA = {
       }
     ]
   },
+  "945": {
+    "number": "945",
+    "type": "روسي",
+    "name": "القاهرة - بورسعيد",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "القاهرة",
+        "scheduled": "6:10 ص",
+        "actual": "--"
+      },
+      {
+        "name": "بنها",
+        "scheduled": "6:48 ص",
+        "actual": "--"
+      },
+      {
+        "name": "منية القمح",
+        "scheduled": "7:10 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الزقازيق",
+        "scheduled": "7:31 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أبو حماد",
+        "scheduled": "8:02 ص",
+        "actual": "--"
+      },
+      {
+        "name": "التل الكبير",
+        "scheduled": "8:15 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أبو صوير",
+        "scheduled": "8:45 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الإسماعيلية",
+        "scheduled": "9:03 ص",
+        "actual": "--"
+      },
+      {
+        "name": "القنطرة غرب",
+        "scheduled": "9:37 ص",
+        "actual": "--"
+      },
+      {
+        "name": "بورسعيد",
+        "scheduled": "10:20 ص",
+        "actual": "--"
+      }
+    ]
+  },
   "951": {
     "number": "951",
     "type": "روسي",
