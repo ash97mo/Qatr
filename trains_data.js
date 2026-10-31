@@ -2532,6 +2532,83 @@ window.DEFAULT_TRAINS_DATA = {
       }
     ]
   },
+  "196": {
+    "number": "196",
+    "type": "روسي مكيف",
+    "name": "الإسكندرية - الفيوم",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "الإسكندرية",
+        "scheduled": "3:40 م",
+        "actual": "--"
+      },
+      {
+        "name": "سيدي جابر",
+        "scheduled": "3:48 م",
+        "actual": "--"
+      },
+      {
+        "name": "كفر الدوار",
+        "scheduled": "4:15 م",
+        "actual": "--"
+      },
+      {
+        "name": "أبو حمص",
+        "scheduled": "4:32 م",
+        "actual": "--"
+      },
+      {
+        "name": "دمنهور",
+        "scheduled": "4:49 م",
+        "actual": "--"
+      },
+      {
+        "name": "طنطا",
+        "scheduled": "5:38 م",
+        "actual": "--"
+      },
+      {
+        "name": "بنها",
+        "scheduled": "6:15 م",
+        "actual": "--"
+      },
+      {
+        "name": "القاهرة",
+        "scheduled": "7:00 م",
+        "actual": "--"
+      },
+      {
+        "name": "صعيد مصر",
+        "scheduled": "7:48 م",
+        "actual": "--"
+      },
+      {
+        "name": "الجيزة",
+        "scheduled": "7:55 م",
+        "actual": "--"
+      },
+      {
+        "name": "العياط",
+        "scheduled": "8:37 م",
+        "actual": "--"
+      },
+      {
+        "name": "الواسطى",
+        "scheduled": "9:05 م",
+        "actual": "--"
+      },
+      {
+        "name": "الفيوم",
+        "scheduled": "10:00 م",
+        "actual": "--"
+      }
+    ]
+  },
   "833": {
     "number": "833",
     "type": "روسي",
