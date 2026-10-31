@@ -3448,6 +3448,103 @@ window.DEFAULT_TRAINS_DATA = {
       }
     ]
   },
+  "977": {
+    "number": "977",
+    "type": "اسباني مطور",
+    "name": "الاقصر - القاهرة",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "الأقصر",
+        "scheduled": "7:25 م",
+        "actual": "--"
+      },
+      {
+        "name": "قوص",
+        "scheduled": "7:50 م",
+        "actual": "--"
+      },
+      {
+        "name": "قنا",
+        "scheduled": "8:15 م",
+        "actual": "--"
+      },
+      {
+        "name": "نجع حمادي",
+        "scheduled": "9:05 م",
+        "actual": "--"
+      },
+      {
+        "name": "أبو تشت",
+        "scheduled": "9:26 م",
+        "actual": "--"
+      },
+      {
+        "name": "البلينا",
+        "scheduled": "9:45 م",
+        "actual": "--"
+      },
+      {
+        "name": "جرجا",
+        "scheduled": "10:02 م",
+        "actual": "--"
+      },
+      {
+        "name": "سوهاج",
+        "scheduled": "10:30 م",
+        "actual": "--"
+      },
+      {
+        "name": "المراغة",
+        "scheduled": "10:49 م",
+        "actual": "--"
+      },
+      {
+        "name": "طهطا",
+        "scheduled": "11:07 م",
+        "actual": "--"
+      },
+      {
+        "name": "طما",
+        "scheduled": "11:23 م",
+        "actual": "--"
+      },
+      {
+        "name": "أسيوط",
+        "scheduled": "12:01 ص",
+        "actual": "--"
+      },
+      {
+        "name": "المنيا",
+        "scheduled": "1:50 ص",
+        "actual": "--"
+      },
+      {
+        "name": "بني سويف",
+        "scheduled": "3:15 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الجيزة",
+        "scheduled": "4:35 ص",
+        "actual": "--"
+      },
+      {
+        "name": "صعيد مصر",
+        "scheduled": "4:49 ص",
+        "actual": "--"
+      },
+      {
+        "name": "القاهرة",
+        "scheduled": "5:05 ص",
+        "actual": "--"
+      }
+    ]
+  },
   "978": {
     "number": "978",
     "type": "روسي مكيف",
