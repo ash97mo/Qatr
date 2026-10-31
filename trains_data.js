@@ -4484,6 +4484,153 @@ window.DEFAULT_TRAINS_DATA = {
       }
     ]
   },
+  "987": {
+    "number": "987",
+    "type": "اسباني مطور",
+    "name": "الاقصر - القاهرة",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "الأقصر",
+        "scheduled": "4:50 ص",
+        "actual": "--"
+      },
+      {
+        "name": "قوص",
+        "scheduled": "5:16 ص",
+        "actual": "--"
+      },
+      {
+        "name": "قفط",
+        "scheduled": "5:30 ص",
+        "actual": "--"
+      },
+      {
+        "name": "قنا",
+        "scheduled": "5:50 ص",
+        "actual": "--"
+      },
+      {
+        "name": "دشنا",
+        "scheduled": "6:24 ص",
+        "actual": "--"
+      },
+      {
+        "name": "نجع حمادي",
+        "scheduled": "6:50 ص",
+        "actual": "--"
+      },
+      {
+        "name": "فرشوط",
+        "scheduled": "7:07 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أبو تشت",
+        "scheduled": "7:18 ص",
+        "actual": "--"
+      },
+      {
+        "name": "البلينا",
+        "scheduled": "7:38 ص",
+        "actual": "--"
+      },
+      {
+        "name": "جرجا",
+        "scheduled": "7:56 ص",
+        "actual": "--"
+      },
+      {
+        "name": "العسيرات",
+        "scheduled": "8:07 ص",
+        "actual": "--"
+      },
+      {
+        "name": "المنشأة",
+        "scheduled": "8:18 ص",
+        "actual": "--"
+      },
+      {
+        "name": "سوهاج",
+        "scheduled": "8:35 ص",
+        "actual": "--"
+      },
+      {
+        "name": "المراغة",
+        "scheduled": "8:56 ص",
+        "actual": "--"
+      },
+      {
+        "name": "طهطا",
+        "scheduled": "9:11 ص",
+        "actual": "--"
+      },
+      {
+        "name": "طما",
+        "scheduled": "9:28 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أبو تيج",
+        "scheduled": "9:46 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أسيوط",
+        "scheduled": "10:10 ص",
+        "actual": "--"
+      },
+      {
+        "name": "منفلوط",
+        "scheduled": "10:49 ص",
+        "actual": "--"
+      },
+      {
+        "name": "القوصية",
+        "scheduled": "11:07 ص",
+        "actual": "--"
+      },
+      {
+        "name": "ملوي",
+        "scheduled": "11:35 ص",
+        "actual": "--"
+      },
+      {
+        "name": "المنيا",
+        "scheduled": "12:15 م",
+        "actual": "--"
+      },
+      {
+        "name": "مغاغة",
+        "scheduled": "1:04 م",
+        "actual": "--"
+      },
+      {
+        "name": "بني سويف",
+        "scheduled": "1:48 م",
+        "actual": "--"
+      },
+      {
+        "name": "الجيزة",
+        "scheduled": "3:10 م",
+        "actual": "--"
+      },
+      {
+        "name": "صعيد مصر",
+        "scheduled": "3:24 م",
+        "actual": "--"
+      },
+      {
+        "name": "القاهرة",
+        "scheduled": "3:40 م",
+        "actual": "--"
+      }
+    ]
+  },
   "988": {
     "number": "988",
     "type": "روسي مكيف",
