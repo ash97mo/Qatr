@@ -3564,6 +3564,143 @@ window.DEFAULT_TRAINS_DATA = {
       }
     ]
   },
+  "972": {
+    "number": "972",
+    "type": "روسي",
+    "name": "القاهرة - اسيوط",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "القاهرة",
+        "scheduled": "4:20 م",
+        "actual": "--"
+      },
+      {
+        "name": "صعيد مصر",
+        "scheduled": "4:33 م",
+        "actual": "--"
+      },
+      {
+        "name": "الجيزة",
+        "scheduled": "4:40 م",
+        "actual": "--"
+      },
+      {
+        "name": "العياط",
+        "scheduled": "5:22 م",
+        "actual": "--"
+      },
+      {
+        "name": "القطوري",
+        "scheduled": "5:39 م",
+        "actual": "--"
+      },
+      {
+        "name": "الواسطى",
+        "scheduled": "5:54 م",
+        "actual": "--"
+      },
+      {
+        "name": "أشمنت",
+        "scheduled": "6:10 م",
+        "actual": "--"
+      },
+      {
+        "name": "ناصر",
+        "scheduled": "6:19 م",
+        "actual": "--"
+      },
+      {
+        "name": "بني سويف",
+        "scheduled": "6:30 م",
+        "actual": "--"
+      },
+      {
+        "name": "ببا",
+        "scheduled": "6:53 م",
+        "actual": "--"
+      },
+      {
+        "name": "الفشن",
+        "scheduled": "7:08 م",
+        "actual": "--"
+      },
+      {
+        "name": "مغاغة",
+        "scheduled": "7:24 م",
+        "actual": "--"
+      },
+      {
+        "name": "بني مزار",
+        "scheduled": "7:57 م",
+        "actual": "--"
+      },
+      {
+        "name": "مطاي",
+        "scheduled": "8:20 م",
+        "actual": "--"
+      },
+      {
+        "name": "سمالوط",
+        "scheduled": "8:33 م",
+        "actual": "--"
+      },
+      {
+        "name": "المنيا",
+        "scheduled": "9:00 م",
+        "actual": "--"
+      },
+      {
+        "name": "أبو قرقاص",
+        "scheduled": "9:24 م",
+        "actual": "--"
+      },
+      {
+        "name": "الروضة",
+        "scheduled": "9:41 م",
+        "actual": "--"
+      },
+      {
+        "name": "ملوي",
+        "scheduled": "9:51 م",
+        "actual": "--"
+      },
+      {
+        "name": "دير مواس",
+        "scheduled": "10:04 م",
+        "actual": "--"
+      },
+      {
+        "name": "ديروط",
+        "scheduled": "10:16 م",
+        "actual": "--"
+      },
+      {
+        "name": "القوصية",
+        "scheduled": "10:29 م",
+        "actual": "--"
+      },
+      {
+        "name": "منفلوط",
+        "scheduled": "10:47 م",
+        "actual": "--"
+      },
+      {
+        "name": "منقباد",
+        "scheduled": "11:08 م",
+        "actual": "--"
+      },
+      {
+        "name": "أسيوط",
+        "scheduled": "11:25 م",
+        "actual": "--"
+      }
+    ]
+  },
   "973": {
     "number": "973",
     "type": "روسي",
