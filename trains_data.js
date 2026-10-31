@@ -4265,6 +4265,98 @@ window.DEFAULT_TRAINS_DATA = {
       }
     ]
   },
+  "988": {
+    "number": "988",
+    "type": "روسي مكيف",
+    "name": "القاهرة - أسوان",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "القاهرة",
+        "scheduled": "7:10 م",
+        "actual": "--"
+      },
+      {
+        "name": "صعيد مصر",
+        "scheduled": "7:23 م",
+        "actual": "--"
+      },
+      {
+        "name": "الجيزة",
+        "scheduled": "7:30 م",
+        "actual": "--"
+      },
+      {
+        "name": "بني سويف",
+        "scheduled": "8:48 م",
+        "actual": "--"
+      },
+      {
+        "name": "المنيا",
+        "scheduled": "10:20 م",
+        "actual": "--"
+      },
+      {
+        "name": "أسيوط",
+        "scheduled": "12:05 ص",
+        "actual": "--"
+      },
+      {
+        "name": "سوهاج",
+        "scheduled": "1:25 ص",
+        "actual": "--"
+      },
+      {
+        "name": "جرجا",
+        "scheduled": "2:03 ص",
+        "actual": "--"
+      },
+      {
+        "name": "نجع حمادي",
+        "scheduled": "2:50 ص",
+        "actual": "--"
+      },
+      {
+        "name": "قنا",
+        "scheduled": "3:40 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الأقصر",
+        "scheduled": "4:35 ص",
+        "actual": "--"
+      },
+      {
+        "name": "إسنا",
+        "scheduled": "5:30 ص",
+        "actual": "--"
+      },
+      {
+        "name": "إدفو",
+        "scheduled": "6:13 ص",
+        "actual": "--"
+      },
+      {
+        "name": "كوم أمبو",
+        "scheduled": "7:02 ص",
+        "actual": "--"
+      },
+      {
+        "name": "دراو",
+        "scheduled": "7:16 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أسوان",
+        "scheduled": "7:50 ص",
+        "actual": "--"
+      }
+    ]
+  },
   "1010": {
     "number": "1010",
     "type": "روسي مكيف",
