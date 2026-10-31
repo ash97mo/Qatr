@@ -27,34 +27,6 @@ window.DEFAULT_TRAINS_DATA = {
       }
     ]
   },
-  "917": {
-    "number": "917",
-    "type": "VIP",
-    "name": "القاهرة - الإسكندرية مباشر",
-    "status": {
-      "state": "NOT_STARTED",
-      "stationIndex": null,
-      "updatedBy": "جدول الرحلة الأساسي",
-      "departedAt": null
-    },
-    "stations": [
-      {
-        "name": "القاهرة",
-        "scheduled": "02:00 م",
-        "actual": "--"
-      },
-      {
-        "name": "سيدي جابر",
-        "scheduled": "04:15 م",
-        "actual": "--"
-      },
-      {
-        "name": "الإسكندرية",
-        "scheduled": "04:30 م",
-        "actual": "--"
-      }
-    ]
-  },
   "928": {
     "number": "928",
     "type": "VIP",
