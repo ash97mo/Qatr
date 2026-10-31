@@ -3564,6 +3564,103 @@ window.DEFAULT_TRAINS_DATA = {
       }
     ]
   },
+  "951": {
+    "number": "951",
+    "type": "روسي",
+    "name": "القاهرة - بور سعيد",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "القاهرة",
+        "scheduled": "11:30 ص",
+        "actual": "--"
+      },
+      {
+        "name": "شبرا الخيمة",
+        "scheduled": "11:44 ص",
+        "actual": "--"
+      },
+      {
+        "name": "قليوب",
+        "scheduled": "11:53 ص",
+        "actual": "--"
+      },
+      {
+        "name": "قها",
+        "scheduled": "12:06 م",
+        "actual": "--"
+      },
+      {
+        "name": "طوخ",
+        "scheduled": "12:15 م",
+        "actual": "--"
+      },
+      {
+        "name": "بنها",
+        "scheduled": "12:29 م",
+        "actual": "--"
+      },
+      {
+        "name": "منية القمح",
+        "scheduled": "12:49 م",
+        "actual": "--"
+      },
+      {
+        "name": "الزقازيق",
+        "scheduled": "1:10 م",
+        "actual": "--"
+      },
+      {
+        "name": "أبو حماد",
+        "scheduled": "1:35 م",
+        "actual": "--"
+      },
+      {
+        "name": "التل الكبير",
+        "scheduled": "1:47 م",
+        "actual": "--"
+      },
+      {
+        "name": "القصاصين",
+        "scheduled": "2:02 م",
+        "actual": "--"
+      },
+      {
+        "name": "أبو صوير",
+        "scheduled": "2:19 م",
+        "actual": "--"
+      },
+      {
+        "name": "الإسماعيلية",
+        "scheduled": "2:40 م",
+        "actual": "--"
+      },
+      {
+        "name": "الشيخ زايد",
+        "scheduled": "2:50 م",
+        "actual": "--"
+      },
+      {
+        "name": "القنطرة غرب",
+        "scheduled": "3:15 م",
+        "actual": "--"
+      },
+      {
+        "name": "التينة",
+        "scheduled": "3:33 م",
+        "actual": "--"
+      },
+      {
+        "name": "بورسعيد",
+        "scheduled": "4:05 م",
+        "actual": "--"
+      }
+    ]
+  },
   "956": {
     "number": "956",
     "type": "روسي",
