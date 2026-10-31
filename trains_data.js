@@ -4014,5 +4014,112 @@ window.DEFAULT_TRAINS_DATA = {
         "actual": "--"
       }
     ]
+  },
+  "1112": {
+    "number": "1112",
+    "type": "روسي",
+    "name": "الاسماعيليه - القاهرة",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "الإسماعيلية",
+        "scheduled": "6:30 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أبو صوير",
+        "scheduled": "6:46 ص",
+        "actual": "--"
+      },
+      {
+        "name": "القصاصين",
+        "scheduled": "7:04 ص",
+        "actual": "--"
+      },
+      {
+        "name": "التل الكبير",
+        "scheduled": "7:20 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أبو حماد",
+        "scheduled": "7:33 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الصوة",
+        "scheduled": "7:41 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الزقازيق",
+        "scheduled": "8:00 ص",
+        "actual": "--"
+      },
+      {
+        "name": "بردين",
+        "scheduled": "8:25 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أولاد سيف",
+        "scheduled": "8:32 ص",
+        "actual": "--"
+      },
+      {
+        "name": "بلبيس",
+        "scheduled": "8:45 ص",
+        "actual": "--"
+      },
+      {
+        "name": "إنشاص",
+        "scheduled": "8:58 ص",
+        "actual": "--"
+      },
+      {
+        "name": "مشتول",
+        "scheduled": "9:07 ص",
+        "actual": "--"
+      },
+      {
+        "name": "شبين القناطر",
+        "scheduled": "9:17 ص",
+        "actual": "--"
+      },
+      {
+        "name": "طحانوب",
+        "scheduled": "9:25 ص",
+        "actual": "--"
+      },
+      {
+        "name": "نوى",
+        "scheduled": "9:35 ص",
+        "actual": "--"
+      },
+      {
+        "name": "قليوب",
+        "scheduled": "9:51 ص",
+        "actual": "--"
+      },
+      {
+        "name": "شبرا الخيمة",
+        "scheduled": "10:04 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الزاوية الحمراء",
+        "scheduled": "10:13 ص",
+        "actual": "--"
+      },
+      {
+        "name": "القاهرة",
+        "scheduled": "10:20 ص",
+        "actual": "--"
+      }
+    ]
   }
 };
