@@ -677,6 +677,63 @@ window.DEFAULT_TRAINS_DATA = {
       }
     ]
   },
+  "129": {
+    "number": "129",
+    "type": "روسي",
+    "name": "طنطا - الإسكندرية",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "طنطا",
+        "scheduled": "4:00 ص",
+        "actual": "--"
+      },
+      {
+        "name": "كفر الزيات",
+        "scheduled": "4:16 ص",
+        "actual": "--"
+      },
+      {
+        "name": "التوفيقية",
+        "scheduled": "4:27 ص",
+        "actual": "--"
+      },
+      {
+        "name": "إيتاي البارود",
+        "scheduled": "4:40 ص",
+        "actual": "--"
+      },
+      {
+        "name": "دمنهور",
+        "scheduled": "5:02 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أبو حمص",
+        "scheduled": "5:19 ص",
+        "actual": "--"
+      },
+      {
+        "name": "كفر الدوار",
+        "scheduled": "5:35 ص",
+        "actual": "--"
+      },
+      {
+        "name": "سيدي جابر",
+        "scheduled": "5:55 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الإسكندرية",
+        "scheduled": "6:05 ص",
+        "actual": "--"
+      }
+    ]
+  },
   "157": {
     "number": "157",
     "type": "روسي",
