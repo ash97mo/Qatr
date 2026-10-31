@@ -2275,6 +2275,163 @@ window.DEFAULT_TRAINS_DATA = {
       }
     ]
   },
+  "165": {
+    "number": "165",
+    "type": "روسي",
+    "name": "أسيوط - القاهرة",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "أسيوط",
+        "scheduled": "6:00 ص",
+        "actual": "--"
+      },
+      {
+        "name": "منقباد",
+        "scheduled": "6:13 ص",
+        "actual": "--"
+      },
+      {
+        "name": "منفلوط",
+        "scheduled": "6:33 ص",
+        "actual": "--"
+      },
+      {
+        "name": "القوصية",
+        "scheduled": "6:52 ص",
+        "actual": "--"
+      },
+      {
+        "name": "ديروط",
+        "scheduled": "7:07 ص",
+        "actual": "--"
+      },
+      {
+        "name": "دير مواس",
+        "scheduled": "7:18 ص",
+        "actual": "--"
+      },
+      {
+        "name": "ملوي",
+        "scheduled": "7:30 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الروضة",
+        "scheduled": "8:02 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أبو قرقاص",
+        "scheduled": "8:17 ص",
+        "actual": "--"
+      },
+      {
+        "name": "المنيا",
+        "scheduled": "8:40 ص",
+        "actual": "--"
+      },
+      {
+        "name": "دماريس",
+        "scheduled": "8:58 ص",
+        "actual": "--"
+      },
+      {
+        "name": "سمالوط",
+        "scheduled": "9:15 ص",
+        "actual": "--"
+      },
+      {
+        "name": "مطاي",
+        "scheduled": "9:29 ص",
+        "actual": "--"
+      },
+      {
+        "name": "بني مزار",
+        "scheduled": "9:39 ص",
+        "actual": "--"
+      },
+      {
+        "name": "مغاغة",
+        "scheduled": "9:54 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الفشن",
+        "scheduled": "10:13 ص",
+        "actual": "--"
+      },
+      {
+        "name": "ببا",
+        "scheduled": "10:29 ص",
+        "actual": "--"
+      },
+      {
+        "name": "بني سويف",
+        "scheduled": "10:48 ص",
+        "actual": "--"
+      },
+      {
+        "name": "ناصر",
+        "scheduled": "10:58 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الواسطى",
+        "scheduled": "11:19 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الرقة",
+        "scheduled": "11:29 ص",
+        "actual": "--"
+      },
+      {
+        "name": "كفر عمار",
+        "scheduled": "11:40 ص",
+        "actual": "--"
+      },
+      {
+        "name": "العياط",
+        "scheduled": "11:52 ص",
+        "actual": "--"
+      },
+      {
+        "name": "المزغونة",
+        "scheduled": "12:08 م",
+        "actual": "--"
+      },
+      {
+        "name": "البدرشين",
+        "scheduled": "12:20 م",
+        "actual": "--"
+      },
+      {
+        "name": "الحوامدية",
+        "scheduled": "12:27 م",
+        "actual": "--"
+      },
+      {
+        "name": "الجيزة",
+        "scheduled": "1:00 م",
+        "actual": "--"
+      },
+      {
+        "name": "صعيد مصر",
+        "scheduled": "1:14 م",
+        "actual": "--"
+      },
+      {
+        "name": "القاهرة",
+        "scheduled": "1:30 م",
+        "actual": "--"
+      }
+    ]
+  },
   "833": {
     "number": "833",
     "type": "روسي",
