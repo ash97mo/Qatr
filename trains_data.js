@@ -3333,6 +3333,108 @@ window.DEFAULT_TRAINS_DATA = {
       }
     ]
   },
+  "979": {
+    "number": "979",
+    "type": "روسي مكيف",
+    "name": "أسيوط - القاهرة",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "أسيوط",
+        "scheduled": "3:00 م",
+        "actual": "--"
+      },
+      {
+        "name": "منفلوط",
+        "scheduled": "3:28 م",
+        "actual": "--"
+      },
+      {
+        "name": "القوصية",
+        "scheduled": "3:48 م",
+        "actual": "--"
+      },
+      {
+        "name": "ديروط",
+        "scheduled": "4:04 م",
+        "actual": "--"
+      },
+      {
+        "name": "دير مواس",
+        "scheduled": "4:15 م",
+        "actual": "--"
+      },
+      {
+        "name": "ملوي",
+        "scheduled": "4:29 م",
+        "actual": "--"
+      },
+      {
+        "name": "المنيا",
+        "scheduled": "5:10 م",
+        "actual": "--"
+      },
+      {
+        "name": "سمالوط",
+        "scheduled": "5:40 م",
+        "actual": "--"
+      },
+      {
+        "name": "مطاي",
+        "scheduled": "5:55 م",
+        "actual": "--"
+      },
+      {
+        "name": "بني مزار",
+        "scheduled": "6:07 م",
+        "actual": "--"
+      },
+      {
+        "name": "مغاغة",
+        "scheduled": "6:24 م",
+        "actual": "--"
+      },
+      {
+        "name": "الفشن",
+        "scheduled": "6:47 م",
+        "actual": "--"
+      },
+      {
+        "name": "ببا",
+        "scheduled": "7:06 م",
+        "actual": "--"
+      },
+      {
+        "name": "بني سويف",
+        "scheduled": "7:25 م",
+        "actual": "--"
+      },
+      {
+        "name": "الواسطى",
+        "scheduled": "7:55 م",
+        "actual": "--"
+      },
+      {
+        "name": "الجيزة",
+        "scheduled": "8:55 م",
+        "actual": "--"
+      },
+      {
+        "name": "صعيد مصر",
+        "scheduled": "9:13 م",
+        "actual": "--"
+      },
+      {
+        "name": "القاهرة",
+        "scheduled": "9:30 م",
+        "actual": "--"
+      }
+    ]
+  },
   "980": {
     "number": "980",
     "type": "VIP",
