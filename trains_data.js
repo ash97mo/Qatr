@@ -734,6 +734,88 @@ window.DEFAULT_TRAINS_DATA = {
       }
     ]
   },
+  "132": {
+    "number": "132",
+    "type": "روسي",
+    "name": "الإسكندرية - القاهرة",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "الإسكندرية",
+        "scheduled": "10:20 ص",
+        "actual": "--"
+      },
+      {
+        "name": "سيدي جابر",
+        "scheduled": "10:28 ص",
+        "actual": "--"
+      },
+      {
+        "name": "كفر الدوار",
+        "scheduled": "10:52 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أبو حمص",
+        "scheduled": "11:08 ص",
+        "actual": "--"
+      },
+      {
+        "name": "دمنهور",
+        "scheduled": "11:24 ص",
+        "actual": "--"
+      },
+      {
+        "name": "إيتاي البارود",
+        "scheduled": "11:45 ص",
+        "actual": "--"
+      },
+      {
+        "name": "كفر الزيات",
+        "scheduled": "12:03 م",
+        "actual": "--"
+      },
+      {
+        "name": "طنطا",
+        "scheduled": "12:21 م",
+        "actual": "--"
+      },
+      {
+        "name": "بركة السبع",
+        "scheduled": "12:42 م",
+        "actual": "--"
+      },
+      {
+        "name": "قويسنا",
+        "scheduled": "12:54 م",
+        "actual": "--"
+      },
+      {
+        "name": "بنها",
+        "scheduled": "1:25 م",
+        "actual": "--"
+      },
+      {
+        "name": "طوخ",
+        "scheduled": "1:41 م",
+        "actual": "--"
+      },
+      {
+        "name": "شبرا الخيمة",
+        "scheduled": "2:05 م",
+        "actual": "--"
+      },
+      {
+        "name": "القاهرة",
+        "scheduled": "2:20 م",
+        "actual": "--"
+      }
+    ]
+  },
   "157": {
     "number": "157",
     "type": "روسي",
