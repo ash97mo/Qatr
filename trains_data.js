@@ -2510,5 +2510,162 @@ window.DEFAULT_TRAINS_DATA = {
         "actual": "--"
       }
     ]
+  },
+  "1012": {
+    "number": "1012",
+    "type": "روسي مكيف",
+    "name": "القاهرة - أسوان",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "القاهرة",
+        "scheduled": "8:20 م",
+        "actual": "--"
+      },
+      {
+        "name": "صعيد مصر",
+        "scheduled": "8:33 م",
+        "actual": "--"
+      },
+      {
+        "name": "الجيزة",
+        "scheduled": "8:40 م",
+        "actual": "--"
+      },
+      {
+        "name": "الواسطى",
+        "scheduled": "9:40 م",
+        "actual": "--"
+      },
+      {
+        "name": "بني سويف",
+        "scheduled": "10:06 م",
+        "actual": "--"
+      },
+      {
+        "name": "مغاغة",
+        "scheduled": "10:51 م",
+        "actual": "--"
+      },
+      {
+        "name": "بني مزار",
+        "scheduled": "11:07 م",
+        "actual": "--"
+      },
+      {
+        "name": "المنيا",
+        "scheduled": "11:50 م",
+        "actual": "--"
+      },
+      {
+        "name": "ملوي",
+        "scheduled": "12:45 ص",
+        "actual": "--"
+      },
+      {
+        "name": "ديروط",
+        "scheduled": "1:35 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أسيوط",
+        "scheduled": "2:30 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أبو تيج",
+        "scheduled": "2:59 ص",
+        "actual": "--"
+      },
+      {
+        "name": "طما",
+        "scheduled": "3:16 ص",
+        "actual": "--"
+      },
+      {
+        "name": "طهطا",
+        "scheduled": "3:34 ص",
+        "actual": "--"
+      },
+      {
+        "name": "المراغة",
+        "scheduled": "3:48 ص",
+        "actual": "--"
+      },
+      {
+        "name": "سوهاج",
+        "scheduled": "4:10 ص",
+        "actual": "--"
+      },
+      {
+        "name": "جرجا",
+        "scheduled": "4:43 ص",
+        "actual": "--"
+      },
+      {
+        "name": "البلينا",
+        "scheduled": "5:01 ص",
+        "actual": "--"
+      },
+      {
+        "name": "فرشوط",
+        "scheduled": "5:28 ص",
+        "actual": "--"
+      },
+      {
+        "name": "نجع حمادي",
+        "scheduled": "5:45 ص",
+        "actual": "--"
+      },
+      {
+        "name": "قنا",
+        "scheduled": "6:35 ص",
+        "actual": "--"
+      },
+      {
+        "name": "قوص",
+        "scheduled": "7:16 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الأقصر",
+        "scheduled": "7:40 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أرمنت",
+        "scheduled": "8:14 ص",
+        "actual": "--"
+      },
+      {
+        "name": "إسنا",
+        "scheduled": "8:44 ص",
+        "actual": "--"
+      },
+      {
+        "name": "إدفو",
+        "scheduled": "9:30 ص",
+        "actual": "--"
+      },
+      {
+        "name": "كلابشة",
+        "scheduled": "10:10 ص",
+        "actual": "--"
+      },
+      {
+        "name": "كوم أمبو",
+        "scheduled": "10:30 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أسوان",
+        "scheduled": "11:15 ص",
+        "actual": "--"
+      }
+    ]
   }
 };
