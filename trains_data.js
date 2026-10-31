@@ -3564,6 +3564,88 @@ window.DEFAULT_TRAINS_DATA = {
       }
     ]
   },
+  "956": {
+    "number": "956",
+    "type": "روسي",
+    "name": "بورسعيد - القاهرة",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "بورسعيد",
+        "scheduled": "1:20 م",
+        "actual": "--"
+      },
+      {
+        "name": "القنطرة غرب",
+        "scheduled": "1:59 م",
+        "actual": "--"
+      },
+      {
+        "name": "الشيخ زايد",
+        "scheduled": "2:28 م",
+        "actual": "--"
+      },
+      {
+        "name": "الإسماعيلية",
+        "scheduled": "2:35 م",
+        "actual": "--"
+      },
+      {
+        "name": "أبو صوير",
+        "scheduled": "3:01 م",
+        "actual": "--"
+      },
+      {
+        "name": "القصاصين",
+        "scheduled": "3:18 م",
+        "actual": "--"
+      },
+      {
+        "name": "التل الكبير",
+        "scheduled": "3:33 م",
+        "actual": "--"
+      },
+      {
+        "name": "محجر أبو حماد",
+        "scheduled": "3:42 م",
+        "actual": "--"
+      },
+      {
+        "name": "أبو حماد",
+        "scheduled": "3:48 م",
+        "actual": "--"
+      },
+      {
+        "name": "الزقازيق",
+        "scheduled": "4:10 م",
+        "actual": "--"
+      },
+      {
+        "name": "منية القمح",
+        "scheduled": "4:41 م",
+        "actual": "--"
+      },
+      {
+        "name": "بنها",
+        "scheduled": "5:00 م",
+        "actual": "--"
+      },
+      {
+        "name": "شبرا الخيمة",
+        "scheduled": "5:35 م",
+        "actual": "--"
+      },
+      {
+        "name": "القاهرة",
+        "scheduled": "5:50 م",
+        "actual": "--"
+      }
+    ]
+  },
   "960": {
     "number": "960",
     "type": "روسي",
