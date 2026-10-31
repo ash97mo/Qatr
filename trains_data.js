@@ -5830,5 +5830,107 @@ window.DEFAULT_TRAINS_DATA = {
         "actual": "--"
       }
     ]
+  },
+  "1903": {
+    "number": "1903",
+    "type": "روسي مكيف",
+    "name": "أسوان - القاهرة",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "أسوان",
+        "scheduled": "5:00 م",
+        "actual": "--"
+      },
+      {
+        "name": "دراو",
+        "scheduled": "5:33 م",
+        "actual": "--"
+      },
+      {
+        "name": "كوم أمبو",
+        "scheduled": "5:45 م",
+        "actual": "--"
+      },
+      {
+        "name": "إدفو",
+        "scheduled": "6:32 م",
+        "actual": "--"
+      },
+      {
+        "name": "إسنا",
+        "scheduled": "7:17 م",
+        "actual": "--"
+      },
+      {
+        "name": "الأقصر",
+        "scheduled": "8:00 م",
+        "actual": "--"
+      },
+      {
+        "name": "قنا",
+        "scheduled": "8:55 م",
+        "actual": "--"
+      },
+      {
+        "name": "نجع حمادي",
+        "scheduled": "9:50 م",
+        "actual": "--"
+      },
+      {
+        "name": "جرجا",
+        "scheduled": "10:42 م",
+        "actual": "--"
+      },
+      {
+        "name": "سوهاج",
+        "scheduled": "11:10 م",
+        "actual": "--"
+      },
+      {
+        "name": "طهطا",
+        "scheduled": "11:46 م",
+        "actual": "--"
+      },
+      {
+        "name": "طما",
+        "scheduled": "12:02 ص",
+        "actual": "--"
+      },
+      {
+        "name": "صدفا",
+        "scheduled": "12:13 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أبو تيج",
+        "scheduled": "12:26 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أسيوط",
+        "scheduled": "12:50 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الجيزة",
+        "scheduled": "5:20 ص",
+        "actual": "--"
+      },
+      {
+        "name": "صعيد مصر",
+        "scheduled": "5:39 ص",
+        "actual": "--"
+      },
+      {
+        "name": "القاهرة",
+        "scheduled": "5:55 ص",
+        "actual": "--"
+      }
+    ]
   }
 };
