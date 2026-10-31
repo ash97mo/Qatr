@@ -1005,6 +1005,113 @@ window.DEFAULT_TRAINS_DATA = {
       }
     ]
   },
+  "142": {
+    "number": "142",
+    "type": "روسي",
+    "name": "القاهرة - الفيوم",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "القاهرة",
+        "scheduled": "8:45 ص",
+        "actual": "--"
+      },
+      {
+        "name": "صعيد مصر",
+        "scheduled": "9:03 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الجيزة",
+        "scheduled": "9:05 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الحوامدية",
+        "scheduled": "9:27 ص",
+        "actual": "--"
+      },
+      {
+        "name": "البدرشين",
+        "scheduled": "9:34 ص",
+        "actual": "--"
+      },
+      {
+        "name": "المرازيق",
+        "scheduled": "9:41 ص",
+        "actual": "--"
+      },
+      {
+        "name": "المزغونة",
+        "scheduled": "9:50 ص",
+        "actual": "--"
+      },
+      {
+        "name": "العياط",
+        "scheduled": "10:21 ص",
+        "actual": "--"
+      },
+      {
+        "name": "كفر عمار",
+        "scheduled": "10:34 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الرقة",
+        "scheduled": "10:59 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الواسطى",
+        "scheduled": "11:10 ص",
+        "actual": "--"
+      },
+      {
+        "name": "كوم أبو راضي",
+        "scheduled": "11:23 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الورش",
+        "scheduled": "11:29 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الروس",
+        "scheduled": "11:34 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الناصرية",
+        "scheduled": "11:41 ص",
+        "actual": "--"
+      },
+      {
+        "name": "سيلا",
+        "scheduled": "11:47 ص",
+        "actual": "--"
+      },
+      {
+        "name": "العدوة",
+        "scheduled": "11:55 ص",
+        "actual": "--"
+      },
+      {
+        "name": "عامرية الفيوم",
+        "scheduled": "12:00 م",
+        "actual": "--"
+      },
+      {
+        "name": "الفيوم",
+        "scheduled": "12:10 م",
+        "actual": "--"
+      }
+    ]
+  },
   "157": {
     "number": "157",
     "type": "روسي",
