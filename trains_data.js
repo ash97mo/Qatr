@@ -2045,7 +2045,8 @@ window.DEFAULT_TRAINS_DATA = {
     "status": {
       "state": "NOT_STARTED",
       "stationIndex": null,
-      "updatedBy": "جدول الرحلة الأساسي"
+      "updatedBy": "جدول الرحلة الأساسي",
+      "departedAt": null
     },
     "stations": [
       {
@@ -2292,7 +2293,8 @@ window.DEFAULT_TRAINS_DATA = {
     "status": {
       "state": "NOT_STARTED",
       "stationIndex": null,
-      "updatedBy": "جدول الرحلة الأساسي"
+      "updatedBy": "جدول الرحلة الأساسي",
+      "departedAt": null
     },
     "stations": [
       {
@@ -2539,7 +2541,8 @@ window.DEFAULT_TRAINS_DATA = {
     "status": {
       "state": "NOT_STARTED",
       "stationIndex": null,
-      "updatedBy": "جدول الرحلة الأساسي"
+      "updatedBy": "جدول الرحلة الأساسي",
+      "departedAt": null
     },
     "stations": [
       {
@@ -3224,6 +3227,108 @@ window.DEFAULT_TRAINS_DATA = {
       {
         "name": "الأقصر",
         "scheduled": "6:15 ص",
+        "actual": "--"
+      }
+    ]
+  },
+  "978": {
+    "number": "978",
+    "type": "روسي مكيف",
+    "name": "القاهرة - أسيوط",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "القاهرة",
+        "scheduled": "6:45 ص",
+        "actual": "--"
+      },
+      {
+        "name": "صعيد مصر",
+        "scheduled": "6:58 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الجيزة",
+        "scheduled": "7:10 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الواسطى",
+        "scheduled": "8:10 ص",
+        "actual": "--"
+      },
+      {
+        "name": "بني سويف",
+        "scheduled": "8:34 ص",
+        "actual": "--"
+      },
+      {
+        "name": "ببا",
+        "scheduled": "8:57 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الفشن",
+        "scheduled": "9:12 ص",
+        "actual": "--"
+      },
+      {
+        "name": "مغاغة",
+        "scheduled": "9:28 ص",
+        "actual": "--"
+      },
+      {
+        "name": "بني مزار",
+        "scheduled": "9:43 ص",
+        "actual": "--"
+      },
+      {
+        "name": "مطاي",
+        "scheduled": "9:54 ص",
+        "actual": "--"
+      },
+      {
+        "name": "سمالوط",
+        "scheduled": "10:18 ص",
+        "actual": "--"
+      },
+      {
+        "name": "المنيا",
+        "scheduled": "10:45 ص",
+        "actual": "--"
+      },
+      {
+        "name": "ملوي",
+        "scheduled": "11:25 ص",
+        "actual": "--"
+      },
+      {
+        "name": "دير مواس",
+        "scheduled": "11:38 ص",
+        "actual": "--"
+      },
+      {
+        "name": "ديروط",
+        "scheduled": "11:50 ص",
+        "actual": "--"
+      },
+      {
+        "name": "القوصية",
+        "scheduled": "12:04 م",
+        "actual": "--"
+      },
+      {
+        "name": "منفلوط",
+        "scheduled": "12:22 م",
+        "actual": "--"
+      },
+      {
+        "name": "أسيوط",
+        "scheduled": "12:55 م",
         "actual": "--"
       }
     ]
@@ -5778,7 +5883,8 @@ window.DEFAULT_TRAINS_DATA = {
     "status": {
       "state": "NOT_STARTED",
       "stationIndex": null,
-      "updatedBy": "جدول الرحلة الأساسي"
+      "updatedBy": "جدول الرحلة الأساسي",
+      "departedAt": null
     },
     "stations": [
       {
@@ -5915,7 +6021,8 @@ window.DEFAULT_TRAINS_DATA = {
     "status": {
       "state": "NOT_STARTED",
       "stationIndex": null,
-      "updatedBy": "جدول الرحلة الأساسي"
+      "updatedBy": "جدول الرحلة الأساسي",
+      "departedAt": null
     },
     "stations": [
       {
@@ -6017,7 +6124,8 @@ window.DEFAULT_TRAINS_DATA = {
     "status": {
       "state": "NOT_STARTED",
       "stationIndex": null,
-      "updatedBy": "جدول الرحلة الأساسي"
+      "updatedBy": "جدول الرحلة الأساسي",
+      "departedAt": null
     },
     "stations": [
       {
