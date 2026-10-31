@@ -2561,6 +2561,183 @@ window.DEFAULT_TRAINS_DATA = {
       }
     ]
   },
+  "185": {
+    "number": "185",
+    "type": "روسي",
+    "name": "سوهاج - بورسعيد",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "سوهاج",
+        "scheduled": "12:05 ص",
+        "actual": "--"
+      },
+      {
+        "name": "المراغة",
+        "scheduled": "12:22 ص",
+        "actual": "--"
+      },
+      {
+        "name": "طهطا",
+        "scheduled": "12:37 ص",
+        "actual": "--"
+      },
+      {
+        "name": "طما",
+        "scheduled": "12:55 ص",
+        "actual": "--"
+      },
+      {
+        "name": "صدفا",
+        "scheduled": "1:34 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أبو تيج",
+        "scheduled": "1:46 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أسيوط",
+        "scheduled": "2:10 ص",
+        "actual": "--"
+      },
+      {
+        "name": "ملوي",
+        "scheduled": "3:30 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أبو قرقاص",
+        "scheduled": "3:54 ص",
+        "actual": "--"
+      },
+      {
+        "name": "المنيا",
+        "scheduled": "4:20 ص",
+        "actual": "--"
+      },
+      {
+        "name": "سمالوط",
+        "scheduled": "4:46 ص",
+        "actual": "--"
+      },
+      {
+        "name": "مطاي",
+        "scheduled": "5:00 ص",
+        "actual": "--"
+      },
+      {
+        "name": "بني مزار",
+        "scheduled": "5:10 ص",
+        "actual": "--"
+      },
+      {
+        "name": "مغاغة",
+        "scheduled": "5:25 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الفشن",
+        "scheduled": "5:42 ص",
+        "actual": "--"
+      },
+      {
+        "name": "ببا",
+        "scheduled": "5:58 ص",
+        "actual": "--"
+      },
+      {
+        "name": "بني سويف",
+        "scheduled": "6:32 ص",
+        "actual": "--"
+      },
+      {
+        "name": "ناصر",
+        "scheduled": "6:45 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الواسطى",
+        "scheduled": "7:06 ص",
+        "actual": "--"
+      },
+      {
+        "name": "العياط",
+        "scheduled": "7:34 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الجيزة",
+        "scheduled": "8:15 ص",
+        "actual": "--"
+      },
+      {
+        "name": "صعيد مصر",
+        "scheduled": "8:29 ص",
+        "actual": "--"
+      },
+      {
+        "name": "القاهرة",
+        "scheduled": "8:45 ص",
+        "actual": "--"
+      },
+      {
+        "name": "بنها",
+        "scheduled": "9:48 ص",
+        "actual": "--"
+      },
+      {
+        "name": "منية القمح",
+        "scheduled": "10:09 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الزقازيق",
+        "scheduled": "10:28 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أبو حماد",
+        "scheduled": "10:52 ص",
+        "actual": "--"
+      },
+      {
+        "name": "التل الكبير",
+        "scheduled": "11:05 ص",
+        "actual": "--"
+      },
+      {
+        "name": "القصاصين",
+        "scheduled": "11:20 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أبو صوير",
+        "scheduled": "11:37 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الإسماعيلية",
+        "scheduled": "11:54 ص",
+        "actual": "--"
+      },
+      {
+        "name": "القنطرة غرب",
+        "scheduled": "12:24 م",
+        "actual": "--"
+      },
+      {
+        "name": "بورسعيد",
+        "scheduled": "1:05 م",
+        "actual": "--"
+      }
+    ]
+  },
   "833": {
     "number": "833",
     "type": "روسي",
