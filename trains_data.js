@@ -3694,5 +3694,82 @@ window.DEFAULT_TRAINS_DATA = {
         "actual": "--"
       }
     ]
+  },
+  "1086": {
+    "number": "1086",
+    "type": "نوم",
+    "name": "صعيد مصر - أسوان",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "صعيد مصر",
+        "scheduled": "7:20 م",
+        "actual": "--"
+      },
+      {
+        "name": "الجيزة",
+        "scheduled": "8:00 م",
+        "actual": "--"
+      },
+      {
+        "name": "أسيوط",
+        "scheduled": "12:55 ص",
+        "actual": "--"
+      },
+      {
+        "name": "سوهاج",
+        "scheduled": "2:20 ص",
+        "actual": "--"
+      },
+      {
+        "name": "جرجا",
+        "scheduled": "2:50 ص",
+        "actual": "--"
+      },
+      {
+        "name": "نجع حمادي",
+        "scheduled": "3:45 ص",
+        "actual": "--"
+      },
+      {
+        "name": "قنا",
+        "scheduled": "4:35 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الأقصر",
+        "scheduled": "5:35 ص",
+        "actual": "--"
+      },
+      {
+        "name": "إسنا",
+        "scheduled": "6:15 ص",
+        "actual": "--"
+      },
+      {
+        "name": "إدفو",
+        "scheduled": "7:05 ص",
+        "actual": "--"
+      },
+      {
+        "name": "كلابشة",
+        "scheduled": "7:40 ص",
+        "actual": "--"
+      },
+      {
+        "name": "كوم أمبو",
+        "scheduled": "8:00 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أسوان",
+        "scheduled": "8:35 ص",
+        "actual": "--"
+      }
+    ]
   }
 };
