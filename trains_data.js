@@ -2822,5 +2822,207 @@ window.DEFAULT_TRAINS_DATA = {
         "actual": "--"
       }
     ]
+  },
+  "1015": {
+    "number": "1015",
+    "type": "روسي",
+    "name": "أسوان - الإسكندرية",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "أسوان",
+        "scheduled": "5:30 م",
+        "actual": "--"
+      },
+      {
+        "name": "كوم أمبو",
+        "scheduled": "6:07 م",
+        "actual": "--"
+      },
+      {
+        "name": "كلابشة",
+        "scheduled": "6:25 م",
+        "actual": "--"
+      },
+      {
+        "name": "سلوا",
+        "scheduled": "6:40 م",
+        "actual": "--"
+      },
+      {
+        "name": "إدفو",
+        "scheduled": "7:07 م",
+        "actual": "--"
+      },
+      {
+        "name": "إسنا",
+        "scheduled": "7:51 م",
+        "actual": "--"
+      },
+      {
+        "name": "أرمنت",
+        "scheduled": "8:18 م",
+        "actual": "--"
+      },
+      {
+        "name": "الأقصر",
+        "scheduled": "8:40 م",
+        "actual": "--"
+      },
+      {
+        "name": "قوص",
+        "scheduled": "9:21 م",
+        "actual": "--"
+      },
+      {
+        "name": "قنا",
+        "scheduled": "9:45 م",
+        "actual": "--"
+      },
+      {
+        "name": "دشنا",
+        "scheduled": "10:13 م",
+        "actual": "--"
+      },
+      {
+        "name": "نجع حمادي",
+        "scheduled": "10:37 م",
+        "actual": "--"
+      },
+      {
+        "name": "فرشوط",
+        "scheduled": "10:52 م",
+        "actual": "--"
+      },
+      {
+        "name": "أبو تشت",
+        "scheduled": "11:02 م",
+        "actual": "--"
+      },
+      {
+        "name": "البلينا",
+        "scheduled": "11:21 م",
+        "actual": "--"
+      },
+      {
+        "name": "جرجا",
+        "scheduled": "11:37 م",
+        "actual": "--"
+      },
+      {
+        "name": "العسيرات",
+        "scheduled": "11:49 م",
+        "actual": "--"
+      },
+      {
+        "name": "المنشأة",
+        "scheduled": "11:59 م",
+        "actual": "--"
+      },
+      {
+        "name": "سوهاج",
+        "scheduled": "12:15 ص",
+        "actual": "--"
+      },
+      {
+        "name": "أسيوط",
+        "scheduled": "1:32 ص",
+        "actual": "--"
+      },
+      {
+        "name": "ملوي",
+        "scheduled": "2:50 ص",
+        "actual": "--"
+      },
+      {
+        "name": "المنيا",
+        "scheduled": "3:30 ص",
+        "actual": "--"
+      },
+      {
+        "name": "سمالوط",
+        "scheduled": "4:31 ص",
+        "actual": "--"
+      },
+      {
+        "name": "بني مزار",
+        "scheduled": "4:50 ص",
+        "actual": "--"
+      },
+      {
+        "name": "مغاغة",
+        "scheduled": "5:06 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الفشن",
+        "scheduled": "5:25 ص",
+        "actual": "--"
+      },
+      {
+        "name": "ببا",
+        "scheduled": "5:42 ص",
+        "actual": "--"
+      },
+      {
+        "name": "بني سويف",
+        "scheduled": "6:01 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الواسطى",
+        "scheduled": "6:28 ص",
+        "actual": "--"
+      },
+      {
+        "name": "العياط",
+        "scheduled": "6:55 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الجيزة",
+        "scheduled": "7:30 ص",
+        "actual": "--"
+      },
+      {
+        "name": "صعيد مصر",
+        "scheduled": "7:45 ص",
+        "actual": "--"
+      },
+      {
+        "name": "القاهرة",
+        "scheduled": "8:00 ص",
+        "actual": "--"
+      },
+      {
+        "name": "بنها",
+        "scheduled": "9:01 ص",
+        "actual": "--"
+      },
+      {
+        "name": "طنطا",
+        "scheduled": "9:40 ص",
+        "actual": "--"
+      },
+      {
+        "name": "دمنهور",
+        "scheduled": "10:33 ص",
+        "actual": "--"
+      },
+      {
+        "name": "سيدي جابر",
+        "scheduled": "11:27 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الإسكندرية",
+        "scheduled": "11:40 ص",
+        "actual": "--"
+      }
+    ]
   }
 };
