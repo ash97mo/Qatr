@@ -56,6 +56,88 @@ window.DEFAULT_TRAINS_DATA = {
       }
     ]
   },
+  "15": {
+    "number": "15",
+    "type": "روسي",
+    "name": "القاهرة - الإسكندرية",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "القاهرة",
+        "scheduled": "12:15 م",
+        "actual": "--"
+      },
+      {
+        "name": "شبرا الخيمة",
+        "scheduled": "12:29 م",
+        "actual": "--"
+      },
+      {
+        "name": "بنها",
+        "scheduled": "12:59 م",
+        "actual": "--"
+      },
+      {
+        "name": "قويسنا",
+        "scheduled": "1:14 م",
+        "actual": "--"
+      },
+      {
+        "name": "بركة السبع",
+        "scheduled": "1:27 م",
+        "actual": "--"
+      },
+      {
+        "name": "طنطا",
+        "scheduled": "1:46 م",
+        "actual": "--"
+      },
+      {
+        "name": "كفر الزيات",
+        "scheduled": "2:07 م",
+        "actual": "--"
+      },
+      {
+        "name": "التوفيقية",
+        "scheduled": "2:18 م",
+        "actual": "--"
+      },
+      {
+        "name": "إيتاي البارود",
+        "scheduled": "2:31 م",
+        "actual": "--"
+      },
+      {
+        "name": "دمنهور",
+        "scheduled": "2:53 م",
+        "actual": "--"
+      },
+      {
+        "name": "أبو حمص",
+        "scheduled": "3:11 م",
+        "actual": "--"
+      },
+      {
+        "name": "كفر الدوار",
+        "scheduled": "3:28 م",
+        "actual": "--"
+      },
+      {
+        "name": "سيدي جابر",
+        "scheduled": "3:47 م",
+        "actual": "--"
+      },
+      {
+        "name": "الإسكندرية",
+        "scheduled": "4:00 م",
+        "actual": "--"
+      }
+    ]
+  },
   "80": {
     "number": "80",
     "type": "روسي",
