@@ -3088,7 +3088,7 @@ window.DEFAULT_TRAINS_DATA = {
   },
   "185": {
     "number": "185",
-    "type": "روسي",
+    "type": "روسي مكيف",
     "name": "سوهاج - القاهرة",
     "status": {
       "state": "NOT_STARTED",
