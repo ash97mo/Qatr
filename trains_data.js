@@ -2937,6 +2937,103 @@ window.DEFAULT_TRAINS_DATA = {
       }
     ]
   },
+  "1007": {
+    "number": "1007",
+    "type": "روسي",
+    "name": "نجع حمادي - القاهرة",
+    "status": {
+      "state": "NOT_STARTED",
+      "stationIndex": null,
+      "updatedBy": "جدول الرحلة الأساسي"
+    },
+    "stations": [
+      {
+        "name": "نجع حمادي",
+        "scheduled": "6:10 م",
+        "actual": "--"
+      },
+      {
+        "name": "أبو تشت",
+        "scheduled": "6:26 م",
+        "actual": "--"
+      },
+      {
+        "name": "جرجا",
+        "scheduled": "6:57 م",
+        "actual": "--"
+      },
+      {
+        "name": "سوهاج",
+        "scheduled": "7:25 م",
+        "actual": "--"
+      },
+      {
+        "name": "المراغة",
+        "scheduled": "7:51 م",
+        "actual": "--"
+      },
+      {
+        "name": "طهطا",
+        "scheduled": "8:07 م",
+        "actual": "--"
+      },
+      {
+        "name": "طما",
+        "scheduled": "8:24 م",
+        "actual": "--"
+      },
+      {
+        "name": "أسيوط",
+        "scheduled": "9:00 م",
+        "actual": "--"
+      },
+      {
+        "name": "منفلوط",
+        "scheduled": "9:39 م",
+        "actual": "--"
+      },
+      {
+        "name": "القوصية",
+        "scheduled": "9:59 م",
+        "actual": "--"
+      },
+      {
+        "name": "ديروط",
+        "scheduled": "10:16 م",
+        "actual": "--"
+      },
+      {
+        "name": "المنيا",
+        "scheduled": "11:10 م",
+        "actual": "--"
+      },
+      {
+        "name": "بني مزار",
+        "scheduled": "11:55 م",
+        "actual": "--"
+      },
+      {
+        "name": "بني سويف",
+        "scheduled": "12:45 ص",
+        "actual": "--"
+      },
+      {
+        "name": "الجيزة",
+        "scheduled": "2:05 ص",
+        "actual": "--"
+      },
+      {
+        "name": "صعيد مصر",
+        "scheduled": "2:19 ص",
+        "actual": "--"
+      },
+      {
+        "name": "القاهرة",
+        "scheduled": "2:35 ص",
+        "actual": "--"
+      }
+    ]
+  },
   "1010": {
     "number": "1010",
     "type": "روسي مكيف",
