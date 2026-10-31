@@ -3093,7 +3093,7 @@ window.DEFAULT_TRAINS_DATA = {
     "status": {
       "state": "NOT_STARTED",
       "stationIndex": null,
-      "updatedBy": "جدول الرحلة الأساسي",
+      "updatedBy": "إعادة ضبط من المشرف",
       "departedAt": null
     },
     "stations": [
