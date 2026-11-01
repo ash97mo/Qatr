@@ -7325,7 +7325,7 @@ window.DEFAULT_TRAINS_DATA = {
   },
   "1009": {
     "number": "1009",
-    "type": "روسي",
+    "type": "روسي مكيف",
     "name": "أسوان - القاهرة",
     "status": {
       "state": "NOT_STARTED",
